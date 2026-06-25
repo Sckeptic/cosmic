@@ -1,199 +1,132 @@
-/**
- * countdown.js — Countdown to Next Call
- * Stores date in localStorage. Particle explosion at zero.
- */
+/* countdown.js — Countdown to next call with gold particle burst at zero */
+export function init(shared) {
+  const dateInput = document.getElementById('countdown-date');
+  const elDays    = document.getElementById('cd-days');
+  const elHours   = document.getElementById('cd-hours');
+  const elMins    = document.getElementById('cd-mins');
+  const elSecs    = document.getElementById('cd-secs');
+  const zeroMsg   = document.getElementById('countdown-zero-msg');
+  const partCanvas= document.getElementById('countdown-particles');
+  if (!dateInput || !elDays) return;
 
-import { shared } from './script.js';
-
-export function init() {
-  const dateInput  = document.getElementById('countdown-date');
-  const cdDays     = document.getElementById('cd-days');
-  const cdHours    = document.getElementById('cd-hours');
-  const cdMins     = document.getElementById('cd-mins');
-  const cdSecs     = document.getElementById('cd-secs');
-  const zeroMsg    = document.getElementById('countdown-zero-msg');
-  const partCanvas = document.getElementById('countdown-particles');
-  const section    = document.getElementById('countdown');
-
-  if (!dateInput || !cdDays) return;
-
+  /* Restore saved date */
   const LS_KEY = 'ls_countdown_date';
-  let targetTime = null;
-  let ticker     = null;
-  let hasExploded = false;
-
-  // ── Restore saved date ──
-  const saved = localStorage.getItem(LS_KEY);
-  if (saved) {
-    dateInput.value = saved;
-    targetTime = new Date(saved).getTime();
-  }
+  const saved  = localStorage.getItem(LS_KEY);
+  if (saved) dateInput.value = saved;
 
   dateInput.addEventListener('change', () => {
-    const val = dateInput.value;
-    if (!val) return;
-    localStorage.setItem(LS_KEY, val);
-    targetTime = new Date(val).getTime();
-    hasExploded = false;
-    zeroMsg && (zeroMsg.classList.remove('visible'));
-    startTicker();
+    localStorage.setItem(LS_KEY, dateInput.value);
   });
 
-  function pad(n) {
-    return String(Math.max(0, Math.floor(n))).padStart(2, '0');
+  /* Pad to 2 digits */
+  function pad2(n) { return String(n).padStart(2, '0'); }
+
+  /* Update digit with tick animation */
+  function setDigit(el, val) {
+    const s = pad2(val);
+    if (el.textContent !== s) {
+      el.style.animation = 'none';
+      void el.offsetWidth;
+      el.textContent = s;
+      el.style.animation = 'cd-tick 0.25s cubic-bezier(0.22,1,0.36,1) both';
+    }
   }
 
-  function pulseNum(el) {
-    el.classList.remove('pulse');
-    void el.offsetWidth;
-    el.classList.add('pulse');
-  }
+  /* Gold particle burst */
+  function bust() {
+    if (!partCanvas) return;
+    const ctx = partCanvas.getContext('2d');
+    partCanvas.width  = window.innerWidth;
+    partCanvas.height = window.innerHeight;
 
-  // Background transition as countdown nears zero
-  function updateBgProgress(diffMs) {
-    if (!section) return;
-    const total = 7 * 24 * 3600 * 1000; // 7 days reference
-    const frac  = Math.max(0, Math.min(1, 1 - diffMs / total));
-    // Transition from #050510 toward #0A1628
-    const r1 = 5,  g1 = 5,  b1 = 16;
-    const r2 = 10, g2 = 22, b2 = 40;
-    const r = Math.round(r1 + (r2 - r1) * frac);
-    const g = Math.round(g1 + (g2 - g1) * frac);
-    const b = Math.round(b1 + (b2 - b1) * frac);
-    section.style.background = `rgb(${r},${g},${b})`;
+    const cx = partCanvas.width  / 2;
+    const cy = partCanvas.height / 2;
 
-    // Make countdown numbers glow warmer approaching zero
-    const glowAlpha = 0.4 + frac * 0.4;
-    const glowColor = frac > 0.8
-      ? `rgba(247,201,72,${glowAlpha})`
-      : `rgba(79,142,247,${glowAlpha})`;
-    [cdDays, cdHours, cdMins, cdSecs].forEach(el => {
-      if (el) el.style.textShadow = `0 0 30px ${glowColor}, 0 0 60px ${glowColor}`;
+    const parts = Array.from({ length: 80 }, () => {
+      const angle = Math.random() * Math.PI * 2;
+      const spd   = 3 + Math.random() * 8;
+      return {
+        x: cx, y: cy,
+        vx: Math.cos(angle) * spd,
+        vy: Math.sin(angle) * spd,
+        life: 80 + Math.random() * 60,
+        maxLife: 80 + Math.random() * 60,
+        r: 2 + Math.random() * 4,
+        gold: Math.random() > 0.35,
+      };
     });
+
+    function animBurst() {
+      ctx.clearRect(0, 0, partCanvas.width, partCanvas.height);
+      let alive = false;
+      for (const p of parts) {
+        if (p.life <= 0) continue;
+        alive = true;
+        p.x += p.vx; p.y += p.vy;
+        p.vy += 0.12;
+        p.vx *= 0.98; p.life--;
+        const a = p.life / p.maxLife;
+        const col = p.gold ? `rgba(247,201,72,${a})` : `rgba(255,255,200,${a * 0.7})`;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r * a, 0, Math.PI * 2);
+        ctx.fillStyle = col;
+        ctx.shadowBlur  = 8;
+        ctx.shadowColor = p.gold ? 'rgba(247,201,72,0.5)' : 'rgba(255,255,200,0.3)';
+        ctx.fill();
+      }
+      if (alive) requestAnimationFrame(animBurst);
+      else ctx.clearRect(0, 0, partCanvas.width, partCanvas.height);
+    }
+    requestAnimationFrame(animBurst);
   }
+
+  let zeroed = false;
 
   function tick() {
-    if (!targetTime) return;
-    const now    = Date.now();
-    const diffMs = targetTime - now;
+    const raw = dateInput.value;
+    if (!raw) {
+      [elDays, elHours, elMins, elSecs].forEach(el => el.textContent = '--');
+      elDays.classList.remove('near-zero');
+      return;
+    }
 
-    if (diffMs <= 0) {
-      // Zero!
-      [cdDays, cdHours, cdMins, cdSecs].forEach(el => { if (el) el.textContent = '00'; });
-      updateBgProgress(0);
-      if (!hasExploded) {
-        hasExploded = true;
-        triggerExplosion();
-        if (zeroMsg) zeroMsg.classList.add('visible');
+    const target = new Date(raw).getTime();
+    const now    = Date.now();
+    const diff   = target - now;
+
+    if (diff <= 0) {
+      setDigit(elDays,  0); setDigit(elHours, 0);
+      setDigit(elMins,  0); setDigit(elSecs,  0);
+      [elDays, elHours, elMins, elSecs].forEach(el => el.classList.add('near-zero'));
+      if (!zeroed) {
+        zeroed = true;
+        zeroMsg?.classList.add('visible');
+        bust();
       }
       return;
     }
 
-    const totalSecs  = Math.floor(diffMs / 1000);
-    const days  = Math.floor(totalSecs / 86400);
-    const hours = Math.floor((totalSecs % 86400) / 3600);
-    const mins  = Math.floor((totalSecs % 3600) / 60);
-    const secs  = totalSecs % 60;
+    zeroed = false;
+    zeroMsg?.classList.remove('visible');
 
-    const prevSecs = cdSecs ? parseInt(cdSecs.textContent || '-1') : -1;
+    const totalSecs = Math.floor(diff / 1000);
+    const d  = Math.floor(totalSecs / 86400);
+    const h  = Math.floor((totalSecs % 86400) / 3600);
+    const m  = Math.floor((totalSecs % 3600)  / 60);
+    const s  = totalSecs % 60;
 
-    if (cdDays)  cdDays.textContent  = pad(days);
-    if (cdHours) cdHours.textContent = pad(hours);
-    if (cdMins)  cdMins.textContent  = pad(mins);
-    if (cdSecs)  { cdSecs.textContent  = pad(secs); }
+    setDigit(elDays,  d);
+    setDigit(elHours, h);
+    setDigit(elMins,  m);
+    setDigit(elSecs,  s);
 
-    // Pulse seconds digit each second
-    if (cdSecs && prevSecs !== secs && !shared.reducedMotion) {
-      pulseNum(cdSecs);
-    }
-
-    updateBgProgress(diffMs);
+    /* Warm up numbers as target approaches (within 1 day) */
+    const nearZero = diff < 86400000;
+    [elDays, elHours, elMins, elSecs].forEach(el => {
+      el.classList.toggle('near-zero', nearZero);
+    });
   }
 
-  function startTicker() {
-    clearInterval(ticker);
-    tick();
-    ticker = setInterval(tick, 1000);
-  }
-
-  if (targetTime) startTicker();
-
-  // ── Particle explosion ──
-  let particles = [];
-  let explRafId;
-
-  function triggerExplosion() {
-    if (!partCanvas) return;
-    const W = window.innerWidth, H = window.innerHeight;
-    const ctx = partCanvas.getContext('2d');
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    partCanvas.width  = W * dpr;
-    partCanvas.height = H * dpr;
-    partCanvas.style.width  = W + 'px';
-    partCanvas.style.height = H + 'px';
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-    // Spawn burst
-    const cx = W / 2, cy = H / 2;
-    particles = [];
-    for (let i = 0; i < (shared.reducedMotion ? 20 : 120); i++) {
-      const angle = Math.random() * Math.PI * 2;
-      const speed = 2 + Math.random() * 8;
-      const isGold = Math.random() > 0.35;
-      particles.push({
-        x: cx, y: cy,
-        vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed,
-        r:  Math.random() * 3 + 1,
-        life: 0,
-        maxLife: 80 + Math.random() * 60,
-        color: isGold
-          ? `rgba(247,201,72,1)`
-          : `rgba(79,142,247,1)`,
-      });
-    }
-
-    // Bloom flash
-    ctx.fillStyle = 'rgba(247,201,72,0.12)';
-    ctx.fillRect(0, 0, W, H);
-
-    function explLoop() {
-      ctx.clearRect(0, 0, W, H);
-      let alive = false;
-      for (const p of particles) {
-        p.x  += p.vx;
-        p.y  += p.vy;
-        p.vy += 0.12; // gravity
-        p.vx *= 0.98;
-        p.life++;
-        const frac = 1 - p.life / p.maxLife;
-        if (frac > 0) {
-          alive = true;
-          ctx.beginPath();
-          ctx.arc(p.x, p.y, p.r * frac, 0, Math.PI * 2);
-          ctx.fillStyle = p.color.replace(',1)', `,${frac * 0.9})`);
-          ctx.shadowBlur  = 6;
-          ctx.shadowColor = p.color;
-          ctx.fill();
-          ctx.shadowBlur = 0;
-        }
-      }
-      if (alive) explRafId = requestAnimationFrame(explLoop);
-      else {
-        ctx.clearRect(0, 0, W, H);
-        // Brighten stars briefly
-        shared.musicReactive = Math.max(shared.musicReactive, 0.8);
-        setTimeout(() => { shared.musicReactive = 0; }, 2000);
-      }
-    }
-
-    cancelAnimationFrame(explRafId);
-    explRafId = requestAnimationFrame(explLoop);
-  }
-
-  // Pause ticker when tab hidden
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden) clearInterval(ticker);
-    else if (targetTime) startTicker();
-  });
+  tick();
+  setInterval(tick, 1000);
 }

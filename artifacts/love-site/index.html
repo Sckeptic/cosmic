@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="274 km apart. Every heartbeat crosses it. A love site for when you can't connect." />
-  <title>274 km Apart — A Love Site</title>
+  <meta name="description" content="274 km apart. Every heartbeat crosses it." />
+  <title>274 km Apart</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet" />
@@ -12,82 +12,202 @@
 </head>
 <body>
 
-  <!-- Global Background Canvas -->
+  <!-- ── Global canvas background ── -->
   <canvas id="star-canvas" aria-hidden="true"></canvas>
   <div class="nebula" aria-hidden="true"></div>
 
-  <!-- SECTION 1 · Hero -->
+  <!-- ════════════════════════════════════════
+       SECTION 1 · HERO — Distance as Art
+  ════════════════════════════════════════ -->
   <section id="hero" class="section hero-section" aria-label="Distance as Art">
     <div class="hero-inner">
-      <div class="hero-nodes" aria-hidden="true">
+
+      <!-- EKG row -->
+      <div class="hero-ekg-section reveal-scale">
         <div class="node node-left">
-          <div class="node-glow"></div>
-          <div class="node-dot"></div>
-          <span class="node-label">Prince</span>
-        </div>
-        <div class="hero-ekg-wrap">
-          <canvas id="ekg-canvas" aria-label="Animated heartbeat connecting two hearts"></canvas>
-        </div>
-        <div class="node node-right">
-          <div class="node-glow"></div>
-          <div class="node-dot"></div>
-          <span class="node-label">Panditain</span>
-        </div>
-      </div>
-      <div class="hero-text reveal-fade">
-        <p class="hero-distance" aria-label="274 kilometres apart. Every heartbeat crosses it.">
-          <span class="distance-number">274</span>
-          <span class="distance-unit">km apart.</span>
-        </p>
-        <p class="hero-sub">Every heartbeat crosses it.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- SECTION 2 · Signal Lost -->
-  <section id="signal" class="section signal-section" aria-label="Signal Lost">
-    <div class="section-label reveal-fade">Signal Lost</div>
-    <div class="phone-wrap reveal-fade" role="region" aria-label="Phone call interface">
-      <div class="phone" id="phone-ui">
-        <div class="phone-status-bar" aria-hidden="true">
-          <span>9:41</span>
-          <span class="status-dots">● ● ●</span>
-        </div>
-        <div class="phone-caller">
-          <div class="caller-avatar" aria-hidden="true">
-            <div class="avatar-ring"></div>
-            <div class="avatar-inner">P</div>
+          <div class="node-dot-wrap">
+            <div class="node-ring-outer"></div>
+            <div class="node-glow-bg"></div>
+            <div class="node-dot"></div>
           </div>
-          <div class="caller-name">Panditain <span class="caller-heart" aria-hidden="true">❤️</span></div>
-          <div class="caller-sub" id="call-status" aria-live="polite">Calling…</div>
+          <span class="node-name">Prince</span>
+          <span class="node-city">your side</span>
         </div>
-        <div class="call-timer" id="call-timer" aria-live="polite" aria-label="Call duration">0:00</div>
-        <div class="phone-actions">
-          <button class="phone-btn retry-btn" id="retry-btn" aria-label="Retry call">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" width="18" height="18">
-              <path d="M1 4v6h6M23 20v-6h-6"/>
-              <path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15"/>
-            </svg>
-            Retry
-          </button>
+
+        <div class="hero-ekg-wrap">
+          <canvas id="ekg-canvas" aria-label="Animated heartbeat line"></canvas>
         </div>
-        <div class="glitch-overlay" id="glitch-overlay" aria-hidden="true"></div>
-        <div class="scanlines" id="scanlines" aria-hidden="true"></div>
+
+        <div class="node node-right">
+          <div class="node-dot-wrap">
+            <div class="node-ring-outer"></div>
+            <div class="node-glow-bg"></div>
+            <div class="node-dot"></div>
+          </div>
+          <span class="node-name">Panditain</span>
+          <span class="node-city">her side</span>
+        </div>
       </div>
+
+      <!-- Text block -->
+      <div class="hero-text-block">
+        <p class="hero-kicker reveal-fade">A love site for when you can't connect</p>
+
+        <h1 class="hero-headline reveal-fade" aria-label="274 kilometres apart">
+          <span class="km-number">274</span>
+          <span class="km-unit">kilometres apart</span>
+        </h1>
+
+        <div class="hero-rule reveal-fade"></div>
+
+        <p class="hero-sub reveal-fade">
+          Every heartbeat crosses it.<br/>
+          <em>Every single one.</em>
+        </p>
+
+        <div class="hero-scroll-hint reveal-fade" aria-hidden="true">
+          <span>Scroll</span>
+          <div class="scroll-line"></div>
+        </div>
+      </div>
+
     </div>
-    <p class="signal-caption reveal-fade">
-      Not your fault. Not hers. Just… interference.
-    </p>
   </section>
 
-  <!-- SECTION 3 · Unsent Messages -->
+  <!-- ════════════════════════════════════════
+       SECTION 2 · SIGNAL LOST
+  ════════════════════════════════════════ -->
+  <section id="signal" class="section signal-section" aria-label="Signal Lost">
+    <div class="signal-inner">
+
+      <div class="signal-heading reveal-fade">
+        <div class="section-badge">Signal Lost</div>
+        <h2 class="signal-title">
+          She picked up.<br/>
+          <span class="title-red">The world didn't.</span>
+        </h2>
+        <p class="signal-tagline">
+          A call that never connects — and the silence that follows.
+        </p>
+      </div>
+
+      <div class="phone-outer reveal-scale" role="region" aria-label="Phone call interface">
+        <div class="phone-glow" id="phone-glow"></div>
+        <div class="phone" id="phone-ui">
+
+          <!-- Notch -->
+          <div class="phone-notch" aria-hidden="true">
+            <div class="notch-camera"></div>
+            <div class="notch-speaker"></div>
+          </div>
+
+          <!-- Status bar -->
+          <div class="phone-status" aria-hidden="true">
+            <span class="status-time">9:41</span>
+            <div class="status-icons">
+              <!-- Signal bars -->
+              <svg width="18" height="12" viewBox="0 0 18 12" fill="rgba(255,255,255,0.7)">
+                <rect x="0"  y="8" width="3" height="4" rx="0.5"/>
+                <rect x="4"  y="5" width="3" height="7" rx="0.5"/>
+                <rect x="8"  y="3" width="3" height="9" rx="0.5"/>
+                <rect x="12" y="0" width="3" height="12" rx="0.5" opacity="0.3"/>
+              </svg>
+              <!-- Battery -->
+              <svg width="25" height="12" viewBox="0 0 25 12" fill="none">
+                <rect x="0.5" y="0.5" width="21" height="11" rx="2.5" stroke="rgba(255,255,255,0.5)" stroke-width="1"/>
+                <rect x="22" y="4" width="2.5" height="4" rx="1" fill="rgba(255,255,255,0.4)"/>
+                <rect x="2" y="2" width="13" height="8" rx="1.5" fill="rgba(255,255,255,0.7)"/>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Caller -->
+          <div class="phone-caller-area">
+            <div class="avatar-stack">
+              <div class="avatar-pulse"></div>
+              <div class="avatar-pulse-2"></div>
+              <div class="avatar-img" aria-hidden="true">P</div>
+            </div>
+            <div class="caller-name-main">
+              Panditain
+              <span class="caller-heart" aria-hidden="true">❤️</span>
+            </div>
+            <div class="call-status-text" id="call-status" aria-live="polite">Calling…</div>
+          </div>
+
+          <!-- Timer -->
+          <div class="call-timer-main" id="call-timer" aria-live="polite" aria-label="Call duration">0:00</div>
+
+          <div class="phone-divider"></div>
+
+          <!-- Actions -->
+          <div class="phone-actions-row">
+            <div class="phone-action-btn">
+              <div class="phone-action-icon btn-mute" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1.8" stroke-linecap="round">
+                  <line x1="1" y1="1" x2="23" y2="23"/>
+                  <path d="M9 9v3a3 3 0 005.12 2.12M15 9.34V4a3 3 0 00-5.94-.6"/>
+                  <path d="M17 16.95A7 7 0 015 12v-2m14 0v2a7 7 0 01-.11 1.23"/>
+                  <line x1="12" y1="19" x2="12" y2="23"/>
+                  <line x1="8" y1="23" x2="16" y2="23"/>
+                </svg>
+              </div>
+              <span class="phone-action-label">Mute</span>
+            </div>
+
+            <button class="phone-action-btn" id="retry-btn" aria-label="Retry call">
+              <div class="phone-action-icon btn-retry">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(79,142,247,0.8)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M1 4v6h6M23 20v-6h-6"/>
+                  <path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15"/>
+                </svg>
+              </div>
+              <span class="phone-action-label">Retry</span>
+            </button>
+
+            <div class="phone-action-btn">
+              <div class="phone-action-icon btn-decline" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(255,52,102,0.7)" stroke-width="1.8" stroke-linecap="round">
+                  <path d="M10.68 13.31a16 16 0 003.41 2.6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7 2 2 0 011.72 2v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.42 19.42 0 013.43 9.37 19.79 19.79 0 01.36 .72 2 2 0 012.34 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11z"/>
+                  <line x1="23" y1="1" x2="1" y2="23"/>
+                </svg>
+              </div>
+              <span class="phone-action-label">End</span>
+            </div>
+          </div>
+
+          <!-- Overlays -->
+          <div class="glitch-overlay" id="glitch-overlay" aria-hidden="true"></div>
+          <div class="scanlines" id="scanlines" aria-hidden="true"></div>
+        </div>
+      </div>
+
+      <p class="signal-caption-text reveal-fade">
+        Not your fault. Not hers.<br/>Just… interference.
+      </p>
+
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════
+       SECTION 3 · UNSENT MESSAGES
+  ════════════════════════════════════════ -->
   <section id="messages" class="section messages-section" aria-label="Unsent Messages">
-    <div class="section-label reveal-fade">Unsent Messages</div>
+
     <div class="messages-canvas-wrap" aria-hidden="true">
       <canvas id="messages-canvas"></canvas>
     </div>
+
+    <div class="messages-center-content reveal-fade">
+      <p class="messages-eyebrow">Unsent Messages</p>
+      <h2 class="messages-title">Words<br/>Never Sent</h2>
+      <p class="messages-sub">Write it. Let it go. She'll feel it anyway.</p>
+    </div>
+
     <p class="messages-watermark" aria-hidden="true">She'll feel it anyway.</p>
-    <div class="messages-input-wrap">
+
+    <div class="messages-input-bar">
+      <p class="input-hint">Press Enter to release</p>
       <input
         type="text"
         id="message-input"
@@ -101,84 +221,118 @@
     </div>
   </section>
 
-  <!-- SECTION 4 · Star Map -->
+  <!-- ════════════════════════════════════════
+       SECTION 4 · STAR MAP
+  ════════════════════════════════════════ -->
   <section id="starmap" class="section starmap-section" aria-label="Star Map">
-    <div class="section-label reveal-fade">Star Map</div>
-    <div class="starmap-wrap reveal-fade">
+
+    <div class="starmap-header">
+      <div class="section-badge reveal-fade">Star Map</div>
+      <h2 class="starmap-title-main reveal-fade">
+        <span class="glow-text">Same</span> stars.<br/>
+        Different silences.
+      </h2>
+    </div>
+
+    <div class="starmap-body-wrap reveal-scale">
       <div class="starmap-panel">
-        <h3 class="starmap-title">Prince's Sky</h3>
-        <canvas id="sky-left" aria-label="Star map of Prince's night sky with Orion constellation"></canvas>
+        <div class="starmap-panel-label">
+          <span class="starmap-panel-name">Prince's Sky</span>
+          <span class="starmap-panel-sub">his coordinates</span>
+        </div>
+        <canvas id="sky-left" aria-label="Prince's night sky with Orion constellation"></canvas>
       </div>
-      <div class="starmap-thread-wrap" aria-hidden="true">
+
+      <div class="starmap-thread-col" aria-hidden="true">
         <canvas id="thread-canvas"></canvas>
       </div>
+
       <div class="starmap-panel">
-        <h3 class="starmap-title">Panditain's Sky</h3>
-        <canvas id="sky-right" aria-label="Star map of Panditain's night sky with Orion constellation"></canvas>
+        <div class="starmap-panel-label">
+          <span class="starmap-panel-name">Panditain's Sky</span>
+          <span class="starmap-panel-sub">her coordinates</span>
+        </div>
+        <canvas id="sky-right" aria-label="Panditain's night sky with Orion constellation"></canvas>
       </div>
     </div>
-    <p class="starmap-caption reveal-fade">
-      Same stars. Same sky. Different sides of the silence.
-    </p>
-    <!-- Easter Egg Panel -->
-    <div id="easter-panel" class="easter-panel" aria-hidden="true" role="complementary" aria-label="Hidden memory">
+
+    <div class="starmap-footer">
+      <p class="starmap-caption reveal-fade">
+        Same stars. Same sky.<br/>Different sides of the silence.
+      </p>
+      <p class="thread-hint reveal-fade">— click the golden thread —</p>
+    </div>
+
+    <!-- Easter Egg -->
+    <div id="easter-panel" class="easter-panel" aria-hidden="true">
+      <p class="easter-eyebrow">a hidden memory</p>
       <div class="easter-text" id="easter-text" aria-live="polite"></div>
       <canvas id="plane-canvas" aria-hidden="true"></canvas>
     </div>
+
   </section>
 
-  <!-- SECTION 5 · Countdown -->
+  <!-- ════════════════════════════════════════
+       SECTION 5 · COUNTDOWN
+  ════════════════════════════════════════ -->
   <section id="countdown" class="section countdown-section" aria-label="Countdown to Next Call">
-    <div class="section-label reveal-fade">Countdown</div>
-    <p class="countdown-question reveal-fade">When will you finally talk, Prince?</p>
-    <div class="countdown-input-wrap reveal-fade">
-      <label for="countdown-date" class="countdown-input-label">Set the date &amp; time</label>
-      <input
-        type="datetime-local"
-        id="countdown-date"
-        class="countdown-date-input"
-        aria-label="Select the date and time for the next call"
-      />
-    </div>
-    <div class="countdown-display reveal-fade" aria-live="polite" aria-label="Countdown timer">
-      <div class="countdown-unit">
-        <span class="countdown-num" id="cd-days">--</span>
-        <span class="countdown-lbl">Days</span>
-      </div>
-      <div class="countdown-sep" aria-hidden="true">:</div>
-      <div class="countdown-unit">
-        <span class="countdown-num" id="cd-hours">--</span>
-        <span class="countdown-lbl">Hours</span>
-      </div>
-      <div class="countdown-sep" aria-hidden="true">:</div>
-      <div class="countdown-unit">
-        <span class="countdown-num" id="cd-mins">--</span>
-        <span class="countdown-lbl">Mins</span>
-      </div>
-      <div class="countdown-sep" aria-hidden="true">:</div>
-      <div class="countdown-unit">
-        <span class="countdown-num" id="cd-secs">--</span>
-        <span class="countdown-lbl">Secs</span>
-      </div>
-    </div>
-    <p class="countdown-zero-msg" id="countdown-zero-msg" aria-live="assertive">Finally, Panditain.</p>
     <canvas id="countdown-particles" aria-hidden="true"></canvas>
+
+    <div class="countdown-inner">
+      <div class="section-badge">Countdown</div>
+
+      <p class="countdown-eyebrow">
+        When will you finally talk, <strong>Prince?</strong><br/>
+        Set the moment. Watch it close.
+      </p>
+
+      <div class="countdown-input-group">
+        <label for="countdown-date" class="countdown-label">Next call</label>
+        <input
+          type="datetime-local"
+          id="countdown-date"
+          class="countdown-date-input"
+          aria-label="Select the date and time for the next call"
+        />
+      </div>
+
+      <div class="countdown-display" aria-live="polite" aria-label="Time remaining">
+        <div class="cd-unit">
+          <span class="cd-num" id="cd-days">--</span>
+          <span class="cd-label">Days</span>
+        </div>
+        <div class="cd-sep" aria-hidden="true">:</div>
+        <div class="cd-unit">
+          <span class="cd-num" id="cd-hours">--</span>
+          <span class="cd-label">Hrs</span>
+        </div>
+        <div class="cd-sep" aria-hidden="true">:</div>
+        <div class="cd-unit">
+          <span class="cd-num" id="cd-mins">--</span>
+          <span class="cd-label">Min</span>
+        </div>
+        <div class="cd-sep" aria-hidden="true">:</div>
+        <div class="cd-unit">
+          <span class="cd-num" id="cd-secs">--</span>
+          <span class="cd-label">Sec</span>
+        </div>
+      </div>
+
+      <p class="countdown-zero-msg" id="countdown-zero-msg" aria-live="assertive">
+        Finally, Panditain. ✦
+      </p>
+    </div>
   </section>
 
-  <!-- Music Button -->
-  <button
-    id="music-btn"
-    class="music-btn"
-    aria-label="Play our song"
-    aria-pressed="false"
-  >
+  <!-- ── Music Button ── -->
+  <button id="music-btn" class="music-btn" aria-label="Play our song" aria-pressed="false">
     <span class="music-btn-icon" aria-hidden="true">🎵</span>
     <span class="music-btn-text">Play Our Song</span>
     <span class="music-ripple" aria-hidden="true"></span>
   </button>
 
   <div class="music-blocked-msg" id="music-blocked" aria-live="polite" hidden>
-    Tap to let the music begin.
+    Tap anywhere to let the music begin.
   </div>
 
   <audio id="our-song" preload="none" loop>

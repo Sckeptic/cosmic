@@ -1,444 +1,343 @@
-/**
- * starmap.js — Star Map
- * Two synchronized star canvases with Orion constellation.
- * Golden thread, shooting stars, easter egg.
- */
+/* starmap.js — Dual night sky with Orion + golden thread + easter egg */
+export function init(shared) {
+  const skyL   = document.getElementById('sky-left');
+  const skyR   = document.getElementById('sky-right');
+  const thread = document.getElementById('thread-canvas');
+  const easter = document.getElementById('easter-panel');
+  const eText  = document.getElementById('easter-text');
+  const plane  = document.getElementById('plane-canvas');
+  if (!skyL || !skyR || !thread) return;
 
-import { shared } from './script.js';
-
-export function init() {
-  const canvasL  = document.getElementById('sky-left');
-  const canvasR  = document.getElementById('sky-right');
-  const threadC  = document.getElementById('thread-canvas');
-  const easterP  = document.getElementById('easter-panel');
-  const easterT  = document.getElementById('easter-text');
-  const planeC   = document.getElementById('plane-canvas');
-  const starmapW = document.querySelector('.starmap-wrap');
-
-  if (!canvasL || !canvasR || !threadC) return;
-
-  let dpr = Math.min(window.devicePixelRatio || 1, 2);
-
-  // ── Seeded PRNG (date-based) ──
-  const today = new Date();
-  let seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
-  function rng() {
-    seed = (seed * 9301 + 49297) % 233280;
-    return seed / 233280;
+  /* ── Seed-based RNG so star field is stable ── */
+  function mkRng(seed) {
+    let s = seed;
+    return () => { s = (s * 16807 + 0) % 2147483647; return (s - 1) / 2147483646; };
   }
 
-  // ── Orion star positions (normalised 0..1 within canvas) ──
+  /* ── Orion star positions (normalised 0..1) ── */
   const ORION = [
-    { name: 'Betelgeuse', x: 0.30, y: 0.28, r: 2.6, color: '#FF9966' },
-    { name: 'Bellatrix',  x: 0.62, y: 0.28, r: 2.0, color: '#99CCFF' },
-    { name: 'Alnilam',    x: 0.48, y: 0.50, r: 1.9, color: '#AACCFF' },
-    { name: 'Alnitak',    x: 0.38, y: 0.53, r: 1.8, color: '#AACCFF' },
-    { name: 'Mintaka',    x: 0.57, y: 0.47, r: 1.7, color: '#AACCFF' },
-    { name: 'Rigel',      x: 0.62, y: 0.73, r: 2.4, color: '#CCDDFF' },
-    { name: 'Saiph',      x: 0.30, y: 0.73, r: 1.9, color: '#CCDDFF' },
-    { name: "Meissa",     x: 0.48, y: 0.17, r: 1.5, color: '#DDEEFF' },
+    { name: 'Betelgeuse', x: 0.30, y: 0.28, mag: 2.2 },
+    { name: 'Bellatrix',  x: 0.65, y: 0.28, mag: 2.4 },
+    { name: 'Mintaka',    x: 0.40, y: 0.50, mag: 2.9 },
+    { name: 'Alnilam',    x: 0.50, y: 0.52, mag: 2.8 },
+    { name: 'Alnitak',    x: 0.60, y: 0.54, mag: 2.8 },
+    { name: 'Saiph',      x: 0.35, y: 0.75, mag: 2.9 },
+    { name: 'Rigel',      x: 0.70, y: 0.74, mag: 1.8 },
   ];
+  const ORION_LINES = [[0,1],[0,2],[1,3],[2,3],[3,4],[0,5],[1,6],[5,6]];
 
-  const ORION_LINES = [
-    [0, 1], [0, 3], [1, 4], [2, 3], [2, 4],
-    [3, 6], [4, 5], [0, 7], [1, 7],
-  ];
+  /* ── Draw a star canvas ── */
+  function drawSky(canvas, rng, tintR, tintG, tintB, label) {
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width = canvas.clientWidth;
+    const H = canvas.height = canvas.clientHeight;
 
-  // ── Generate background stars (seeded) ──
-  function genStars(W, H, count) {
-    const arr = [];
-    for (let i = 0; i < count; i++) {
-      arr.push({
-        x:     rng() * W,
-        y:     rng() * H,
-        r:     rng() * 1.0 + 0.25,
-        base:  rng() * 0.55 + 0.15,
-        speed: rng() * 0.5 + 0.2,
-        phase: rng() * Math.PI * 2,
-        twinkle: rng() > 0.7,
-      });
+    ctx.clearRect(0, 0, W, H);
+
+    /* Background */
+    const bg = ctx.createRadialGradient(W/2, H/2, 0, W/2, H/2, Math.max(W, H)*0.7);
+    bg.addColorStop(0, `rgba(${tintR},${tintG},${tintB},0.08)`);
+    bg.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, W, H);
+
+    /* Field stars */
+    const COUNT = Math.floor((W * H) / 3200);
+    for (let i = 0; i < COUNT; i++) {
+      const sx = rng() * W, sy = rng() * H;
+      const sr = 0.4 + rng() * 1.1;
+      const sa = 0.15 + rng() * 0.7;
+
+      const sg = ctx.createRadialGradient(sx, sy, 0, sx, sy, sr * 3.5);
+      sg.addColorStop(0,   `rgba(200,220,255,${sa})`);
+      sg.addColorStop(0.5, `rgba(140,180,255,${sa * 0.3})`);
+      sg.addColorStop(1,   'transparent');
+      ctx.beginPath();
+      ctx.arc(sx, sy, sr * 3.5, 0, Math.PI * 2);
+      ctx.fillStyle = sg;
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(sx, sy, sr, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(230,240,255,${sa})`;
+      ctx.fill();
     }
-    return arr;
+
+    /* Orion constellation lines */
+    ctx.save();
+    ctx.strokeStyle = `rgba(${tintR},${tintG},${tintB},0.22)`;
+    ctx.lineWidth = 1;
+    ctx.setLineDash([3, 5]);
+    for (const [a, b] of ORION_LINES) {
+      const ax = ORION[a].x * W, ay = ORION[a].y * H;
+      const bx = ORION[b].x * W, by = ORION[b].y * H;
+      ctx.beginPath();
+      ctx.moveTo(ax, ay);
+      ctx.lineTo(bx, by);
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    /* Orion named stars */
+    for (const star of ORION) {
+      const sx = star.x * W, sy = star.y * H;
+      const br = (3.5 - star.mag) * 3.5;
+
+      const sg = ctx.createRadialGradient(sx, sy, 0, sx, sy, br * 2.5);
+      sg.addColorStop(0,   `rgba(${tintR},${tintG},${tintB},0.9)`);
+      sg.addColorStop(0.5, `rgba(${tintR},${tintG},${tintB},0.25)`);
+      sg.addColorStop(1,   'transparent');
+      ctx.beginPath();
+      ctx.arc(sx, sy, br * 2.5, 0, Math.PI * 2);
+      ctx.fillStyle = sg;
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(sx, sy, br * 0.5, 0, Math.PI * 2);
+      ctx.fillStyle = '#fff';
+      ctx.fill();
+
+      /* Star name */
+      ctx.save();
+      ctx.font = '400 9px "Space Grotesk", system-ui';
+      ctx.fillStyle = `rgba(${tintR},${tintG},${tintB},0.5)`;
+      ctx.textAlign  = 'center';
+      ctx.fillText(star.name, sx, sy - br * 2.5 - 4);
+      ctx.restore();
+    }
   }
 
-  // ── Per-panel state ──
-  function makePanel(canvas) {
-    const ctx = canvas.getContext('2d');
-    let W = 0, H = 0, stars = [], t = 0;
-    let shooter = null, shooterTimer = 0;
-
+  /* Shooting star state */
+  let shootL = null, shootR = null;
+  function spawnShoot(canvas) {
+    const W = canvas.clientWidth, H = canvas.clientHeight;
+    const angle = (25 + Math.random() * 30) * Math.PI / 180;
     return {
-      canvas, ctx,
-      get W() { return W; },
-      get H() { return H; },
-      resize() {
-        W = canvas.clientWidth;
-        H = canvas.clientHeight;
-        canvas.width  = W * dpr;
-        canvas.height = H * dpr;
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        stars = genStars(W, H, Math.min(Math.round(W * H / 1800), 140));
-      },
-      spawnShooter() {
-        shooter = {
-          x:  rng() * W * 0.6,
-          y:  rng() * H * 0.4,
-          vx: 3 + rng() * 4,
-          vy: 1.5 + rng() * 2,
-          tail: [],
-          life: 0,
-          maxLife: 40 + rng() * 30,
-        };
-      },
-      draw() {
-        ctx.clearRect(0, 0, W, H);
-
-        // Background
-        ctx.fillStyle = 'rgba(5,5,16,0.95)';
-        ctx.fillRect(0, 0, W, H);
-
-        const boost = shared.musicReactive * 0.25;
-
-        // Stars
-        for (const s of stars) {
-          const twinkle = s.twinkle
-            ? s.base + Math.sin(t * s.speed + s.phase) * (0.2 + boost)
-            : s.base;
-          ctx.beginPath();
-          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(210,220,255,${Math.max(0, Math.min(1, twinkle))})`;
-          ctx.fill();
-        }
-
-        // Shooting star
-        shooterTimer++;
-        if (shooterTimer > 1800 && !shooter) {
-          this.spawnShooter();
-          shooterTimer = 0;
-        }
-        if (shooter) {
-          shooter.tail.push({ x: shooter.x, y: shooter.y });
-          if (shooter.tail.length > 20) shooter.tail.shift();
-          shooter.x += shooter.vx;
-          shooter.y += shooter.vy;
-          shooter.life++;
-
-          // Draw tail
-          for (let i = 0; i < shooter.tail.length; i++) {
-            const frac = i / shooter.tail.length;
-            ctx.beginPath();
-            ctx.arc(shooter.tail[i].x, shooter.tail[i].y, 1 * frac, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(255,255,255,${frac * 0.7})`;
-            ctx.fill();
-          }
-
-          if (shooter.life > shooter.maxLife || shooter.x > W + 40 || shooter.y > H + 40) {
-            shooter = null;
-          }
-        }
-
-        t += 0.016;
-      },
-      drawOrion(threadGlow) {
-        const orionPts = ORION.map(s => ({
-          ...s,
-          px: s.x * W,
-          py: s.y * H,
-        }));
-
-        // Constellation lines
-        for (const [a, b] of ORION_LINES) {
-          ctx.beginPath();
-          ctx.moveTo(orionPts[a].px, orionPts[a].py);
-          ctx.lineTo(orionPts[b].px, orionPts[b].py);
-          ctx.strokeStyle = 'rgba(79,142,247,0.18)';
-          ctx.lineWidth   = 0.8;
-          ctx.stroke();
-        }
-
-        // Stars
-        for (const s of orionPts) {
-          // Outer glow halo
-          ctx.beginPath();
-          ctx.arc(s.px, s.py, s.r * 7, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(79,142,247,0.04)`;
-          ctx.fill();
-
-          // Core
-          ctx.beginPath();
-          ctx.arc(s.px, s.py, s.r + shared.musicReactive * 0.5, 0, Math.PI * 2);
-          ctx.fillStyle = s.color;
-          ctx.fill();
-
-          // Name label
-          if (s.r > 1.8) {
-            ctx.font = '500 9px Inter, sans-serif';
-            ctx.fillStyle = 'rgba(165,168,184,0.6)';
-            ctx.textBaseline = 'top';
-            ctx.fillText(s.name, s.px + s.r + 4, s.py - 5);
-          }
-        }
-
-        return orionPts;
-      },
+      x:  Math.random() * W * 0.5,
+      y:  Math.random() * H * 0.3,
+      dx: Math.cos(angle) * 7,
+      dy: Math.sin(angle) * 7,
+      life: 0, maxLife: 30 + Math.random() * 20,
+      canvas,
     };
   }
 
-  const left  = makePanel(canvasL);
-  const right = makePanel(canvasR);
+  setInterval(() => {
+    if (!shootL) shootL = spawnShoot(skyL);
+    if (!shootR) shootR = spawnShoot(skyR);
+  }, 28000 + Math.random() * 12000);
 
-  // ── Thread canvas ──
-  const threadCtx = threadC.getContext('2d');
-  let threadT = 0;
+  /* ── Thread canvas animation ── */
+  let threadPhase = 0;
+  let threadClicks = 0;
+  let threadClickTimer = null;
 
-  function resizeThread() {
-    const wrap = document.querySelector('.starmap-thread-wrap');
-    if (!wrap) return;
-    const W = wrap.clientWidth, H = wrap.clientHeight;
-    threadC.width  = W * dpr;
-    threadC.height = H * dpr;
-    threadC.style.width  = W + 'px';
-    threadC.style.height = H + 'px';
-    threadCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  }
+  function animateThread() {
+    const ctx = thread.getContext('2d');
+    const W = thread.width  = thread.clientWidth;
+    const H = thread.height = thread.clientHeight;
+    ctx.clearRect(0, 0, W, H);
 
-  let threadClickCount = 0;
-  let lastClickTime = 0;
-  let easterActive = false;
+    threadPhase += 0.03;
+    const pulse = 0.6 + 0.4 * Math.sin(threadPhase) + shared.musicReactive * 0.4;
 
-  function drawThread() {
-    const wrap = document.querySelector('.starmap-thread-wrap');
-    if (!wrap) return;
-    const W = threadC.clientWidth, H = threadC.clientHeight;
-    threadCtx.clearRect(0, 0, W, H);
-
-    threadT += 0.016;
-    const pulse = 0.6 + Math.sin(threadT * 2) * 0.25 + shared.musicReactive * 0.35;
-
-    // Vertical golden thread
+    /* Glow halo */
     const cx = W / 2;
-    threadCtx.beginPath();
-    for (let y = 0; y <= H; y += 4) {
-      const wave = Math.sin(y / 15 + threadT * 1.5) * 2;
-      if (y === 0) threadCtx.moveTo(cx + wave, y);
-      else         threadCtx.lineTo(cx + wave, y);
-    }
-    const grad = threadCtx.createLinearGradient(0, 0, 0, H);
-    grad.addColorStop(0,   `rgba(247,201,72,${pulse * 0.6})`);
-    grad.addColorStop(0.5, `rgba(247,201,72,${pulse})`);
-    grad.addColorStop(1,   `rgba(247,201,72,${pulse * 0.6})`);
-    threadCtx.strokeStyle = grad;
-    threadCtx.lineWidth   = 1.5;
-    threadCtx.shadowBlur  = 8 + shared.musicReactive * 8;
-    threadCtx.shadowColor = 'rgba(247,201,72,0.6)';
-    threadCtx.stroke();
-    threadCtx.shadowBlur  = 0;
+    const grd = ctx.createLinearGradient(cx, 0, cx, H);
+    grd.addColorStop(0,   'transparent');
+    grd.addColorStop(0.2, `rgba(247,201,72,${0.08 * pulse})`);
+    grd.addColorStop(0.5, `rgba(247,201,72,${0.14 * pulse})`);
+    grd.addColorStop(0.8, `rgba(247,201,72,${0.08 * pulse})`);
+    grd.addColorStop(1,   'transparent');
+    ctx.fillStyle = grd;
+    ctx.fillRect(0, 0, W, H);
 
-    // Particle drops
-    if (!shared.reducedMotion && Math.random() < 0.15) {
-      const py = Math.random() * H;
-      threadCtx.beginPath();
-      threadCtx.arc(cx, py, 1.5, 0, Math.PI * 2);
-      threadCtx.fillStyle = `rgba(247,201,72,${Math.random() * 0.6 + 0.1})`;
-      threadCtx.fill();
-    }
+    /* Thread line */
+    ctx.save();
+    ctx.shadowBlur  = 14 * pulse;
+    ctx.shadowColor = `rgba(247,201,72,0.6)`;
+    const lineGrd = ctx.createLinearGradient(cx, 0, cx, H);
+    lineGrd.addColorStop(0,   'transparent');
+    lineGrd.addColorStop(0.1, `rgba(247,201,72,${0.7 * pulse})`);
+    lineGrd.addColorStop(0.5, `rgba(255,220,80,${pulse})`);
+    lineGrd.addColorStop(0.9, `rgba(247,201,72,${0.7 * pulse})`);
+    lineGrd.addColorStop(1,   'transparent');
+    ctx.strokeStyle = lineGrd;
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(cx, 0);
+    ctx.lineTo(cx, H);
+    ctx.stroke();
+    ctx.restore();
+
+    /* Travelling particle up thread */
+    const particleY = ((threadPhase * 12) % H);
+    const pg = ctx.createRadialGradient(cx, particleY, 0, cx, particleY, 6);
+    pg.addColorStop(0,   `rgba(255,240,120,${0.9 * pulse})`);
+    pg.addColorStop(0.5, `rgba(247,201,72,0.3)`);
+    pg.addColorStop(1,   'transparent');
+    ctx.beginPath();
+    ctx.arc(cx, particleY, 6, 0, Math.PI * 2);
+    ctx.fillStyle = pg;
+    ctx.fill();
+
+    requestAnimationFrame(animateThread);
   }
 
-  // Click easter egg on thread canvas
-  threadC.style.cursor = 'pointer';
-  threadC.setAttribute('role', 'button');
-  threadC.setAttribute('aria-label', 'Click 3 times for a hidden memory');
-  threadC.setAttribute('tabindex', '0');
-
-  function handleThreadClick() {
-    if (easterActive) return;
-    const now = Date.now();
-    if (now - lastClickTime > 3000) threadClickCount = 0;
-    lastClickTime = now;
-    threadClickCount++;
-    if (threadClickCount >= 3) {
-      threadClickCount = 0;
+  /* Click hit-test on thread canvas */
+  thread.style.cursor = 'pointer';
+  thread.addEventListener('click', () => {
+    threadClicks++;
+    clearTimeout(threadClickTimer);
+    threadClickTimer = setTimeout(() => { threadClicks = 0; }, 2800);
+    if (threadClicks >= 3) {
+      threadClicks = 0;
       triggerEasterEgg();
     }
-  }
-
-  threadC.addEventListener('click', handleThreadClick);
-  threadC.addEventListener('keydown', e => {
-    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleThreadClick(); }
   });
 
-  // ── Easter Egg ──
-  const EASTER_LINES = [
-    'Remember Katogdham?',
-    'Ghumi ghumi gaye the…',
-    'Lost.',
-    'Together.',
-    'Happy.',
-    'That day proved 274 km means nothing.',
-  ];
-
-  let paperPlane = null;
-  let planeParticles = [];
-  let easterRaf = null;
+  /* ── Easter egg ── */
+  const MEMORY = `Remember Katogdham?\nWhere we first realised\nthe stars don't care\nabout the distance—\njust like us.`;
 
   function triggerEasterEgg() {
-    easterActive = true;
-    easterP.setAttribute('aria-hidden', 'false');
-    easterP.classList.add('visible');
-    easterT.textContent = '';
+    if (!easter) return;
+    easter.setAttribute('aria-hidden', 'false');
+    easter.classList.add('visible');
+    eText.textContent = '';
 
-    resizePlanCanvas();
-    typewriterLines(EASTER_LINES, 0, () => {
-      setTimeout(() => launchPaperPlane(), 800);
-    });
-  }
-
-  function resizePlanCanvas() {
-    if (!planeC) return;
-    const W = window.innerWidth, H = window.innerHeight;
-    planeC.width  = W * dpr;
-    planeC.height = H * dpr;
-    planeC.style.width  = W + 'px';
-    planeC.style.height = H + 'px';
-    planeC.getContext('2d').setTransform(dpr, 0, 0, dpr, 0, 0);
-  }
-
-  function typewriterLines(lines, lineIdx, onDone) {
-    if (lineIdx >= lines.length) {
-      setTimeout(onDone, 600);
-      return;
-    }
-    const line = lines[lineIdx];
-    let charIdx = 0;
-    const existingText = easterT.innerHTML;
-    const lineDiv = document.createElement('div');
-    easterT.appendChild(lineDiv);
-
-    const interval = setInterval(() => {
-      charIdx++;
-      lineDiv.textContent = line.slice(0, charIdx);
-      if (charIdx >= line.length) {
-        clearInterval(interval);
-        setTimeout(() => typewriterLines(lines, lineIdx + 1, onDone), 500);
-      }
-    }, 45 + Math.random() * 30);
-  }
-
-  function launchPaperPlane() {
-    const pCtx = planeC.getContext('2d');
-    const W = planeC.clientWidth, H = planeC.clientHeight;
-
-    paperPlane = {
-      x: -40,
-      y: H / 2 + (Math.random() - 0.5) * H * 0.3,
-      angle: Math.PI * 0.04,
-      speed: 6,
-      t: 0,
-    };
-    planeParticles = [];
-
-    function planeDraw() {
-      pCtx.clearRect(0, 0, W, H);
-
-      if (!paperPlane) return;
-      paperPlane.x += paperPlane.speed;
-      paperPlane.t += 0.06;
-      paperPlane.y += Math.sin(paperPlane.t) * 0.5;
-
-      // Particle trail
-      planeParticles.push({
-        x: paperPlane.x - 8,
-        y: paperPlane.y,
-        vx: -1 + (Math.random() - 0.5) * 2,
-        vy: (Math.random() - 0.5) * 2,
-        life: 0,
-        maxLife: 40 + Math.random() * 30,
-        r: Math.random() * 2.5 + 0.5,
-      });
-
-      for (let i = planeParticles.length - 1; i >= 0; i--) {
-        const p = planeParticles[i];
-        p.x += p.vx; p.y += p.vy; p.life++;
-        const frac = 1 - p.life / p.maxLife;
-        pCtx.beginPath();
-        pCtx.arc(p.x, p.y, p.r * frac, 0, Math.PI * 2);
-        pCtx.fillStyle = `rgba(247,201,72,${frac * 0.7})`;
-        pCtx.fill();
-        if (p.life >= p.maxLife) planeParticles.splice(i, 1);
-      }
-
-      // Draw paper plane
-      pCtx.save();
-      pCtx.translate(paperPlane.x, paperPlane.y);
-      pCtx.rotate(paperPlane.angle);
-      pCtx.fillStyle = 'rgba(247,201,72,0.9)';
-      pCtx.shadowBlur  = 12;
-      pCtx.shadowColor = 'rgba(247,201,72,0.7)';
-      pCtx.beginPath();
-      pCtx.moveTo(20, 0);
-      pCtx.lineTo(-10, -8);
-      pCtx.lineTo(-5, 0);
-      pCtx.lineTo(-10, 8);
-      pCtx.closePath();
-      pCtx.fill();
-      pCtx.restore();
-
-      if (paperPlane.x > W + 60) {
-        paperPlane = null;
-        // Fade out and reset
+    let i = 0;
+    const chars = MEMORY.split('');
+    const typeInterval = setInterval(() => {
+      if (i < chars.length) {
+        eText.textContent += chars[i] === '\n' ? '\n' : chars[i];
+        i++;
+      } else {
+        clearInterval(typeInterval);
+        launchPlane();
         setTimeout(() => {
-          easterP.classList.remove('visible');
-          setTimeout(() => {
-            easterP.setAttribute('aria-hidden', 'true');
-            easterT.textContent = '';
-            pCtx.clearRect(0, 0, W, H);
-            easterActive = false;
-          }, 900);
-        }, 600);
-        return;
+          easter.classList.remove('visible');
+          easter.setAttribute('aria-hidden', 'true');
+        }, 5000);
       }
+    }, 58);
 
-      easterRaf = requestAnimationFrame(planeDraw);
-    }
-
-    easterRaf = requestAnimationFrame(planeDraw);
+    easter.addEventListener('click', () => {
+      clearInterval(typeInterval);
+      easter.classList.remove('visible');
+      easter.setAttribute('aria-hidden', 'true');
+    }, { once: true });
   }
 
-  // ── Main loop ──
-  let rafId;
+  function launchPlane() {
+    if (!plane) return;
+    plane.width  = window.innerWidth;
+    plane.height = window.innerHeight;
+    const ctx = plane.getContext('2d');
+    const particles = [];
+    let px = -40, py = plane.height * 0.5;
+    const tvx = 9, tvy = -2.5;
+    let angle = Math.atan2(tvy, tvx);
+
+    function drawPlane(x, y, a) {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(a);
+      ctx.strokeStyle = 'rgba(247,201,72,0.95)';
+      ctx.lineWidth   = 2;
+      ctx.shadowBlur  = 14;
+      ctx.shadowColor = 'rgba(247,201,72,0.7)';
+      ctx.beginPath();
+      ctx.moveTo(18,  0);
+      ctx.lineTo(-10,  8);
+      ctx.lineTo(-6,   0);
+      ctx.lineTo(-10, -8);
+      ctx.closePath();
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    function animPlane() {
+      ctx.clearRect(0, 0, plane.width, plane.height);
+      px += tvx; py += tvy;
+      if (Math.random() < 0.4) {
+        particles.push({ x: px, y: py, vx: (Math.random() - 0.5) * 2, vy: Math.random() * 1.5, life: 40, r: 2 + Math.random() * 3 });
+      }
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.x += p.vx; p.y += p.vy; p.life--;
+        const a = p.life / 40;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r * a, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(247,201,72,${a * 0.7})`;
+        ctx.fill();
+        if (p.life <= 0) particles.splice(i, 1);
+      }
+      drawPlane(px, py, angle);
+      if (px < plane.width + 80) requestAnimationFrame(animPlane);
+      else ctx.clearRect(0, 0, plane.width, plane.height);
+    }
+    requestAnimationFrame(animPlane);
+  }
+
+  /* ── Main render loop ── */
+  let frame = 0;
+  let loopStarted = false;
+
+  function renderAll() {
+    frame++;
+    if (frame % 8 === 0 || frame === 1) {
+      drawSky(skyL, mkRng(20240101), 79, 142, 247, 'Prince');
+      drawSky(skyR, mkRng(20240102), 247, 201, 72, 'Panditain');
+
+      for (const shoot of [{ s: shootL, cv: skyL }, { s: shootR, cv: skyR }]) {
+        if (!shoot.s) continue;
+        const sc = shoot.cv.getContext('2d');
+        const ss = shoot.s;
+        ss.x += ss.dx; ss.y += ss.dy; ss.life++;
+        const sa = 1 - ss.life / ss.maxLife;
+        sc.save();
+        sc.globalAlpha = sa;
+        sc.strokeStyle = 'rgba(230,240,255,0.9)';
+        sc.lineWidth = 1.5;
+        sc.shadowBlur = 8;
+        sc.shadowColor = 'rgba(200,220,255,0.8)';
+        sc.beginPath();
+        sc.moveTo(ss.x, ss.y);
+        sc.lineTo(ss.x - ss.dx * 5, ss.y - ss.dy * 5);
+        sc.stroke();
+        sc.restore();
+        if (ss.life >= ss.maxLife) {
+          if (shoot.s === shootL) shootL = null;
+          else shootR = null;
+        }
+      }
+    }
+  }
 
   function loop() {
-    left.draw();
-    right.draw();
-
-    const lpL = left.drawOrion();
-    const lpR = right.drawOrion();
-
-    drawThread();
-
-    rafId = requestAnimationFrame(loop);
+    renderAll();
+    requestAnimationFrame(loop);
   }
 
-  function handleVisibility() {
-    if (document.hidden) {
-      cancelAnimationFrame(rafId);
-      cancelAnimationFrame(easterRaf);
-    } else {
-      loop();
-    }
+  function tryStart() {
+    if (loopStarted) return;
+    const W = skyL.clientWidth;
+    if (W < 10) { requestAnimationFrame(tryStart); return; }
+    loopStarted = true;
+    loop();
+    animateThread();
   }
 
-  function resize() {
-    dpr = Math.min(window.devicePixelRatio || 1, 2);
-    left.resize();
-    right.resize();
-    resizeThread();
-    resizePlanCanvas();
+  /* Use ResizeObserver for reliable canvas sizing */
+  if (typeof ResizeObserver !== 'undefined') {
+    const ro = new ResizeObserver(() => {
+      frame = 0;
+      tryStart();
+    });
+    ro.observe(skyL);
+  } else {
+    setTimeout(tryStart, 200);
   }
 
-  window.addEventListener('resize', resize, { passive: true });
-  document.addEventListener('visibilitychange', handleVisibility);
-
-  resize();
-  loop();
+  window.addEventListener('resize', () => { frame = 0; }, { passive: true });
 }
