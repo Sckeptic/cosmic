@@ -275,8 +275,8 @@ export function init(shared) {
   function renderAll() {
     frame++;
     if (frame % 8 === 0 || frame === 1) {
-      drawSky(skyL, mkRng(20240101), 79,  142, 247);
-      drawSky(skyR, mkRng(20240102), 247, 201, 72);
+      drawSky(skyL, mkRng(20240101), 255, 107, 157);
+      drawSky(skyR, mkRng(20240102), 247, 201,  72);
 
       for (const shoot of [{ s: shootL, cv: skyL }, { s: shootR, cv: skyR }]) {
         if (!shoot.s) continue;

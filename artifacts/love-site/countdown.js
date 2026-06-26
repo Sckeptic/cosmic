@@ -1,4 +1,4 @@
-/* countdown.js — Countdown to next call with gold particle burst at zero */
+/* countdown.js — Countdown to next call with romantic particle burst at zero */
 
 export function init(shared) {
   const dateInput  = document.getElementById('countdown-date');
@@ -10,7 +10,6 @@ export function init(shared) {
   const partCanvas = document.getElementById('countdown-particles');
   if (!dateInput || !elDays) return;
 
-  // Stop arrow keys from triggering page navigation in the date input
   dateInput.addEventListener('keydown', e => e.stopPropagation());
 
   const LS_KEY = 'ls_countdown_date';
@@ -18,9 +17,7 @@ export function init(shared) {
   if (saved) {
     dateInput.value = saved;
   } else {
-    // Default: 3 days from now so the countdown is always live
     const d = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000);
-    // datetime-local needs "YYYY-MM-DDTHH:MM"
     dateInput.value = d.toISOString().slice(0, 16);
   }
 
@@ -48,9 +45,20 @@ export function init(shared) {
     const cx = partCanvas.width  / 2;
     const cy = partCanvas.height / 2;
 
-    const parts = Array.from({ length: 80 }, () => {
+    /* Romantic particle palette: rose + gold + lavender */
+    const palette = [
+      { r: 255, g: 107, b: 157, name: 'rose' },
+      { r: 247, g: 201, b:  72, name: 'gold' },
+      { r: 255, g: 150, b: 180, name: 'pink' },
+      { r: 200, g: 130, b: 255, name: 'lavender' },
+      { r: 255, g: 200, b: 120, name: 'peach' },
+    ];
+
+    const parts = Array.from({ length: 100 }, () => {
       const angle = Math.random() * Math.PI * 2;
-      const spd   = 3 + Math.random() * 8;
+      const spd   = 3 + Math.random() * 9;
+      const col   = palette[Math.floor(Math.random() * palette.length)];
+      const isHeart = Math.random() > 0.6;
       return {
         x: cx, y: cy,
         vx: Math.cos(angle) * spd,
@@ -58,9 +66,25 @@ export function init(shared) {
         life: 80 + Math.random() * 60,
         maxLife: 80 + Math.random() * 60,
         r: 2 + Math.random() * 4,
-        gold: Math.random() > 0.35,
+        col, isHeart,
       };
     });
+
+    function drawHeart(ctx, x, y, size, alpha, col) {
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.fillStyle = `rgba(${col.r},${col.g},${col.b},${alpha})`;
+      ctx.shadowBlur = 8;
+      ctx.shadowColor = `rgba(${col.r},${col.g},${col.b},0.6)`;
+      ctx.beginPath();
+      ctx.moveTo(x, y + size * 0.3);
+      ctx.bezierCurveTo(x, y, x - size, y, x - size, y + size * 0.4);
+      ctx.bezierCurveTo(x - size, y + size * 0.8, x, y + size * 1.1, x, y + size * 1.3);
+      ctx.bezierCurveTo(x, y + size * 1.1, x + size, y + size * 0.8, x + size, y + size * 0.4);
+      ctx.bezierCurveTo(x + size, y, x, y, x, y + size * 0.3);
+      ctx.fill();
+      ctx.restore();
+    }
 
     function animBurst() {
       ctx.clearRect(0, 0, partCanvas.width, partCanvas.height);
@@ -69,15 +93,20 @@ export function init(shared) {
         if (p.life <= 0) continue;
         alive = true;
         p.x += p.vx; p.y += p.vy;
-        p.vy += 0.12;
-        p.vx *= 0.98; p.life--;
+        p.vy += 0.10;
+        p.vx *= 0.99; p.life--;
         const a = p.life / p.maxLife;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r * a, 0, Math.PI * 2);
-        ctx.fillStyle = p.gold ? `rgba(247,201,72,${a})` : `rgba(255,255,200,${a * 0.7})`;
-        ctx.shadowBlur  = 8;
-        ctx.shadowColor = p.gold ? 'rgba(247,201,72,0.5)' : 'rgba(255,255,200,0.3)';
-        ctx.fill();
+        const { r, g, b } = p.col;
+        if (p.isHeart) {
+          drawHeart(ctx, p.x, p.y, p.r * a * 1.5, a * 0.85, p.col);
+        } else {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r * a, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${r},${g},${b},${a})`;
+          ctx.shadowBlur  = 8;
+          ctx.shadowColor = `rgba(${r},${g},${b},0.5)`;
+          ctx.fill();
+        }
       }
       if (alive) requestAnimationFrame(animBurst);
       else ctx.clearRect(0, 0, partCanvas.width, partCanvas.height);
@@ -122,6 +151,4 @@ export function init(shared) {
   setInterval(tick, 1000);
 }
 
-export function onEnter() {
-  // Numbers are always live — nothing extra needed on page enter
-}
+export function onEnter() {}

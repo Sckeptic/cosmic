@@ -1,4 +1,4 @@
-/* hero.js — EKG heartbeat between two glowing nodes */
+/* hero.js — EKG heartbeat between two glowing nodes (rose/romantic palette) */
 
 let _shared, _canvas, _ctx, _W, _H, _rafId;
 
@@ -42,8 +42,8 @@ function sampleBeat(t) {
 function resize() {
   if (!_canvas) return;
   const wrap = _canvas.parentElement;
-  _W = _canvas.width  = wrap.clientWidth;
-  _H = _canvas.height = wrap.clientHeight;
+  _W = _canvas.width  = wrap.clientWidth  || window.innerWidth;
+  _H = _canvas.height = wrap.clientHeight || 120;
 }
 
 let offset = 0;
@@ -58,13 +58,13 @@ function draw() {
   offset = (offset + speed) % 1;
   const midY = _H * 0.52;
 
-  /* Soft glow underline */
+  /* Soft rose glow underline */
   _ctx.save();
-  _ctx.lineWidth   = 5;
-  _ctx.strokeStyle = 'rgba(79,142,247,0.06)';
+  _ctx.lineWidth   = 6;
+  _ctx.strokeStyle = 'rgba(255,107,157,0.06)';
   _ctx.shadowBlur  = 30;
-  _ctx.shadowColor = 'rgba(79,142,247,0.2)';
-  _ctx.filter = 'blur(3px)';
+  _ctx.shadowColor = 'rgba(255,107,157,0.25)';
+  _ctx.filter = 'blur(4px)';
   _ctx.beginPath();
   for (let i = 0; i <= STEPS; i++) {
     const nx = i / STEPS;
@@ -74,19 +74,21 @@ function draw() {
   _ctx.stroke();
   _ctx.restore();
 
-  /* Main line */
+  /* Main rose line */
   _ctx.save();
   _ctx.lineWidth = 2;
   _ctx.lineJoin  = 'round';
-  _ctx.shadowBlur  = 18;
-  _ctx.shadowColor = 'rgba(100,180,255,0.7)';
+  _ctx.shadowBlur  = 22;
+  _ctx.shadowColor = 'rgba(255,100,160,0.75)';
 
   const grad = _ctx.createLinearGradient(0, 0, _W, 0);
-  grad.addColorStop(0,    'rgba(79,142,247,0.0)');
-  grad.addColorStop(0.08, 'rgba(79,142,247,1)');
-  grad.addColorStop(0.5,  'rgba(150,200,255,1)');
-  grad.addColorStop(0.92, 'rgba(79,142,247,1)');
-  grad.addColorStop(1,    'rgba(79,142,247,0.0)');
+  grad.addColorStop(0,    'rgba(255,107,157,0.0)');
+  grad.addColorStop(0.08, 'rgba(255,107,157,1)');
+  grad.addColorStop(0.35, 'rgba(255,80,140,1)');
+  grad.addColorStop(0.5,  'rgba(255,150,180,1)');
+  grad.addColorStop(0.65, 'rgba(247,201,72,1)');
+  grad.addColorStop(0.92, 'rgba(255,107,157,1)');
+  grad.addColorStop(1,    'rgba(255,107,157,0.0)');
   _ctx.strokeStyle = grad;
 
   _ctx.beginPath();
@@ -98,21 +100,31 @@ function draw() {
   _ctx.stroke();
   _ctx.restore();
 
-  /* Travelling glow head */
+  /* Travelling glow head — rose/white */
   const hx = _W * 0.68;
   const hy = midY - sampleBeat((0.68 + offset) % 1) * amp;
 
-  const rg = _ctx.createRadialGradient(hx, hy, 0, hx, hy, 14);
+  const rg = _ctx.createRadialGradient(hx, hy, 0, hx, hy, 16);
   rg.addColorStop(0,    'rgba(255,255,255,1)');
-  rg.addColorStop(0.25, 'rgba(160,210,255,0.9)');
+  rg.addColorStop(0.25, 'rgba(255,180,210,0.9)');
+  rg.addColorStop(0.6,  'rgba(255,107,157,0.4)');
   rg.addColorStop(1,    'transparent');
   _ctx.beginPath();
-  _ctx.arc(hx, hy, 14, 0, Math.PI * 2);
+  _ctx.arc(hx, hy, 16, 0, Math.PI * 2);
   _ctx.fillStyle = rg;
   _ctx.fill();
   _ctx.beginPath();
   _ctx.arc(hx, hy, 2.5, 0, Math.PI * 2);
   _ctx.fillStyle = '#fff';
+  _ctx.fill();
+
+  /* Extra glow trail */
+  const trail = _ctx.createRadialGradient(hx - 20, hy, 0, hx - 20, hy, 30);
+  trail.addColorStop(0,   'rgba(255,107,157,0.3)');
+  trail.addColorStop(1,   'transparent');
+  _ctx.beginPath();
+  _ctx.arc(hx - 20, hy, 30, 0, Math.PI * 2);
+  _ctx.fillStyle = trail;
   _ctx.fill();
 
   _rafId = requestAnimationFrame(draw);
