@@ -1575,15 +1575,16 @@ html[data-nav-dir="back"] .section.page-leaving {
 }
 
 .starmap-thread-col {
-  width: clamp(40px, 6vw, 80px);
+  width: clamp(100px, 13vw, 160px);
   display: flex;
   align-items: stretch;
   justify-content: center;
-  padding-top: clamp(28px, 4vh, 40px);
+  padding-top: 0;
 }
 #thread-canvas {
   width: 100%;
   height: 100%;
+  display: block;
 }
 
 .starmap-footer {
@@ -1914,11 +1915,11 @@ html[data-nav-dir="back"] .section.page-leaving {
   }
   .starmap-thread-col {
     width: 100%;
-    height: 40px;
+    height: 120px;
     padding-top: 0;
-    padding-left: clamp(20px, 4vh, 40px);
+    padding-left: 0;
   }
-  #thread-canvas { width: 100%; height: 40px; }
+  #thread-canvas { width: 100%; height: 120px; }
   .page-nav { right: 10px; }
   .arrow-prev { bottom: calc(50% + 42px); right: 10px; }
   .arrow-next { bottom: calc(50% - 78px); right: 10px; }

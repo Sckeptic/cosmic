@@ -1,4 +1,6 @@
-/* starmap.js — Dual night sky with Orion + golden thread + easter egg */
+/* starmap.js — Dual night sky with Orion + WebGL cosmic portal + easter egg */
+
+import { initPortal } from './portal.js';
 
 let _shared;
 
@@ -122,59 +124,14 @@ export function init(shared) {
     if (!shootR) shootR = spawnShoot(skyR);
   }, 28000 + Math.random() * 12000);
 
-  /* ── Thread animation ── */
-  let threadPhase = 0;
-  let threadClicks = 0;
+  /* ── WebGL Cosmic Portal ── */
+  let portalInstance = null;
+  let threadClicks   = 0;
   let threadClickTimer = null;
 
-  function animateThread() {
-    const ctx = thread.getContext('2d');
-    const W = thread.width  = thread.clientWidth;
-    const H = thread.height = thread.clientHeight;
-    if (W < 2 || H < 2) { requestAnimationFrame(animateThread); return; }
-    ctx.clearRect(0, 0, W, H);
-
-    threadPhase += 0.03;
-    const pulse = 0.6 + 0.4 * Math.sin(threadPhase) + (_shared?.musicReactive ?? 0) * 0.4;
-
-    const cx = W / 2;
-    const grd = ctx.createLinearGradient(cx, 0, cx, H);
-    grd.addColorStop(0,   'transparent');
-    grd.addColorStop(0.2, `rgba(247,201,72,${0.08 * pulse})`);
-    grd.addColorStop(0.5, `rgba(247,201,72,${0.14 * pulse})`);
-    grd.addColorStop(0.8, `rgba(247,201,72,${0.08 * pulse})`);
-    grd.addColorStop(1,   'transparent');
-    ctx.fillStyle = grd;
-    ctx.fillRect(0, 0, W, H);
-
-    ctx.save();
-    ctx.shadowBlur  = 14 * pulse;
-    ctx.shadowColor = 'rgba(247,201,72,0.6)';
-    const lineGrd = ctx.createLinearGradient(cx, 0, cx, H);
-    lineGrd.addColorStop(0,   'transparent');
-    lineGrd.addColorStop(0.1, `rgba(247,201,72,${0.7 * pulse})`);
-    lineGrd.addColorStop(0.5, `rgba(255,220,80,${pulse})`);
-    lineGrd.addColorStop(0.9, `rgba(247,201,72,${0.7 * pulse})`);
-    lineGrd.addColorStop(1,   'transparent');
-    ctx.strokeStyle = lineGrd;
-    ctx.lineWidth = 1.5;
-    ctx.beginPath();
-    ctx.moveTo(cx, 0);
-    ctx.lineTo(cx, H);
-    ctx.stroke();
-    ctx.restore();
-
-    const particleY = ((threadPhase * 12) % H);
-    const pg = ctx.createRadialGradient(cx, particleY, 0, cx, particleY, 6);
-    pg.addColorStop(0,   `rgba(255,240,120,${0.9 * pulse})`);
-    pg.addColorStop(0.5, 'rgba(247,201,72,0.3)');
-    pg.addColorStop(1,   'transparent');
-    ctx.beginPath();
-    ctx.arc(cx, particleY, 6, 0, Math.PI * 2);
-    ctx.fillStyle = pg;
-    ctx.fill();
-
-    requestAnimationFrame(animateThread);
+  function startPortal() {
+    if (portalInstance) return;
+    portalInstance = initPortal(thread, () => _shared);
   }
 
   thread.style.cursor = 'pointer';
@@ -309,7 +266,7 @@ export function init(shared) {
     if (skyL.clientWidth < 4) { requestAnimationFrame(startLoop); return; }
     loopStarted = true;
     renderAll();
-    animateThread();
+    startPortal();
   }
 
   if (typeof ResizeObserver !== 'undefined') {

@@ -1,0 +1,188 @@
+I approve using Canvas/WebGL or Three.js if needed to achieve the best possible result.
+
+Do NOT fake 3D using only CSS.
+
+Upgrade ONLY the center connection of the Star Map section.
+
+DO NOT modify:
+- Page layout
+- Typography
+- Colors outside the center portal
+- Left and right star maps
+- Navigation
+- Other sections
+- Existing animations outside this component
+
+The only objective is to transform the current center connection into a world-class interactive 3D cosmic portal.
+
+=====================================================
+VISION
+=====================================================
+
+The center should feel like a living universe connecting two souls across space.
+
+It must immediately become the most beautiful and premium part of the entire website.
+
+Users should stop scrolling just to look at it.
+
+It should look emotional, mysterious, elegant and cinematic.
+
+=====================================================
+PORTAL DESIGN
+=====================================================
+
+Replace the current glowing vertical line with a fully volumetric cosmic portal.
+
+Inside the portal create an infinite universe containing:
+
+• Rotating spiral galaxies
+• Deep colorful nebula clouds
+• Multiple depth layers
+• Orbiting planets
+• Tiny moons
+• Floating asteroids
+• Thousands of stars
+• Cosmic dust
+• Energy particles
+• Golden plasma streams
+• Light rays
+• Space fog
+• Gravitational lensing
+• Black hole distortion
+• Infinite tunnel illusion
+
+Nothing should appear flat.
+
+Everything should exist on different Z-depths.
+
+=====================================================
+3D DEPTH
+=====================================================
+
+The portal must feel like users can look infinitely deep inside it.
+
+Objects close to the camera move faster.
+
+Far objects move slower.
+
+Create realistic parallax.
+
+Use layered particles.
+
+Use perspective.
+
+Use depth of field.
+
+Use volumetric lighting.
+
+Use bloom carefully.
+
+Create realistic cinematic lighting.
+
+=====================================================
+ANIMATION
+=====================================================
+
+Galaxy rotates slowly.
+
+Nebula continuously flows.
+
+Stars randomly twinkle.
+
+Particles drift naturally.
+
+Golden energy continuously rises.
+
+Planets orbit slowly.
+
+Occasional comet flies through.
+
+Brightness gently breathes.
+
+Portal softly pulses.
+
+Everything loops seamlessly.
+
+Movement must feel calm and premium.
+
+=====================================================
+INTERACTION
+=====================================================
+
+When mouse approaches:
+
+• Portal reacts slightly.
+• Galaxy rotates toward cursor.
+• Particles become more active.
+• Light intensity increases.
+• Small gravitational distortion appears.
+• Tiny stars bend around the center.
+• Smooth easing.
+
+On mouse leave everything slowly returns.
+
+=====================================================
+VISUAL STYLE
+=====================================================
+
+Apple Vision Pro quality.
+
+Apple keynote quality.
+
+Interstellar.
+
+NASA.
+
+Unreal Engine 5 cinematic lighting.
+
+Pixar lighting quality.
+
+Luxury sci-fi.
+
+Mystical.
+
+Elegant.
+
+Premium.
+
+Photorealistic.
+
+Emotionally beautiful.
+
+Avoid:
+- Cheap glow
+- Flat gradients
+- Cartoon effects
+- Generic particle systems
+- Flashy animations
+- Over-saturated colors
+
+=====================================================
+PERFORMANCE
+=====================================================
+
+Maintain smooth 60 FPS.
+
+GPU accelerated rendering.
+
+Optimize particle count.
+
+Pause rendering when offscreen.
+
+No layout shifts.
+
+No unnecessary DOM updates.
+
+Desktop and mobile compatible.
+
+=====================================================
+FINAL GOAL
+=====================================================
+
+The center should no longer resemble a glowing line.
+
+It should become an infinite 3D cosmic gateway that visually connects both star maps through a living universe.
+
+The result should feel like something from an Apple product launch, an Unreal Engine cinematic, or a Hollywood sci-fi film.
+
+Take your time and build the highest-quality implementation possible rather than the quickest one.
