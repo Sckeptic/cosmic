@@ -11,6 +11,21 @@ const COLORS = [
   { r: 160, g: 220, b: 255 },
 ];
 
+/* Safe rounded rect — ctx.roundRect is Chrome 99+ only */
+function pillPath(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+}
+
 const ghosts = [
   'miss you', 'just one call', 'good night, you',
   'be safe', 'thinking about you', 'come back soon',
@@ -77,8 +92,7 @@ function draw() {
     _ctx.shadowBlur  = 16;
     _ctx.shadowColor = `rgba(${r},${g},${bc},0.35)`;
     _ctx.fillStyle   = `rgba(${r},${g},${bc},0.09)`;
-    _ctx.beginPath();
-    _ctx.roundRect(bx, by, pw, ph, ph / 2);
+    pillPath(_ctx, bx, by, pw, ph, ph / 2);
     _ctx.fill();
 
     _ctx.shadowBlur = 0;
