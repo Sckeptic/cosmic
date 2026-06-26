@@ -1,15 +1,18 @@
 /* countdown.js — Countdown to next call with gold particle burst at zero */
+
 export function init(shared) {
-  const dateInput = document.getElementById('countdown-date');
-  const elDays    = document.getElementById('cd-days');
-  const elHours   = document.getElementById('cd-hours');
-  const elMins    = document.getElementById('cd-mins');
-  const elSecs    = document.getElementById('cd-secs');
-  const zeroMsg   = document.getElementById('countdown-zero-msg');
-  const partCanvas= document.getElementById('countdown-particles');
+  const dateInput  = document.getElementById('countdown-date');
+  const elDays     = document.getElementById('cd-days');
+  const elHours    = document.getElementById('cd-hours');
+  const elMins     = document.getElementById('cd-mins');
+  const elSecs     = document.getElementById('cd-secs');
+  const zeroMsg    = document.getElementById('countdown-zero-msg');
+  const partCanvas = document.getElementById('countdown-particles');
   if (!dateInput || !elDays) return;
 
-  /* Restore saved date */
+  // Stop arrow keys from triggering page navigation in the date input
+  dateInput.addEventListener('keydown', e => e.stopPropagation());
+
   const LS_KEY = 'ls_countdown_date';
   const saved  = localStorage.getItem(LS_KEY);
   if (saved) dateInput.value = saved;
@@ -18,10 +21,8 @@ export function init(shared) {
     localStorage.setItem(LS_KEY, dateInput.value);
   });
 
-  /* Pad to 2 digits */
   function pad2(n) { return String(n).padStart(2, '0'); }
 
-  /* Update digit with tick animation */
   function setDigit(el, val) {
     const s = pad2(val);
     if (el.textContent !== s) {
@@ -32,13 +33,11 @@ export function init(shared) {
     }
   }
 
-  /* Gold particle burst */
-  function bust() {
+  function burst() {
     if (!partCanvas) return;
     const ctx = partCanvas.getContext('2d');
     partCanvas.width  = window.innerWidth;
     partCanvas.height = window.innerHeight;
-
     const cx = partCanvas.width  / 2;
     const cy = partCanvas.height / 2;
 
@@ -66,10 +65,9 @@ export function init(shared) {
         p.vy += 0.12;
         p.vx *= 0.98; p.life--;
         const a = p.life / p.maxLife;
-        const col = p.gold ? `rgba(247,201,72,${a})` : `rgba(255,255,200,${a * 0.7})`;
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r * a, 0, Math.PI * 2);
-        ctx.fillStyle = col;
+        ctx.fillStyle = p.gold ? `rgba(247,201,72,${a})` : `rgba(255,255,200,${a * 0.7})`;
         ctx.shadowBlur  = 8;
         ctx.shadowColor = p.gold ? 'rgba(247,201,72,0.5)' : 'rgba(255,255,200,0.3)';
         ctx.fill();
@@ -85,24 +83,18 @@ export function init(shared) {
   function tick() {
     const raw = dateInput.value;
     if (!raw) {
-      [elDays, elHours, elMins, elSecs].forEach(el => el.textContent = '--');
-      elDays.classList.remove('near-zero');
+      [elDays, elHours, elMins, elSecs].forEach(el => { el.textContent = '--'; el.classList.remove('urgent'); });
       return;
     }
 
     const target = new Date(raw).getTime();
-    const now    = Date.now();
-    const diff   = target - now;
+    const diff   = target - Date.now();
 
     if (diff <= 0) {
-      setDigit(elDays,  0); setDigit(elHours, 0);
-      setDigit(elMins,  0); setDigit(elSecs,  0);
-      [elDays, elHours, elMins, elSecs].forEach(el => el.classList.add('near-zero'));
-      if (!zeroed) {
-        zeroed = true;
-        zeroMsg?.classList.add('visible');
-        bust();
-      }
+      setDigit(elDays, 0); setDigit(elHours, 0);
+      setDigit(elMins, 0); setDigit(elSecs,  0);
+      [elDays, elHours, elMins, elSecs].forEach(el => el.classList.add('urgent'));
+      if (!zeroed) { zeroed = true; zeroMsg?.classList.add('visible'); burst(); }
       return;
     }
 
@@ -110,23 +102,19 @@ export function init(shared) {
     zeroMsg?.classList.remove('visible');
 
     const totalSecs = Math.floor(diff / 1000);
-    const d  = Math.floor(totalSecs / 86400);
-    const h  = Math.floor((totalSecs % 86400) / 3600);
-    const m  = Math.floor((totalSecs % 3600)  / 60);
-    const s  = totalSecs % 60;
+    setDigit(elDays,  Math.floor(totalSecs / 86400));
+    setDigit(elHours, Math.floor((totalSecs % 86400) / 3600));
+    setDigit(elMins,  Math.floor((totalSecs % 3600)  / 60));
+    setDigit(elSecs,  totalSecs % 60);
 
-    setDigit(elDays,  d);
-    setDigit(elHours, h);
-    setDigit(elMins,  m);
-    setDigit(elSecs,  s);
-
-    /* Warm up numbers as target approaches (within 1 day) */
     const nearZero = diff < 86400000;
-    [elDays, elHours, elMins, elSecs].forEach(el => {
-      el.classList.toggle('near-zero', nearZero);
-    });
+    [elDays, elHours, elMins, elSecs].forEach(el => el.classList.toggle('urgent', nearZero));
   }
 
   tick();
   setInterval(tick, 1000);
+}
+
+export function onEnter() {
+  // Numbers are always live — nothing extra needed on page enter
 }

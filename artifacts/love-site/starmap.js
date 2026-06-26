@@ -1,5 +1,9 @@
 /* starmap.js — Dual night sky with Orion + golden thread + easter egg */
+
+let _shared;
+
 export function init(shared) {
+  _shared = shared;
   const skyL   = document.getElementById('sky-left');
   const skyR   = document.getElementById('sky-right');
   const thread = document.getElementById('thread-canvas');
@@ -8,13 +12,11 @@ export function init(shared) {
   const plane  = document.getElementById('plane-canvas');
   if (!skyL || !skyR || !thread) return;
 
-  /* ── Seed-based RNG so star field is stable ── */
   function mkRng(seed) {
     let s = seed;
     return () => { s = (s * 16807 + 0) % 2147483647; return (s - 1) / 2147483646; };
   }
 
-  /* ── Orion star positions (normalised 0..1) ── */
   const ORION = [
     { name: 'Betelgeuse', x: 0.30, y: 0.28, mag: 2.2 },
     { name: 'Bellatrix',  x: 0.65, y: 0.28, mag: 2.4 },
@@ -26,22 +28,20 @@ export function init(shared) {
   ];
   const ORION_LINES = [[0,1],[0,2],[1,3],[2,3],[3,4],[0,5],[1,6],[5,6]];
 
-  /* ── Draw a star canvas ── */
-  function drawSky(canvas, rng, tintR, tintG, tintB, label) {
+  function drawSky(canvas, rng, tintR, tintG, tintB) {
     const ctx = canvas.getContext('2d');
-    const W = canvas.width = canvas.clientWidth;
+    const W = canvas.width  = canvas.clientWidth;
     const H = canvas.height = canvas.clientHeight;
+    if (W < 4 || H < 4) return;
 
     ctx.clearRect(0, 0, W, H);
 
-    /* Background */
-    const bg = ctx.createRadialGradient(W/2, H/2, 0, W/2, H/2, Math.max(W, H)*0.7);
+    const bg = ctx.createRadialGradient(W/2, H/2, 0, W/2, H/2, Math.max(W, H) * 0.7);
     bg.addColorStop(0, `rgba(${tintR},${tintG},${tintB},0.08)`);
     bg.addColorStop(1, 'rgba(0,0,0,0)');
     ctx.fillStyle = bg;
     ctx.fillRect(0, 0, W, H);
 
-    /* Field stars */
     const COUNT = Math.floor((W * H) / 3200);
     for (let i = 0; i < COUNT; i++) {
       const sx = rng() * W, sy = rng() * H;
@@ -63,7 +63,6 @@ export function init(shared) {
       ctx.fill();
     }
 
-    /* Orion constellation lines */
     ctx.save();
     ctx.strokeStyle = `rgba(${tintR},${tintG},${tintB},0.22)`;
     ctx.lineWidth = 1;
@@ -78,7 +77,6 @@ export function init(shared) {
     }
     ctx.restore();
 
-    /* Orion named stars */
     for (const star of ORION) {
       const sx = star.x * W, sy = star.y * H;
       const br = (3.5 - star.mag) * 3.5;
@@ -97,37 +95,34 @@ export function init(shared) {
       ctx.fillStyle = '#fff';
       ctx.fill();
 
-      /* Star name */
       ctx.save();
       ctx.font = '400 9px "Space Grotesk", system-ui';
       ctx.fillStyle = `rgba(${tintR},${tintG},${tintB},0.5)`;
-      ctx.textAlign  = 'center';
+      ctx.textAlign = 'center';
       ctx.fillText(star.name, sx, sy - br * 2.5 - 4);
       ctx.restore();
     }
   }
 
-  /* Shooting star state */
   let shootL = null, shootR = null;
   function spawnShoot(canvas) {
     const W = canvas.clientWidth, H = canvas.clientHeight;
     const angle = (25 + Math.random() * 30) * Math.PI / 180;
     return {
-      x:  Math.random() * W * 0.5,
-      y:  Math.random() * H * 0.3,
+      x: Math.random() * W * 0.5,
+      y: Math.random() * H * 0.3,
       dx: Math.cos(angle) * 7,
       dy: Math.sin(angle) * 7,
       life: 0, maxLife: 30 + Math.random() * 20,
       canvas,
     };
   }
-
   setInterval(() => {
     if (!shootL) shootL = spawnShoot(skyL);
     if (!shootR) shootR = spawnShoot(skyR);
   }, 28000 + Math.random() * 12000);
 
-  /* ── Thread canvas animation ── */
+  /* ── Thread animation ── */
   let threadPhase = 0;
   let threadClicks = 0;
   let threadClickTimer = null;
@@ -136,12 +131,12 @@ export function init(shared) {
     const ctx = thread.getContext('2d');
     const W = thread.width  = thread.clientWidth;
     const H = thread.height = thread.clientHeight;
+    if (W < 2 || H < 2) { requestAnimationFrame(animateThread); return; }
     ctx.clearRect(0, 0, W, H);
 
     threadPhase += 0.03;
-    const pulse = 0.6 + 0.4 * Math.sin(threadPhase) + shared.musicReactive * 0.4;
+    const pulse = 0.6 + 0.4 * Math.sin(threadPhase) + (_shared?.musicReactive ?? 0) * 0.4;
 
-    /* Glow halo */
     const cx = W / 2;
     const grd = ctx.createLinearGradient(cx, 0, cx, H);
     grd.addColorStop(0,   'transparent');
@@ -152,10 +147,9 @@ export function init(shared) {
     ctx.fillStyle = grd;
     ctx.fillRect(0, 0, W, H);
 
-    /* Thread line */
     ctx.save();
     ctx.shadowBlur  = 14 * pulse;
-    ctx.shadowColor = `rgba(247,201,72,0.6)`;
+    ctx.shadowColor = 'rgba(247,201,72,0.6)';
     const lineGrd = ctx.createLinearGradient(cx, 0, cx, H);
     lineGrd.addColorStop(0,   'transparent');
     lineGrd.addColorStop(0.1, `rgba(247,201,72,${0.7 * pulse})`);
@@ -170,11 +164,10 @@ export function init(shared) {
     ctx.stroke();
     ctx.restore();
 
-    /* Travelling particle up thread */
     const particleY = ((threadPhase * 12) % H);
     const pg = ctx.createRadialGradient(cx, particleY, 0, cx, particleY, 6);
     pg.addColorStop(0,   `rgba(255,240,120,${0.9 * pulse})`);
-    pg.addColorStop(0.5, `rgba(247,201,72,0.3)`);
+    pg.addColorStop(0.5, 'rgba(247,201,72,0.3)');
     pg.addColorStop(1,   'transparent');
     ctx.beginPath();
     ctx.arc(cx, particleY, 6, 0, Math.PI * 2);
@@ -184,16 +177,12 @@ export function init(shared) {
     requestAnimationFrame(animateThread);
   }
 
-  /* Click hit-test on thread canvas */
   thread.style.cursor = 'pointer';
   thread.addEventListener('click', () => {
     threadClicks++;
     clearTimeout(threadClickTimer);
     threadClickTimer = setTimeout(() => { threadClicks = 0; }, 2800);
-    if (threadClicks >= 3) {
-      threadClicks = 0;
-      triggerEasterEgg();
-    }
+    if (threadClicks >= 3) { threadClicks = 0; triggerEasterEgg(); }
   });
 
   /* ── Easter egg ── */
@@ -202,7 +191,7 @@ export function init(shared) {
   function triggerEasterEgg() {
     if (!easter) return;
     easter.setAttribute('aria-hidden', 'false');
-    easter.classList.add('visible');
+    easter.classList.add('show');
     eText.textContent = '';
 
     let i = 0;
@@ -215,7 +204,7 @@ export function init(shared) {
         clearInterval(typeInterval);
         launchPlane();
         setTimeout(() => {
-          easter.classList.remove('visible');
+          easter.classList.remove('show');
           easter.setAttribute('aria-hidden', 'true');
         }, 5000);
       }
@@ -223,7 +212,7 @@ export function init(shared) {
 
     easter.addEventListener('click', () => {
       clearInterval(typeInterval);
-      easter.classList.remove('visible');
+      easter.classList.remove('show');
       easter.setAttribute('aria-hidden', 'true');
     }, { once: true });
   }
@@ -236,20 +225,20 @@ export function init(shared) {
     const particles = [];
     let px = -40, py = plane.height * 0.5;
     const tvx = 9, tvy = -2.5;
-    let angle = Math.atan2(tvy, tvx);
+    const angle = Math.atan2(tvy, tvx);
 
     function drawPlane(x, y, a) {
       ctx.save();
       ctx.translate(x, y);
       ctx.rotate(a);
       ctx.strokeStyle = 'rgba(247,201,72,0.95)';
-      ctx.lineWidth   = 2;
-      ctx.shadowBlur  = 14;
+      ctx.lineWidth = 2;
+      ctx.shadowBlur = 14;
       ctx.shadowColor = 'rgba(247,201,72,0.7)';
       ctx.beginPath();
-      ctx.moveTo(18,  0);
-      ctx.lineTo(-10,  8);
-      ctx.lineTo(-6,   0);
+      ctx.moveTo(18, 0);
+      ctx.lineTo(-10, 8);
+      ctx.lineTo(-6, 0);
       ctx.lineTo(-10, -8);
       ctx.closePath();
       ctx.stroke();
@@ -286,8 +275,8 @@ export function init(shared) {
   function renderAll() {
     frame++;
     if (frame % 8 === 0 || frame === 1) {
-      drawSky(skyL, mkRng(20240101), 79, 142, 247, 'Prince');
-      drawSky(skyR, mkRng(20240102), 247, 201, 72, 'Panditain');
+      drawSky(skyL, mkRng(20240101), 79,  142, 247);
+      drawSky(skyR, mkRng(20240102), 247, 201, 72);
 
       for (const shoot of [{ s: shootL, cv: skyL }, { s: shootR, cv: skyR }]) {
         if (!shoot.s) continue;
@@ -312,32 +301,30 @@ export function init(shared) {
         }
       }
     }
+    requestAnimationFrame(renderAll);
   }
 
-  function loop() {
-    renderAll();
-    requestAnimationFrame(loop);
-  }
-
-  function tryStart() {
+  function startLoop() {
     if (loopStarted) return;
-    const W = skyL.clientWidth;
-    if (W < 10) { requestAnimationFrame(tryStart); return; }
+    if (skyL.clientWidth < 4) { requestAnimationFrame(startLoop); return; }
     loopStarted = true;
-    loop();
+    renderAll();
     animateThread();
   }
 
-  /* Use ResizeObserver for reliable canvas sizing */
   if (typeof ResizeObserver !== 'undefined') {
     const ro = new ResizeObserver(() => {
       frame = 0;
-      tryStart();
+      startLoop();
     });
     ro.observe(skyL);
   } else {
-    setTimeout(tryStart, 200);
+    setTimeout(startLoop, 200);
   }
 
   window.addEventListener('resize', () => { frame = 0; }, { passive: true });
+}
+
+export function onEnter() {
+  // Canvases are always full-size now (fixed sections), nothing extra needed
 }
