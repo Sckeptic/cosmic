@@ -41,37 +41,56 @@ function triggerGlitch() {
   _failed = true;
   clearInterval(_tickId);
 
-  phone.classList.add('shaking', 'chromatic');
-  phone.style.borderColor = 'rgba(255,52,102,0.4)';
+  // Phase 1 — Impact burst: RGB split + screen flash + chaos jitter
+  phone.classList.add('glitching', 'screen-flash');
+  phone.style.borderColor = 'rgba(255,52,102,0.5)';
   glitchEl?.classList.add('active');
   scanEl?.classList.add('active');
 
   const sliceId = setInterval(() => {
     if (phone) {
-      phone.style.transform =
-        `translateX(${(Math.random() - 0.5) * 8}px) skewX(${(Math.random() - 0.5) * 1.5}deg)`;
+      const x    = (Math.random() - 0.5) * 16;
+      const skew = (Math.random() - 0.5) * 3;
+      const sc   = 0.97 + Math.random() * 0.06;
+      phone.style.transform = `translateX(${x}px) skewX(${skew}deg) scaleX(${sc})`;
     }
-  }, 40);
+  }, 30);
 
+  // Phase 2 — Status lands (220 ms)
   setTimeout(() => {
     setStatus('Call Failed', true);
     glow?.classList.add('failed');
     setEndMode('retry');
   }, 220);
 
+  // Phase 3 — Stop RGB split, keep chromatic afterglow, remove flash class (600 ms)
+  setTimeout(() => {
+    phone.classList.remove('glitching', 'screen-flash');
+    phone.classList.add('chromatic');
+  }, 600);
+
+  // Phase 4 — Stop chaotic jitter, tiny aftershock lingers (700 ms)
   setTimeout(() => {
     clearInterval(sliceId);
     if (phone) {
-      phone.style.transform = '';
-      phone.classList.remove('shaking', 'chromatic');
-      phone.style.borderColor = '';
+      phone.style.transform = `translateX(-2px) skewX(0.3deg)`;
     }
-  }, 650);
+  }, 700);
 
+  // Phase 5 — Phone fully settles (950 ms)
+  setTimeout(() => {
+    if (phone) {
+      phone.style.transform = '';
+      phone.style.borderColor = '';
+      phone.classList.remove('chromatic');
+    }
+  }, 950);
+
+  // Phase 6 — Overlays fade out (1400 ms)
   setTimeout(() => {
     glitchEl?.classList.remove('active');
     scanEl?.classList.remove('active');
-  }, 1300);
+  }, 1400);
 
   // Auto-retry countdown
   let count = RETRY_SEC;
@@ -123,9 +142,10 @@ function resetCall() {
   glow?.classList.remove('failed');
   if (timer) timer.textContent = '0:00';
   if (phone) {
-    phone.classList.remove('shaking', 'chromatic');
+    phone.classList.remove('shaking', 'chromatic', 'glitching', 'screen-flash');
     phone.style.transform = '';
     phone.style.borderColor = '';
+    phone.style.filter = '';
   }
   glitchEl?.classList.remove('active');
   scanEl?.classList.remove('active');

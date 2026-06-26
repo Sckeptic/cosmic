@@ -1234,16 +1234,23 @@ html[data-nav-dir="back"] .section.page-leaving {
 }
 .glitch-overlay.active {
   opacity: 1;
-  animation: glitch-flicker 0.1s step-end infinite;
+  animation: glitch-flicker 0.06s step-end infinite;
 }
 @keyframes glitch-flicker {
-  0%   { background: rgba(255,20,97,0.06); }
-  33%  { background: rgba(0,200,255,0.04); clip-path: inset(20% 0 30% 0); }
-  66%  { background: rgba(255,20,97,0.08); clip-path: inset(60% 0 10% 0); }
-  100% { background: rgba(255,20,97,0.06); clip-path: none; }
+  0%   { background: rgba(255,20,97,0.07); clip-path: none; }
+  10%  { background: rgba(0,220,255,0.06); clip-path: inset(8% 0 74% 0);  transform: translateX(6px); }
+  20%  { background: rgba(255,20,97,0.10); clip-path: none; transform: none; }
+  30%  { background: rgba(0,220,255,0.05); clip-path: inset(55% 0 18% 0); transform: translateX(-8px); }
+  40%  { background: transparent;          clip-path: inset(80% 0 2% 0);  transform: translateX(4px); }
+  50%  { background: rgba(255,20,97,0.12); clip-path: none; transform: none; }
+  60%  { background: rgba(0,220,255,0.07); clip-path: inset(30% 0 45% 0); transform: translateX(-5px); }
+  70%  { background: rgba(255,20,97,0.05); clip-path: none; transform: none; }
+  80%  { background: rgba(255,255,255,0.08); clip-path: inset(65% 0 8% 0); transform: translateX(7px); }
+  90%  { background: rgba(255,20,97,0.09); clip-path: none; transform: none; }
+  100% { background: rgba(255,20,97,0.07); clip-path: none; }
 }
 
-/* Scanlines — Bug fix: was missing */
+/* Scanlines */
 .scanlines {
   position: absolute;
   inset: 0;
@@ -1255,14 +1262,21 @@ html[data-nav-dir="back"] .section.page-leaving {
     0deg,
     transparent,
     transparent 2px,
-    rgba(255,20,97,0.03) 2px,
-    rgba(255,20,97,0.03) 4px
+    rgba(255,20,97,0.04) 2px,
+    rgba(255,20,97,0.04) 4px
   );
   transition: opacity 0.2s;
 }
-.scanlines.active { opacity: 0.4; }
+.scanlines.active {
+  opacity: 0.55;
+  animation: scanline-rush 0.4s linear infinite;
+}
+@keyframes scanline-rush {
+  from { background-position: 0 0; }
+  to   { background-position: 0 -80px; }
+}
 
-/* Phone shake — Bug fix: was missing */
+/* Phone shake */
 @keyframes phone-shake {
   0%, 100% { transform: translateX(0); }
   20%  { transform: translateX(-4px) skewX(-1deg); }
@@ -1273,6 +1287,23 @@ html[data-nav-dir="back"] .section.page-leaving {
 .phone.shaking {
   animation: phone-shake 0.08s ease-in-out infinite;
 }
+
+/* RGB chromatic split on glitching phone */
+.phone.glitching {
+  animation: glitch-rgb 0.05s step-end infinite;
+}
+@keyframes glitch-rgb {
+  0%   { filter: none; }
+  15%  { filter: drop-shadow(-5px 0 0 rgba(255,0,80,0.75)) drop-shadow(5px 0 0 rgba(0,220,255,0.65)); }
+  30%  { filter: none; }
+  45%  { filter: drop-shadow(4px 0 0 rgba(0,220,255,0.7)) drop-shadow(-4px 0 0 rgba(255,0,80,0.6)); }
+  60%  { filter: none; }
+  75%  { filter: drop-shadow(-6px 0 0 rgba(255,0,80,0.85)) drop-shadow(6px 0 0 rgba(0,220,255,0.5)); }
+  90%  { filter: none; }
+  100% { filter: drop-shadow(3px 0 0 rgba(255,0,80,0.5)); }
+}
+
+/* Chromatic afterglow */
 .phone.chromatic::before {
   content: '';
   position: absolute;
@@ -1282,6 +1313,23 @@ html[data-nav-dir="back"] .section.page-leaving {
   mix-blend-mode: screen;
   pointer-events: none;
   z-index: 8;
+}
+
+/* Screen flash on fail */
+.phone.screen-flash::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: rgba(255,255,255,0.18);
+  pointer-events: none;
+  z-index: 11;
+  animation: screen-flash 0.5s ease-out forwards;
+}
+@keyframes screen-flash {
+  0%   { opacity: 1; }
+  40%  { opacity: 0.4; }
+  100% { opacity: 0; }
 }
 
 
