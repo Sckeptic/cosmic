@@ -1,0 +1,69 @@
+Do a root-cause fix for the phone layout. Do NOT apply cosmetic margin tweaks.
+
+The current layout breaks on different mobile screen sizes because it relies on viewport height (vh), fixed margins, and flex compression.
+
+Do NOT redesign the UI.
+Do NOT change colors, typography, animations, effects, spacing style, branding, or functionality.
+
+Instead, fix the layout architecture.
+
+Root causes to fix:
+
+1. Phone Container
+- Remove viewport-height dependency.
+- Avoid using height: min(50vh, 410px) or similar viewport-based sizing.
+- Use a stable responsive sizing strategy that preserves the phone's aspect ratio across all devices.
+- The phone should scale proportionally without changing internal spacing.
+
+2. Caller Area
+- The caller area currently uses flex:1 and vertically centers everything.
+- Because the phone height changes, this section compresses first.
+- Prevent the caller section from collapsing on smaller screens.
+- Maintain consistent vertical spacing regardless of screen height.
+
+3. Avatar Position
+- Stop positioning the avatar using fixed margin-top values.
+- Remove layout dependence on margin-top.
+- Position the avatar naturally within the caller section using flex/grid alignment.
+- The avatar should stay in the same visual position on every device.
+
+4. Home Indicator
+- Remove the fixed 22px top margin.
+- Position the home indicator relative to the phone layout instead of using large fixed margins.
+- It should always sit near the bottom with consistent spacing.
+
+5. Internal Layout
+- Audit every flex container inside the phone.
+- Prevent unwanted flex shrinking.
+- Ensure each section keeps stable proportions.
+- Do not allow one section to collapse just because the viewport height changes.
+
+6. Responsive Strategy
+- Eliminate layout dependence on vh wherever it affects the phone UI.
+- Replace fragile spacing with responsive sizing that scales proportionally.
+- Preserve the exact visual design.
+
+7. Validation
+Test the layout at:
+- 320px
+- 360px
+- 375px
+- 390px
+- 412px
+- 430px
+- 768px
+
+Verify:
+✓ Dynamic Island never moves.
+✓ Status bar never overlaps.
+✓ Avatar stays in the same position.
+✓ Call controls never shift.
+✓ Home indicator stays correctly aligned.
+✓ No overflow.
+✓ No clipping.
+✓ No horizontal scrolling.
+✓ Identical appearance across devices.
+
+IMPORTANT:
+Do not fix this by changing random margins or adding media-query hacks.
+Identify the true root cause and rebuild only the layout logic responsible for these issues while preserving the exact appearance of the interface.

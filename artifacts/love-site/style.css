@@ -874,8 +874,8 @@ html[data-nav-dir="back"] .section.page-leaving {
 
 /* ── Phone frame ── */
 .phone {
-  height: min(50vh, 410px);
-  width: auto;
+  width: 190px;
+  height: auto;
   aspect-ratio: 9 / 19.5;
   position: relative;
   border-radius: 46px;
@@ -1017,9 +1017,10 @@ html[data-nav-dir="back"] .section.page-leaving {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding: 0 0 6px;
+  padding: 20px 0 6px;
   gap: 0;
   min-height: 0;
+  overflow: hidden;
 }
 
 .avatar-stack {
@@ -1028,8 +1029,9 @@ html[data-nav-dir="back"] .section.page-leaving {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: clamp(6px, 3vh, 20px);
-  margin-bottom: clamp(6px, 1.5vh, 12px);
+  margin-top: 0;
+  margin-bottom: 12px;
+  flex-shrink: 0;
 }
 .avatar-pulse, .avatar-pulse-2 {
   position: absolute;
@@ -1215,7 +1217,7 @@ html[data-nav-dir="back"] .section.page-leaving {
   height: 4px;
   background: rgba(255,255,255,0.22);
   border-radius: 2px;
-  margin: clamp(8px, 2vh, 22px) auto clamp(6px, 1vh, 10px);
+  margin: 8px auto 6px;
   flex-shrink: 0;
 }
 
@@ -1835,7 +1837,8 @@ html[data-nav-dir="back"] .section.page-leaving {
   .signal-caption-text { grid-column: 1; }
   .phone-outer { justify-self: center; }
   .phone {
-    height: min(46vh, 360px);
+    width: min(50vw, 180px);
+    height: auto;
     aspect-ratio: 9 / 18;
     border-radius: 38px;
   }
@@ -1850,10 +1853,11 @@ html[data-nav-dir="back"] .section.page-leaving {
   .call-end-btn { width: 52px; height: 52px; }
   .caller-name-main { font-size: 0.95rem; }
   .avatar-img { width: 60px; height: 60px; font-size: 1.4rem; }
-  .avatar-stack { width: 60px; height: 60px; margin-top: 18px; margin-bottom: 8px; }
+  .avatar-stack { width: 60px; height: 60px; margin-top: 0; margin-bottom: 8px; }
+  .phone-caller-area { padding-top: 16px; }
   .avatar-pulse  { inset: -6px; }
   .avatar-pulse-2 { inset: -14px; }
-  .phone-home-bar { margin: 14px auto 8px; }
+  .phone-home-bar { margin: 8px auto 6px; }
   .signal-title { font-size: clamp(1.2rem, 5vw, 2rem); }
 
   .starmap-body-wrap {
@@ -1881,6 +1885,3 @@ html[data-nav-dir="back"] .section.page-leaving {
   .arrow-prev, .arrow-next { right: 8px; }
 }
 
-@media (max-width: 430px) {
-  .phone-home-bar { margin: 8px auto 8px; }
-}
