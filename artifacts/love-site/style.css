@@ -1850,7 +1850,7 @@ html[data-nav-dir="back"] .section.page-leaving {
   .call-end-btn { width: 52px; height: 52px; }
   .caller-name-main { font-size: 0.95rem; }
   .avatar-img { width: 60px; height: 60px; font-size: 1.4rem; }
-  .avatar-stack { width: 60px; height: 60px; margin-top: 10px; margin-bottom: 8px; }
+  .avatar-stack { width: 60px; height: 60px; margin-top: 18px; margin-bottom: 8px; }
   .avatar-pulse  { inset: -6px; }
   .avatar-pulse-2 { inset: -14px; }
   .phone-home-bar { margin: 14px auto 8px; }
@@ -1882,6 +1882,5 @@ html[data-nav-dir="back"] .section.page-leaving {
 }
 
 @media (max-width: 430px) {
-  .avatar-stack { margin-top: 6px; }
   .phone-home-bar { margin: 8px auto 8px; }
 }
