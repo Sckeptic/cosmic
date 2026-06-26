@@ -1016,7 +1016,7 @@ html[data-nav-dir="back"] .section.page-leaving {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   padding: 0 0 6px;
   gap: 0;
   min-height: 0;
@@ -1028,8 +1028,8 @@ html[data-nav-dir="back"] .section.page-leaving {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 20px;
-  margin-bottom: 12px;
+  margin-top: clamp(6px, 3vh, 20px);
+  margin-bottom: clamp(6px, 1.5vh, 12px);
 }
 .avatar-pulse, .avatar-pulse-2 {
   position: absolute;
@@ -1215,7 +1215,7 @@ html[data-nav-dir="back"] .section.page-leaving {
   height: 4px;
   background: rgba(255,255,255,0.22);
   border-radius: 2px;
-  margin: 22px auto 10px;
+  margin: clamp(8px, 2vh, 22px) auto clamp(6px, 1vh, 10px);
   flex-shrink: 0;
 }
 
