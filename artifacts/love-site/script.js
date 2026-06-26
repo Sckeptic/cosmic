@@ -56,8 +56,8 @@ function drawStars() {
     const glow = s.r * 3.5 * boost;
 
     const g = starCtx.createRadialGradient(s.x, s.y, 0, s.x, s.y, glow);
-    g.addColorStop(0,   `rgba(200,220,255,${a * 0.9})`);
-    g.addColorStop(0.4, `rgba(140,180,255,${a * 0.3})`);
+    g.addColorStop(0,   `rgba(255,180,200,${a * 0.7})`);
+    g.addColorStop(0.4, `rgba(200,140,200,${a * 0.25})`);
     g.addColorStop(1,   'transparent');
 
     starCtx.beginPath();
@@ -67,7 +67,7 @@ function drawStars() {
 
     starCtx.beginPath();
     starCtx.arc(s.x, s.y, s.r * boost, 0, Math.PI * 2);
-    starCtx.fillStyle = `rgba(230,240,255,${a})`;
+    starCtx.fillStyle = `rgba(255,230,240,${a})`;
     starCtx.fill();
   }
 }
@@ -75,6 +75,7 @@ function drawStars() {
 let rafId;
 function loop() {
   if (typeof window.__musicTick === 'function') window.__musicTick();
+  if (typeof window.__cursorTick === 'function') window.__cursorTick();
   if (!shared.reducedMotion) drawStars();
   rafId = requestAnimationFrame(loop);
 }
@@ -84,6 +85,183 @@ document.addEventListener('visibilitychange', () => {
   if (document.hidden) cancelAnimationFrame(rafId);
   else rafId = requestAnimationFrame(loop);
 });
+
+
+/* ══════════════════════════════════════════════
+   FLOATING HEARTS OVERLAY
+══════════════════════════════════════════════ */
+function initFloatingHearts() {
+  if (shared.reducedMotion) return;
+  const overlay = document.getElementById('hearts-overlay');
+  if (!overlay) return;
+
+  const heartChars = ['♥', '♡', '❤', '✿'];
+  const count = 14;
+
+  for (let i = 0; i < count; i++) {
+    const el = document.createElement('span');
+    el.className = 'fh';
+    const sz = 0.6 + Math.random() * 1.0;
+    const left = 3 + Math.random() * 94;
+    const dur  = 18 + Math.random() * 22;
+    const del  = -(Math.random() * dur);
+    const opacity = 0.15 + Math.random() * 0.25;
+    el.textContent = heartChars[Math.floor(Math.random() * heartChars.length)];
+    el.style.cssText = `
+      left: ${left}%;
+      font-size: ${sz}rem;
+      animation-duration: ${dur}s;
+      animation-delay: ${del}s;
+      opacity: ${opacity};
+      color: hsl(${330 + Math.random() * 30}deg, ${70 + Math.random() * 20}%, ${70 + Math.random() * 15}%);
+    `;
+    overlay.appendChild(el);
+  }
+}
+
+
+/* ══════════════════════════════════════════════
+   CURSOR TRAIL
+══════════════════════════════════════════════ */
+function initCursorTrail() {
+  if (shared.reducedMotion) return;
+  const canvas = document.getElementById('cursor-trail');
+  if (!canvas) return;
+
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+  window.addEventListener('resize', () => {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }, { passive: true });
+
+  const ctx    = canvas.getContext('2d');
+  const trails = [];
+  let mx = -999, my = -999;
+
+  window.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    if (Math.random() > 0.55) return;
+    const hue = 330 + Math.random() * 40;
+    trails.push({
+      x: mx + (Math.random() - 0.5) * 6,
+      y: my + (Math.random() - 0.5) * 6,
+      r: 2 + Math.random() * 3,
+      alpha: 0.7 + Math.random() * 0.3,
+      vx: (Math.random() - 0.5) * 0.6,
+      vy: -(0.3 + Math.random() * 0.8),
+      hue,
+    });
+  }, { passive: true });
+
+  window.__cursorTick = () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let i = trails.length - 1; i >= 0; i--) {
+      const t = trails[i];
+      t.x += t.vx; t.y += t.vy;
+      t.alpha -= 0.03;
+      t.r     -= 0.04;
+      if (t.alpha <= 0 || t.r <= 0) { trails.splice(i, 1); continue; }
+
+      ctx.save();
+      ctx.globalAlpha = t.alpha;
+      ctx.fillStyle   = `hsl(${t.hue}deg, 85%, 70%)`;
+      ctx.shadowBlur  = 6;
+      ctx.shadowColor = `hsl(${t.hue}deg, 85%, 70%)`;
+
+      /* Draw a tiny heart */
+      const s = t.r;
+      ctx.beginPath();
+      ctx.moveTo(t.x, t.y + s * 0.4);
+      ctx.bezierCurveTo(t.x, t.y, t.x - s * 1.2, t.y, t.x - s * 1.2, t.y + s * 0.5);
+      ctx.bezierCurveTo(t.x - s * 1.2, t.y + s * 1.0, t.x, t.y + s * 1.4, t.x, t.y + s * 1.6);
+      ctx.bezierCurveTo(t.x, t.y + s * 1.4, t.x + s * 1.2, t.y + s * 1.0, t.x + s * 1.2, t.y + s * 0.5);
+      ctx.bezierCurveTo(t.x + s * 1.2, t.y, t.x, t.y, t.x, t.y + s * 0.4);
+      ctx.fill();
+      ctx.restore();
+    }
+  };
+}
+
+
+/* ══════════════════════════════════════════════
+   TYPEWRITER QUOTE (hero)
+══════════════════════════════════════════════ */
+const QUOTES = [
+  "distance is just a test of how far love can travel",
+  "i think about you in colours that don't have names",
+  "wherever you are is my favourite place",
+  "274 km — and every single one is full of you",
+  "i carry your heart with me, always",
+  "the stars know how much i miss you",
+  "some loves are worth every kilometre",
+  "you are the reason the moon still makes sense",
+];
+
+function initTypewriter() {
+  const el = document.getElementById('hero-quote');
+  if (!el) return;
+
+  let qi = Math.floor(Math.random() * QUOTES.length);
+  let ci = 0, deleting = false, pauseFor = 0;
+
+  function tick() {
+    if (pauseFor > 0) { pauseFor--; setTimeout(tick, 80); return; }
+
+    const q = QUOTES[qi];
+    if (!deleting) {
+      el.textContent = q.slice(0, ++ci);
+      if (ci >= q.length) { el.classList.add('done'); pauseFor = 38; deleting = true; }
+      setTimeout(tick, 52 + Math.random() * 38);
+    } else {
+      el.classList.remove('done');
+      el.textContent = q.slice(0, --ci);
+      if (ci <= 0) {
+        qi = (qi + 1) % QUOTES.length;
+        deleting = false;
+        pauseFor = 12;
+      }
+      setTimeout(tick, 22);
+    }
+  }
+  setTimeout(tick, 1800);
+}
+
+
+/* ══════════════════════════════════════════════
+   HEARTBEATS COUNTER (hero)
+══════════════════════════════════════════════ */
+function initHeartbeats() {
+  const el = document.getElementById('hb-count');
+  if (!el) return;
+
+  const BPM = 72;
+  const BEATS_PER_MS = BPM / 60000;
+
+  /* Count heartbeats since midnight (romantic "today" framing) */
+  function getCount() {
+    const now = Date.now();
+    const midnight = new Date();
+    midnight.setHours(0, 0, 0, 0);
+    return Math.floor((now - midnight.getTime()) * BEATS_PER_MS);
+  }
+
+  function fmt(n) {
+    return n.toLocaleString();
+  }
+
+  let displayed = getCount();
+  el.textContent = fmt(displayed);
+
+  setInterval(() => {
+    const real = getCount();
+    /* Smooth the update — increment by 1 until caught up */
+    if (displayed < real) {
+      displayed++;
+      el.textContent = fmt(displayed);
+    }
+  }, Math.round(60000 / BPM));
+}
 
 
 /* ══════════════════════════════════════════════
@@ -104,15 +282,14 @@ class PageManager {
     this.bindDots();
     this.hideHintAfterDelay();
 
-    // Activate first page
     this._activate(0, true);
   }
 
   buildNav() {
-    this.dots = Array.from(document.querySelectorAll('.page-dot'));
-    this.prevBtn  = document.getElementById('arrow-prev');
-    this.nextBtn  = document.getElementById('arrow-next');
-    this.numEl    = document.getElementById('page-num');
+    this.dots    = Array.from(document.querySelectorAll('.page-dot'));
+    this.prevBtn = document.getElementById('arrow-prev');
+    this.nextBtn = document.getElementById('arrow-next');
+    this.numEl   = document.getElementById('page-num');
   }
 
   _activate(index, instant = false) {
@@ -126,12 +303,10 @@ class PageManager {
     }
 
     if (!instant && prev && prev.el !== next.el) {
-      // Brief delay so leaving transition starts first
       setTimeout(() => {
         next.el.classList.remove('page-leaving');
         next.el.classList.remove('page-entering');
         next.el.classList.add('page-active');
-        // Force reflow then add entering class to restart animations
         void next.el.offsetWidth;
         next.el.classList.add('page-entering');
         if (next.onEnter) next.onEnter();
@@ -151,9 +326,7 @@ class PageManager {
       this.transitioning = true;
       setTimeout(() => {
         this.transitioning = false;
-        if (prev && prev.el !== next.el) {
-          prev.el.classList.remove('page-leaving');
-        }
+        if (prev && prev.el !== next.el) prev.el.classList.remove('page-leaving');
       }, 950);
     }
   }
@@ -173,21 +346,14 @@ class PageManager {
   updateUI() {
     const i = this.current;
     const n = this.pages.length;
-
-    // Dots
     this.dots.forEach((d, j) => d.classList.toggle('active', j === i));
-
-    // Counter
     if (this.numEl) this.numEl.textContent = String(i + 1).padStart(2, '0');
-
-    // Arrows
     if (this.prevBtn) this.prevBtn.classList.toggle('hidden', i === 0);
     if (this.nextBtn) this.nextBtn.classList.toggle('hidden', i === n - 1);
   }
 
   bindKeys() {
     window.addEventListener('keydown', e => {
-      // Don't intercept when typing in an input
       if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
       if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); this.next(); }
       if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   { e.preventDefault(); this.prev(); }
@@ -210,18 +376,12 @@ class PageManager {
       const dy = e.changedTouches[0].clientY - startY;
       const adx = Math.abs(dx), ady = Math.abs(dy);
       if (Math.max(adx, ady) < threshold) return;
-
-      if (adx > ady) {
-        dx < 0 ? this.next() : this.prev();
-      } else {
-        dy < 0 ? this.next() : this.prev();
-      }
+      if (adx > ady) { dx < 0 ? this.next() : this.prev(); }
+      else           { dy < 0 ? this.next() : this.prev(); }
     }, { passive: true });
 
-    // Mouse wheel (debounced)
     let wheelTimer = null;
     window.addEventListener('wheel', e => {
-      // Don't trigger if in messages input area
       if (e.target.closest('.messages-input-bar')) return;
       clearTimeout(wheelTimer);
       wheelTimer = setTimeout(() => {
@@ -244,13 +404,10 @@ class PageManager {
   hideHint() {
     if (this.hintHidden) return;
     this.hintHidden = true;
-    const hint = document.getElementById('key-hint');
-    hint?.classList.add('hidden');
+    document.getElementById('key-hint')?.classList.add('hidden');
   }
 
-  hideHintAfterDelay() {
-    setTimeout(() => this.hideHint(), 5000);
-  }
+  hideHintAfterDelay() { setTimeout(() => this.hideHint(), 5000); }
 }
 
 
@@ -353,15 +510,12 @@ resizeStars();
 rafId = requestAnimationFrame(loop);
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Cinematic curtain — lift after a short delay
   const curtain = document.getElementById('curtain');
   requestAnimationFrame(() => requestAnimationFrame(() => curtain?.classList.add('out')));
 
-  // Adapt nav hint to touch vs keyboard
   const hint = document.getElementById('key-hint');
   if (hint && navigator.maxTouchPoints > 0) hint.textContent = 'swipe to explore';
 
-  // Init all modules
   initHero(shared);
   initSignal(shared);
   initMessages(shared);
@@ -369,7 +523,11 @@ document.addEventListener('DOMContentLoaded', () => {
   initCountdown(shared);
   initMusic();
 
-  // Build page list with onEnter callbacks
+  initFloatingHearts();
+  initCursorTrail();
+  initTypewriter();
+  initHeartbeats();
+
   const pages = [
     { el: document.getElementById('hero'),      onEnter: heroEnter      },
     { el: document.getElementById('signal'),    onEnter: signalEnter    },

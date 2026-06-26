@@ -172,6 +172,12 @@ html[data-nav-dir="back"] .section.page-leaving {
 .hero-section.page-entering .hero-sub {
   animation: ent-up 0.8s 0.62s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
+.hero-section.page-entering .hero-typewriter {
+  animation: ent-up 0.7s 0.80s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.hero-section.page-entering .hero-heartbeats {
+  animation: ent-up 0.7s 0.95s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
 
 /* Signal entrance */
 .signal-section.page-entering .signal-heading {
@@ -217,6 +223,42 @@ html[data-nav-dir="back"] .section.page-leaving {
   animation: ent-scale 0.9s 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+
+/* ═══════════════════════════════════════════════════════════
+   FLOATING HEARTS OVERLAY
+   ═══════════════════════════════════════════════════════════ */
+
+#hearts-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+@keyframes float-heart {
+  0%   { transform: translateY(110vh) scale(0.6) rotate(-15deg); opacity: 0; }
+  8%   { opacity: 0.7; }
+  85%  { opacity: 0.5; }
+  100% { transform: translateY(-12vh) scale(1.1) rotate(20deg); opacity: 0; }
+}
+
+.fh {
+  position: absolute;
+  bottom: -5%;
+  font-size: 1rem;
+  animation: float-heart linear infinite;
+  pointer-events: none;
+  filter: drop-shadow(0 0 6px rgba(255,107,157,0.5));
+}
+
+/* ── Cursor trail canvas ── */
+#cursor-trail {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  pointer-events: none;
+}
 
 /* ═══════════════════════════════════════════════════════════
    PAGE NAVIGATION
@@ -570,6 +612,98 @@ html[data-nav-dir="back"] .section.page-leaving {
 .hero-sub em {
   font-style: normal;
   color: var(--text);
+}
+
+/* ── Typewriter quote ── */
+.hero-typewriter {
+  font-family: 'Inter', system-ui, sans-serif;
+  font-style: italic;
+  font-size: clamp(0.75rem, 1.4vw, 0.92rem);
+  color: rgba(255,150,180,0.65);
+  letter-spacing: 0.04em;
+  min-height: 1.4em;
+  text-align: center;
+  position: relative;
+}
+.hero-typewriter::after {
+  content: '|';
+  color: var(--glow);
+  animation: blink-cursor 0.9s step-end infinite;
+  margin-left: 1px;
+}
+.hero-typewriter.done::after { display: none; }
+@keyframes blink-cursor {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+/* ── Heartbeats stat ── */
+.hero-heartbeats {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 24px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,107,157,0.18);
+  background: rgba(255,107,157,0.06);
+  backdrop-filter: blur(8px);
+}
+.hb-icon {
+  font-size: 1rem;
+  color: var(--glow);
+  animation: hb-pulse 0.86s ease-in-out infinite;
+  filter: drop-shadow(0 0 6px rgba(255,107,157,0.7));
+}
+@keyframes hb-pulse {
+  0%, 100% { transform: scale(1); }
+  14%      { transform: scale(1.35); }
+  28%      { transform: scale(1); }
+  42%      { transform: scale(1.2); }
+}
+.hb-count {
+  font-family: var(--font-head);
+  font-size: 1.05rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  background: linear-gradient(135deg, var(--glow), var(--gold));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  min-width: 5ch;
+  text-align: right;
+}
+.hb-label {
+  font-size: 0.72rem;
+  color: var(--muted-2);
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+}
+
+/* ── Music button heartbeat pulse when playing ── */
+@keyframes music-heartbeat {
+  0%, 100% { box-shadow: 0 0 14px rgba(255,107,157,0.25); }
+  14%      { box-shadow: 0 0 32px rgba(255,107,157,0.55), 0 0 60px rgba(255,107,157,0.2); }
+  28%      { box-shadow: 0 0 14px rgba(255,107,157,0.25); }
+  42%      { box-shadow: 0 0 24px rgba(255,107,157,0.4), 0 0 40px rgba(255,107,157,0.15); }
+}
+.music-btn[aria-pressed="true"] {
+  border-color: rgba(255,107,157,0.55);
+  animation: music-heartbeat 0.86s ease-in-out infinite;
+}
+
+/* ── Heart burst for messages ── */
+@keyframes msg-heart-pop {
+  0%   { transform: translate(-50%, -50%) scale(0) rotate(-20deg); opacity: 1; }
+  60%  { transform: translate(-50%, -100%) scale(1.2) rotate(10deg); opacity: 0.9; }
+  100% { transform: translate(-50%, -200%) scale(0.5) rotate(30deg); opacity: 0; }
+}
+.msg-heart-burst {
+  position: absolute;
+  font-size: 1.4rem;
+  pointer-events: none;
+  animation: msg-heart-pop 0.8s ease-out forwards;
+  z-index: 10;
+  filter: drop-shadow(0 0 8px rgba(255,107,157,0.8));
 }
 
 /* Floating hearts animation for hero */

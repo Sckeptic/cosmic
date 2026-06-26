@@ -155,11 +155,31 @@ export function init(shared) {
   }
 
   /* Stop arrow keys from triggering page navigation while typing */
+  function heartBurst(inputEl) {
+    const wrap = inputEl.closest('.messages-input-bar') || inputEl.parentElement;
+    if (!wrap) return;
+    const hearts = ['♥', '❤', '♡', '✿'];
+    for (let i = 0; i < 5; i++) {
+      const el = document.createElement('span');
+      el.className = 'msg-heart-burst';
+      el.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+      el.style.left = `${20 + Math.random() * 60}%`;
+      el.style.bottom = '100%';
+      el.style.animationDelay = `${i * 60}ms`;
+      const hue = 330 + Math.random() * 30;
+      el.style.color = `hsl(${hue}deg, 85%, 70%)`;
+      el.style.fontSize = `${0.9 + Math.random() * 0.7}rem`;
+      wrap.style.position = 'relative';
+      wrap.appendChild(el);
+      el.addEventListener('animationend', () => el.remove());
+    }
+  }
+
   _input.addEventListener('keydown', e => {
     e.stopPropagation();
     if (e.key === 'Enter') {
       const txt = _input.value.trim();
-      if (txt.length) { spawnBubble(txt); _input.value = ''; }
+      if (txt.length) { spawnBubble(txt); heartBurst(_input); _input.value = ''; }
     }
   });
 
