@@ -148,24 +148,28 @@
           <!-- Glass screen reflection -->
           <div class="phone-screen-shimmer" aria-hidden="true"></div>
 
-          <!-- Status bar -->
-          <div class="phone-top-bar" aria-hidden="true">
-            <span class="status-time">9:41</span>
+          <!-- Dynamic Island — own dedicated zone, never touches status bar -->
+          <div class="phone-di-zone" aria-hidden="true">
             <div class="phone-dynamic-island">
               <div class="di-camera"></div>
               <div class="di-speaker-bar"></div>
             </div>
+          </div>
+
+          <!-- Status bar — completely separate row below DI -->
+          <div class="phone-top-bar" aria-hidden="true">
+            <span class="status-time">9:41</span>
             <div class="status-icons">
-              <svg width="17" height="11" viewBox="0 0 17 11" fill="none">
-                <rect x="0"   y="7"   width="3" height="4"  rx="0.8" fill="rgba(255,255,255,0.9)"/>
-                <rect x="4.5" y="4.5" width="3" height="6.5" rx="0.8" fill="rgba(255,255,255,0.9)"/>
-                <rect x="9"   y="2"   width="3" height="9"  rx="0.8" fill="rgba(255,255,255,0.9)"/>
-                <rect x="13.5" y="0"  width="3" height="11" rx="0.8" fill="rgba(255,255,255,0.2)"/>
+              <svg width="16" height="10" viewBox="0 0 16 10" fill="none">
+                <rect x="0"   y="6.5" width="2.5" height="3.5" rx="0.7" fill="rgba(255,255,255,0.9)"/>
+                <rect x="4"   y="4"   width="2.5" height="6"   rx="0.7" fill="rgba(255,255,255,0.9)"/>
+                <rect x="8"   y="1.5" width="2.5" height="8.5" rx="0.7" fill="rgba(255,255,255,0.9)"/>
+                <rect x="12"  y="0"   width="2.5" height="10"  rx="0.7" fill="rgba(255,255,255,0.2)"/>
               </svg>
-              <svg width="26" height="12" viewBox="0 0 26 12" fill="none">
-                <rect x="0.5" y="0.5" width="22" height="11" rx="3"   stroke="rgba(255,255,255,0.35)" stroke-width="1"/>
-                <rect x="23"  y="3.5" width="2.5" height="5" rx="1.2" fill="rgba(255,255,255,0.3)"/>
-                <rect x="2"   y="2"   width="14" height="8"  rx="1.5" fill="rgba(255,255,255,0.8)"/>
+              <svg width="24" height="11" viewBox="0 0 24 11" fill="none">
+                <rect x="0.5" y="0.5" width="20" height="10" rx="2.5" stroke="rgba(255,255,255,0.35)" stroke-width="1"/>
+                <rect x="21" y="3" width="2.5" height="5" rx="1" fill="rgba(255,255,255,0.3)"/>
+                <rect x="2"  y="2" width="13" height="7" rx="1.5" fill="rgba(255,255,255,0.8)"/>
               </svg>
             </div>
           </div>

@@ -934,21 +934,70 @@ html[data-nav-dir="back"] .section.page-leaving {
   z-index: 20;
 }
 
-/* ── Status bar + Dynamic Island ── */
+/* ── Dynamic Island — own dedicated row at top of phone ── */
+.phone-di-zone {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  padding-top: 10px;
+  height: 34px;
+  flex-shrink: 0;
+  z-index: 6;
+}
+
+.phone-dynamic-island {
+  width: 32%;
+  min-width: 50px;
+  max-width: 80px;
+  height: 22px;
+  background: #000;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.04) inset,
+    0 2px 6px rgba(0,0,0,0.7);
+}
+.di-camera {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #1c1c2e, #0a0a18);
+  box-shadow: inset 0 0 2px rgba(0,0,0,0.9), 0 0 0 1px rgba(255,255,255,0.03);
+  position: relative;
+  flex-shrink: 0;
+}
+.di-camera::after {
+  content: '';
+  position: absolute;
+  top: 1.5px; left: 1.5px;
+  width: 2.5px; height: 2.5px;
+  border-radius: 50%;
+  background: rgba(80,160,255,0.25);
+}
+.di-speaker-bar {
+  width: 34px; height: 5px;
+  border-radius: 3px;
+  background: #0a0a0a;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.9);
+  flex-shrink: 0;
+}
+
+/* ── Status bar — sits cleanly below the DI zone ── */
 .phone-top-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 22px 0;
-  position: relative;
-  z-index: 6;
+  padding: 3px 18px 6px;
   flex-shrink: 0;
-  min-height: 46px;
+  z-index: 5;
 }
 
 .status-time {
   font-family: -apple-system, 'SF Pro Text', system-ui, sans-serif;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 600;
   color: rgba(255,255,255,0.9);
   letter-spacing: -0.02em;
@@ -958,50 +1007,7 @@ html[data-nav-dir="back"] .section.page-leaving {
 .status-icons {
   display: flex;
   align-items: center;
-  gap: 5px;
-}
-
-/* Dynamic Island pill */
-.phone-dynamic-island {
-  position: absolute;
-  top: 11px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 38%;
-  height: 30px;
-  background: #000;
-  border-radius: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,0.04) inset,
-    0 2px 8px rgba(0,0,0,0.6);
-  z-index: 7;
-}
-.di-camera {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #1c1c2e, #0a0a18);
-  box-shadow: inset 0 0 3px rgba(0,0,0,0.9), 0 0 0 1px rgba(255,255,255,0.03);
-  position: relative;
-  flex-shrink: 0;
-}
-.di-camera::after {
-  content: '';
-  position: absolute;
-  top: 1.5px; left: 1.5px;
-  width: 3px; height: 3px;
-  border-radius: 50%;
-  background: rgba(80,160,255,0.25);
-}
-.di-speaker-bar {
-  width: 50px; height: 5px;
-  border-radius: 3px;
-  background: #080808;
-  box-shadow: inset 0 1px 2px rgba(0,0,0,0.9);
-  flex-shrink: 0;
+  gap: 4px;
 }
 
 /* ── Caller area ── */
@@ -1119,7 +1125,7 @@ html[data-nav-dir="back"] .section.page-leaving {
 
 .call-ctrl-grid {
   display: flex;
-  gap: clamp(12px, 2.5vw, 20px);
+  gap: 10px;
   justify-content: center;
   margin: 0;
 }
@@ -1129,14 +1135,14 @@ html[data-nav-dir="back"] .section.page-leaving {
   align-items: center;
   gap: 5px;
   font-family: -apple-system, 'SF Pro Text', system-ui, sans-serif;
-  font-size: 0.55rem;
+  font-size: 0.52rem;
   font-weight: 400;
   color: rgba(255,255,255,0.45);
   letter-spacing: 0.02em;
 }
 .call-ctrl-ring {
-  width: clamp(40px, 5.5vw, 48px);
-  height: clamp(40px, 5.5vw, 48px);
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   background: rgba(255,255,255,0.10);
   border: 1px solid rgba(255,255,255,0.09);
@@ -1147,6 +1153,7 @@ html[data-nav-dir="back"] .section.page-leaving {
     0 2px 8px rgba(0,0,0,0.35),
     inset 0 1px 0 rgba(255,255,255,0.1);
   transition: background 0.18s, transform 0.14s;
+  flex-shrink: 0;
 }
 .call-ctrl-ring:hover {
   background: rgba(255,255,255,0.16);
@@ -1832,15 +1839,19 @@ html[data-nav-dir="back"] .section.page-leaving {
     border-radius: 38px;
   }
   .phone-screen-shimmer { border-radius: 38px 38px 55% 55%; }
-  .phone-top-bar { padding: 12px 18px 0; min-height: 40px; }
-  .phone-dynamic-island { width: 42%; height: 26px; top: 10px; }
-  .call-ctrl-ring { width: 38px; height: 38px; }
-  .call-ctrl-grid { gap: 10px; }
-  .phone-controls-area { gap: 10px; }
-  .call-end-btn { width: 54px; height: 54px; }
-  .caller-name-main { font-size: 1rem; }
-  .avatar-img { width: 62px; height: 62px; font-size: 1.5rem; }
-  .avatar-stack { width: 62px; height: 62px; margin-bottom: 10px; }
+  .phone-di-zone { height: 30px; padding-top: 8px; }
+  .phone-dynamic-island { height: 20px; border-radius: 10px; }
+  .phone-top-bar { padding: 2px 14px 5px; }
+  .status-time { font-size: 0.68rem; }
+  .call-ctrl-ring { width: 36px; height: 36px; }
+  .call-ctrl-grid { gap: 8px; }
+  .phone-controls-area { gap: 10px; padding: 0 12px; }
+  .call-end-btn { width: 52px; height: 52px; }
+  .caller-name-main { font-size: 0.95rem; }
+  .avatar-img { width: 60px; height: 60px; font-size: 1.4rem; }
+  .avatar-stack { width: 60px; height: 60px; margin-bottom: 8px; }
+  .avatar-pulse  { inset: -6px; }
+  .avatar-pulse-2 { inset: -14px; }
   .signal-title { font-size: clamp(1.2rem, 5vw, 2rem); }
 
   .starmap-body-wrap {
