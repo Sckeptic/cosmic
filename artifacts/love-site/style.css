@@ -94,7 +94,7 @@ input { outline: none; font: inherit; }
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: clamp(60px, 10vh, 100px) clamp(24px, 6vw, 100px);
+  padding: clamp(36px, 5.5vh, 70px) clamp(20px, 5vw, 80px);
   overflow: hidden;
 
   opacity: 0;
@@ -463,7 +463,7 @@ html[data-nav-dir="back"] .section.page-leaving {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: clamp(40px, 7vh, 80px);
+  gap: clamp(16px, 3vh, 40px);
   position: relative;
   z-index: 1;
   perspective: 1200px;
@@ -569,7 +569,7 @@ html[data-nav-dir="back"] .section.page-leaving {
 
 .hero-ekg-wrap {
   flex: 1;
-  height: clamp(100px, 16vh, 160px);
+  height: clamp(80px, 12vh, 130px);
   position: relative;
   min-width: 0;
 }
@@ -585,7 +585,7 @@ html[data-nav-dir="back"] .section.page-leaving {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: clamp(10px, 1.8vh, 18px);
   text-align: center;
   transform-style: preserve-3d;
 }
@@ -779,12 +779,15 @@ html[data-nav-dir="back"] .section.page-leaving {
   max-width: 1000px;
   display: grid;
   grid-template-columns: 1fr auto;
-  grid-template-rows: auto auto;
-  column-gap: clamp(40px, 6vw, 80px);
-  row-gap: clamp(16px, 3vh, 32px);
+  grid-template-rows: 1fr auto;
+  column-gap: clamp(24px, 4vw, 60px);
+  row-gap: clamp(12px, 2vh, 24px);
   align-items: center;
   position: relative;
   z-index: 1;
+  min-height: 0;
+  height: 100%;
+  max-height: calc(100vh - clamp(72px, 11vh, 140px));
 }
 
 .signal-heading {
@@ -849,7 +852,8 @@ html[data-nav-dir="back"] .section.page-leaving {
 }
 
 .phone {
-  width: clamp(180px, 22vw, 240px);
+  height: min(58vh, 460px);
+  width: auto;
   aspect-ratio: 9/18;
   background: linear-gradient(160deg, #100818 0%, #0a0514 60%, #060310 100%);
   border-radius: clamp(28px, 4vw, 40px);
@@ -1292,7 +1296,8 @@ html[data-nav-dir="back"] .section.page-leaving {
 
 .starmap-section {
   gap: 0;
-  padding: clamp(50px, 8vh, 80px) clamp(16px, 4vw, 60px);
+  padding: clamp(32px, 5vh, 60px) clamp(16px, 4vw, 60px);
+  justify-content: flex-start;
 }
 
 .starmap-section::before {
@@ -1360,7 +1365,7 @@ html[data-nav-dir="back"] .section.page-leaving {
 
 #sky-left, #sky-right {
   width: 100%;
-  height: clamp(160px, 28vh, 340px);
+  height: clamp(140px, 24vh, 280px);
   border-radius: 20px;
   border: 1px solid rgba(255,107,157,0.08);
   background: radial-gradient(ellipse at 50% 50%, rgba(16,6,24,1) 0%, rgba(6,4,16,1) 100%);
