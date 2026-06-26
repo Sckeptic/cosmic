@@ -3,6 +3,7 @@ import { init as initSignal,    onEnter as signalEnter    } from '/signal.js';
 import { init as initMessages,  onEnter as messagesEnter  } from '/messages.js';
 import { init as initStarmap,   onEnter as starmapEnter   } from '/starmap.js';
 import { init as initCountdown, onEnter as countdownEnter } from '/countdown.js';
+import { createMusicEngine }                               from '/music.js';
 
 /* ── Shared reactive state ── */
 export const shared = {
@@ -418,38 +419,23 @@ function initMusic() {
   const btn     = document.getElementById('music-btn');
   const btnText = btn.querySelector('.music-btn-text');
   const ripple  = btn.querySelector('.music-ripple');
-  const blocked = document.getElementById('music-blocked');
-  const audio   = document.getElementById('our-song');
-  if (!audio) return;
+  if (!btn) return;
 
-  const savedPos     = parseFloat(localStorage.getItem('ls_music_pos') || '0');
-  const savedPlaying = localStorage.getItem('ls_music_playing') === '1';
-  if (savedPos > 0) audio.currentTime = savedPos;
+  const engine      = createMusicEngine();
+  let   engineReady = false;
 
-  let analyser, dataArr, audioCtx, source, connected = false;
-
-  function connectAnalyser() {
-    if (connected) return;
-    try {
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      source   = audioCtx.createMediaElementSource(audio);
-      analyser = audioCtx.createAnalyser();
-      analyser.fftSize = 64;
-      dataArr  = new Uint8Array(analyser.frequencyBinCount);
-      source.connect(analyser);
-      analyser.connect(audioCtx.destination);
-      connected = true;
-    } catch {}
+  function ensureEngine() {
+    if (engineReady) return;
+    engine.init();
+    engineReady = true;
   }
 
   window.__musicTick = () => {
-    if (!analyser || !shared.musicPlaying) {
+    if (!shared.musicPlaying) {
       shared.musicReactive = Math.max(0, shared.musicReactive - 0.04);
       return;
     }
-    analyser.getByteFrequencyData(dataArr);
-    const avg = dataArr.slice(0, 8).reduce((a, b) => a + b, 0) / 8;
-    shared.musicReactive = Math.min(1, (avg / 128) * 1.4);
+    shared.musicReactive = Math.min(1, engine.getLevel() * 1.6);
   };
 
   function setPlaying(play) {
@@ -471,33 +457,22 @@ function initMusic() {
 
   async function toggle(e) {
     triggerRipple(e);
-    connectAnalyser();
-    if (audioCtx?.state === 'suspended') await audioCtx.resume();
+    ensureEngine();
     if (shared.musicPlaying) {
-      audio.pause(); setPlaying(false);
+      engine.pause(); setPlaying(false);
     } else {
-      try {
-        await audio.play(); setPlaying(true);
-        if (blocked) blocked.hidden = true;
-      } catch {
-        if (blocked) { blocked.hidden = false; setTimeout(() => { blocked.hidden = true; }, 4000); }
-      }
+      await engine.play(); setPlaying(true);
     }
   }
 
   btn.addEventListener('click', toggle);
 
-  setInterval(() => {
-    if (shared.musicPlaying && !audio.paused) {
-      localStorage.setItem('ls_music_pos', String(audio.currentTime));
-    }
-  }, 3000);
-
+  const savedPlaying = localStorage.getItem('ls_music_playing') === '1';
   if (savedPlaying) {
     document.addEventListener('click', async function once() {
       document.removeEventListener('click', once);
-      connectAnalyser();
-      try { await audio.play(); setPlaying(true); } catch {}
+      ensureEngine();
+      await engine.play(); setPlaying(true);
     }, { once: true });
   }
 }

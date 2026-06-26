@@ -1,0 +1,82 @@
+The last update introduced layout regressions.
+
+DO NOT redesign anything.
+DO NOT change the visual style.
+DO NOT change colors, typography, animations, spacing style, glow effects, branding, or functionality.
+
+Your only task is to restore the original design while making it pixel-perfect.
+
+### Critical Issues to Fix
+
+1. Dynamic Island
+- Reduce it to realistic iPhone proportions.
+- Center it perfectly.
+- Never overlap the status bar.
+- Keep proper spacing between the Dynamic Island and the top edge.
+
+2. Status Bar
+- Time, signal, Wi-Fi (if present), and battery must always remain fully visible.
+- No element may cover or touch them.
+- Vertically center every icon.
+- Use equal horizontal spacing.
+
+3. Safe Area
+- Respect iPhone safe-area insets.
+- Nothing should extend into the notch/Dynamic Island area.
+- Keep consistent top padding.
+
+4. Phone Display
+- Every UI element must stay completely inside the phone screen.
+- No clipping.
+- No cropped buttons.
+- No overflow.
+- No hidden text.
+
+5. Call Controls
+- Mute, Keypad, Speaker, End Call and every control must be fully visible.
+- Keep equal spacing.
+- Keep identical button sizes.
+- Center everything perfectly.
+
+6. Text
+- "Panditain ❤️"
+- "Calling..."
+- "Signal Lost"
+- Timer
+All text must remain aligned and never overlap.
+
+7. Phone Frame
+- Restore the original phone proportions.
+- Keep bezels symmetrical.
+- Keep corner radius consistent.
+- Do not stretch or compress the phone.
+
+8. Responsive Rules
+- Preserve the desktop design.
+- Mobile should look identical, only scaled correctly.
+- No horizontal scrolling.
+- No overlapping.
+- No automatic repositioning that changes the design.
+
+### Validation Checklist
+
+Before finishing, verify ALL of these:
+
+✓ Dynamic Island never overlaps the status bar.
+✓ Time is fully visible.
+✓ Battery is fully visible.
+✓ Signal icons are fully visible.
+✓ All buttons remain inside the display.
+✓ No cropped content.
+✓ No overflow.
+✓ No layout shifts.
+✓ Pixel-perfect alignment.
+✓ Original appearance preserved.
+
+If any responsive change causes overlap or clipping, revert that change instead of forcing responsiveness.
+
+Priority:
+1. Preserve the original design.
+2. Eliminate layout bugs.
+3. Maintain perfect responsiveness.
+Never sacrifice the original UI just to make something responsive.
