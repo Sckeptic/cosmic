@@ -1,0 +1,211 @@
+You misunderstood the previous requests.
+
+STOP adding more glow.
+
+STOP making stars larger.
+
+STOP making constellation lines thicker.
+
+STOP adding random visual effects.
+
+The current renderer is already good.
+It already has bloom, particles, nebula, parallax, twinkling stars and HDR effects.
+
+My request is NOT to add more effects.
+
+My request is to professionally ART DIRECT the existing renderer.
+
+========================================================
+GOAL
+========================================================
+
+Transform the star maps from "neon glowing UI"
+into
+"a realistic cinematic space window."
+
+Think:
+
+• NASA Astrophotography
+• James Webb Space Telescope
+• Apple Vision Pro
+• Interstellar
+• Minimal luxury UI
+
+NOT
+
+• Gaming RGB
+• Neon wallpaper
+• Cartoon glow
+• Sci-fi HUD
+
+========================================================
+DO NOT CHANGE
+========================================================
+
+Keep exactly the same:
+
+• layout
+• spacing
+• constellation positions
+• Orion star positions
+• typography
+• labels
+• section structure
+• animations
+
+Do NOT redesign.
+
+========================================================
+TUNE THE EXISTING RENDERER
+========================================================
+
+Instead of adding effects:
+
+Reduce bloom intensity.
+
+Reduce halo radius.
+
+Reduce glow opacity.
+
+Reduce line brightness.
+
+Reduce bloom radius around stars.
+
+Reduce nebula opacity.
+
+Keep everything elegant.
+
+========================================================
+MAKE SPACE FEEL REAL
+========================================================
+
+Instead of glow, improve depth.
+
+Increase tiny background stars.
+
+Create multiple depth layers.
+
+Some stars should be extremely tiny.
+
+Some medium.
+
+Only the major Orion stars should be bright.
+
+Add several subtle star clusters.
+
+Add faint Milky Way dust bands.
+
+Add extremely soft distant galaxies near the corners.
+
+Add subtle cosmic dust.
+
+Add volumetric depth instead of brightness.
+
+The empty areas should feel like real space,
+not empty black rectangles.
+
+========================================================
+CONSTELLATION
+========================================================
+
+Keep Orion exactly where it is.
+
+Do NOT move any stars.
+
+Do NOT change the constellation.
+
+Only improve rendering quality.
+
+Constellation lines should look like elegant
+optical energy filaments.
+
+Not neon tubes.
+
+Thin.
+
+Sharp.
+
+Premium.
+
+========================================================
+STAR QUALITY
+========================================================
+
+Each major star should have:
+
+• tiny white hot core
+• soft colored corona
+• subtle HDR bloom
+• realistic brightness falloff
+
+Different stars should have different brightness.
+
+Different sizes.
+
+Different temperatures.
+
+========================================================
+BACKGROUND
+========================================================
+
+The cards should look like looking through
+the window of a spacecraft.
+
+Not like a glowing illustration.
+
+Use:
+
+• distant galaxies
+• star clusters
+• faint nebula
+• cosmic dust
+• tiny particles
+• realistic darkness
+
+Leave negative space.
+
+Do NOT fill every corner.
+
+========================================================
+LIGHTING
+========================================================
+
+Replace artificial glow with realistic lighting.
+
+Soft bloom.
+
+Natural gradients.
+
+Depth.
+
+Atmosphere.
+
+Subtle reflections.
+
+Realistic contrast.
+
+========================================================
+FINAL GOAL
+========================================================
+
+When someone sees these cards they should think:
+
+"This looks like a real window into space."
+
+NOT
+
+"This has lots of glow."
+
+The improvement should come from realism,
+depth,
+composition,
+lighting,
+and restraint.
+
+Less glow.
+
+More realism.
+
+Less effects.
+
+More cinematic quality.

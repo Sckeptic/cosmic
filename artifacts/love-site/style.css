@@ -1587,6 +1587,53 @@ html[data-nav-dir="back"] .section.page-leaving {
   display: block;
 }
 
+/* ── Same Sky Moment ── */
+.same-sky-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 20;
+  opacity: 0;
+  transition: opacity 2.2s ease;
+}
+.same-sky-overlay.visible { opacity: 1; }
+
+.same-sky-msg {
+  text-align: center;
+  font-family: var(--font-head);
+  font-size: clamp(0.76rem, 1.4vw, 0.94rem);
+  font-weight: 400;
+  color: rgba(248, 218, 148, 0.90);
+  letter-spacing: 0.10em;
+  line-height: 1.85;
+  padding: 16px 30px;
+  background: rgba(3, 1, 10, 0.68);
+  border-radius: 14px;
+  border: 1px solid rgba(247, 201, 72, 0.10);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow: 0 0 40px rgba(247, 201, 72, 0.06) inset;
+}
+.same-sky-star {
+  opacity: 0.55;
+  font-size: 0.7em;
+  letter-spacing: 0.4em;
+}
+
+@keyframes same-sky-pulse-l {
+  0%,100% { box-shadow: 0 0 60px rgba(0,0,0,0.7) inset, 0 0 30px rgba(255,107,157,0.07), 0 0 0 1px rgba(255,107,157,0.04); }
+  50%      { box-shadow: 0 0 60px rgba(0,0,0,0.7) inset, 0 0 44px rgba(247,201,72,0.13), 0 0 0 1px rgba(247,201,72,0.08); }
+}
+@keyframes same-sky-pulse-r {
+  0%,100% { box-shadow: 0 0 60px rgba(0,0,0,0.7) inset, 0 0 30px rgba(247,201,72,0.07), 0 0 0 1px rgba(247,201,72,0.04); }
+  50%      { box-shadow: 0 0 60px rgba(0,0,0,0.7) inset, 0 0 44px rgba(247,201,72,0.15), 0 0 0 1px rgba(247,201,72,0.10); }
+}
+.same-sky-glow #sky-left  { animation: same-sky-pulse-l 4.5s ease-in-out infinite; }
+.same-sky-glow #sky-right { animation: same-sky-pulse-r 4.5s ease-in-out infinite; }
+
 .starmap-footer {
   text-align: center;
   margin-top: clamp(8px, 1.5vh, 16px);
