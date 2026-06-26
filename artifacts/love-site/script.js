@@ -162,6 +162,7 @@ class PageManager {
     if (this.transitioning) return;
     if (index < 0 || index >= this.pages.length) return;
     if (index === this.current) return;
+    document.documentElement.dataset.navDir = index > this.current ? 'forward' : 'back';
     this._activate(index);
     this.hideHint();
   }
@@ -352,6 +353,14 @@ resizeStars();
 rafId = requestAnimationFrame(loop);
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Cinematic curtain — lift after a short delay
+  const curtain = document.getElementById('curtain');
+  requestAnimationFrame(() => requestAnimationFrame(() => curtain?.classList.add('out')));
+
+  // Adapt nav hint to touch vs keyboard
+  const hint = document.getElementById('key-hint');
+  if (hint && navigator.maxTouchPoints > 0) hint.textContent = 'swipe to explore';
+
   // Init all modules
   initHero(shared);
   initSignal(shared);

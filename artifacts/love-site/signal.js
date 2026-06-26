@@ -101,6 +101,18 @@ export function init(shared) {
   if (!phone) return;
 
   retryBtn?.addEventListener('click', resetCall);
+
+  // Live clock in the phone status bar
+  const clockEl = phone.querySelector('.status-time');
+  if (clockEl) {
+    function updateClock() {
+      const now = new Date();
+      const h = now.getHours(), m = String(now.getMinutes()).padStart(2, '0');
+      clockEl.textContent = `${h}:${m}`;
+    }
+    updateClock();
+    setInterval(updateClock, 15000);
+  }
 }
 
 export function onEnter() {

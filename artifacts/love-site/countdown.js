@@ -15,7 +15,14 @@ export function init(shared) {
 
   const LS_KEY = 'ls_countdown_date';
   const saved  = localStorage.getItem(LS_KEY);
-  if (saved) dateInput.value = saved;
+  if (saved) {
+    dateInput.value = saved;
+  } else {
+    // Default: 3 days from now so the countdown is always live
+    const d = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000);
+    // datetime-local needs "YYYY-MM-DDTHH:MM"
+    dateInput.value = d.toISOString().slice(0, 16);
+  }
 
   dateInput.addEventListener('change', () => {
     localStorage.setItem(LS_KEY, dateInput.value);

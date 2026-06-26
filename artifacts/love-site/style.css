@@ -44,6 +44,18 @@ img, canvas { display: block; max-width: 100%; }
 button { cursor: pointer; border: none; background: none; font: inherit; color: inherit; }
 input { outline: none; font: inherit; }
 
+/* ─── Cinematic opening curtain ─── */
+#curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: #050510;
+  opacity: 1;
+  pointer-events: none;
+  transition: opacity 1.2s ease 0.4s;
+}
+#curtain.out { opacity: 0; }
+
 /* ─── Global star canvas ─── */
 #star-canvas {
   position: fixed;
@@ -85,13 +97,18 @@ input { outline: none; font: inherit; }
   padding: clamp(60px, 10vh, 100px) clamp(24px, 6vw, 100px);
   overflow: hidden;
 
-  /* Hidden by default */
+  /* Hidden by default — forward direction offset */
   opacity: 0;
-  transform: scale(1.04);
+  transform: scale(1.04) translateX(28px);
   pointer-events: none;
   transition:
     opacity  0.85s cubic-bezier(0.22, 1, 0.36, 1),
     transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Backward navigation: hidden pages come from the left */
+html[data-nav-dir="back"] .section {
+  transform: scale(1.04) translateX(-28px);
 }
 
 .section::before {
@@ -110,12 +127,16 @@ input { outline: none; font: inherit; }
   z-index: 2;
 }
 
-/* Leaving page */
+/* Leaving page — slides left when going forward */
 .section.page-leaving {
   opacity: 0;
-  transform: scale(0.96);
+  transform: scale(0.96) translateX(-28px);
   pointer-events: none;
   z-index: 1;
+}
+/* Slides right when going backward */
+html[data-nav-dir="back"] .section.page-leaving {
+  transform: scale(0.96) translateX(28px);
 }
 
 /* ─── Entrance animations (fire on page-entering class) ─── */
@@ -1226,6 +1247,12 @@ button.phone-action-btn .btn-retry:hover { background: rgba(79,142,247,0.2); }
 }
 .countdown-date-input:focus {
   border-color: rgba(79,142,247,0.5);
+}
+
+/* Digit flip animation (used by countdown.js setDigit) */
+@keyframes cd-tick {
+  from { opacity: 0; transform: translateY(-10px) scale(0.9); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 /* Countdown digits */
