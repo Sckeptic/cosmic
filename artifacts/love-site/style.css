@@ -1880,3 +1880,8 @@ html[data-nav-dir="back"] .section.page-leaving {
   .page-nav { right: 8px; }
   .arrow-prev, .arrow-next { right: 8px; }
 }
+
+@media (max-width: 430px) {
+  .avatar-stack { margin-top: 6px; }
+  .phone-home-bar { margin: 8px auto 8px; }
+}
