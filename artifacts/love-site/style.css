@@ -1496,7 +1496,10 @@ html[data-nav-dir="back"] .section.page-leaving {
 }
 
 .starmap-section::before {
-  background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(255,107,157,0.05) 0%, transparent 70%);
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 50%, rgba(60,100,255,0.07) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 40% at 15% 20%, rgba(80,40,220,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 35% 35% at 85% 80%, rgba(40,160,255,0.06) 0%, transparent 60%);
 }
 
 .starmap-header {
@@ -1564,14 +1567,14 @@ html[data-nav-dir="back"] .section.page-leaving {
   width: 100%;
   height: clamp(220px, 47vh, 520px);
   border-radius: 20px;
-  border: 1px solid rgba(255,107,157,0.14);
-  background: #030108;
-  box-shadow: 0 0 60px rgba(0,0,0,0.7) inset, 0 0 30px rgba(255,107,157,0.07), 0 0 0 1px rgba(255,107,157,0.04);
+  border: 1px solid rgba(80,140,255,0.18);
+  background: #020108;
+  box-shadow: 0 0 60px rgba(0,0,0,0.75) inset, 0 0 30px rgba(60,100,255,0.10), 0 0 0 1px rgba(80,120,255,0.06);
   transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 #sky-left:hover, #sky-right:hover {
   transform: rotateX(-3deg) rotateY(3deg) translateZ(8px);
-  box-shadow: 0 0 40px rgba(0,0,0,0.5) inset, 0 12px 40px rgba(255,107,157,0.12);
+  box-shadow: 0 0 40px rgba(0,0,0,0.55) inset, 0 12px 40px rgba(60,100,255,0.18), 0 0 80px rgba(80,160,255,0.08);
 }
 
 .starmap-thread-col {
@@ -1624,15 +1627,24 @@ html[data-nav-dir="back"] .section.page-leaving {
 }
 
 @keyframes same-sky-pulse-l {
-  0%,100% { box-shadow: 0 0 60px rgba(0,0,0,0.7) inset, 0 0 30px rgba(255,107,157,0.07), 0 0 0 1px rgba(255,107,157,0.04); }
-  50%      { box-shadow: 0 0 60px rgba(0,0,0,0.7) inset, 0 0 44px rgba(247,201,72,0.13), 0 0 0 1px rgba(247,201,72,0.08); }
+  0%,100% { box-shadow: 0 0 60px rgba(0,0,0,0.75) inset, 0 0 30px rgba(60,100,255,0.10), 0 0 0 1px rgba(80,140,255,0.06); }
+  50%      { box-shadow: 0 0 60px rgba(0,0,0,0.75) inset, 0 0 56px rgba(80,140,255,0.22), 0 0 0 1px rgba(100,160,255,0.14); }
 }
 @keyframes same-sky-pulse-r {
-  0%,100% { box-shadow: 0 0 60px rgba(0,0,0,0.7) inset, 0 0 30px rgba(247,201,72,0.07), 0 0 0 1px rgba(247,201,72,0.04); }
-  50%      { box-shadow: 0 0 60px rgba(0,0,0,0.7) inset, 0 0 44px rgba(247,201,72,0.15), 0 0 0 1px rgba(247,201,72,0.10); }
+  0%,100% { box-shadow: 0 0 60px rgba(0,0,0,0.75) inset, 0 0 30px rgba(60,180,255,0.10), 0 0 0 1px rgba(80,200,255,0.06); }
+  50%      { box-shadow: 0 0 60px rgba(0,0,0,0.75) inset, 0 0 56px rgba(80,200,255,0.22), 0 0 0 1px rgba(100,220,255,0.14); }
 }
 .same-sky-glow #sky-left  { animation: same-sky-pulse-l 4.5s ease-in-out infinite; }
 .same-sky-glow #sky-right { animation: same-sky-pulse-r 4.5s ease-in-out infinite; }
+
+/* ── Cosmic overrides scoped to starmap only ── */
+.starmap-section .glow-text {
+  background: linear-gradient(135deg, #60a0ff 0%, #a080ff 40%, #40d0ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 20px rgba(80,140,255,0.5));
+}
 
 .starmap-footer {
   text-align: center;

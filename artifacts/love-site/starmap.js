@@ -4,20 +4,20 @@ import { initPortal } from './portal.js';
 
 let _shared;
 
-/* ── Edge-only nebula wisps — very faint, corners only ── */
+/* ── Edge-only nebula wisps — cosmic blue & purple ── */
 const WISPS_L = [
-  { cx:0.04, cy:0.94, rx:0.36, ry:0.16, a:-0.22, r:175, g:38, b:110, o:0.036 },
-  { cx:0.96, cy:0.90, rx:0.30, ry:0.15, a: 0.32, r:120, g:18, b:145, o:0.026 },
-  { cx:0.06, cy:0.10, rx:0.26, ry:0.12, a:-0.28, r:130, g:20, b:128, o:0.020 },
-  { cx:0.94, cy:0.06, rx:0.22, ry:0.11, a: 0.38, r:100, g:12, b:118, o:0.015 },
-  { cx:0.50, cy:0.97, rx:0.52, ry:0.14, a: 0.00, r:148, g:28, b:128, o:0.020 },
+  { cx:0.04, cy:0.94, rx:0.36, ry:0.16, a:-0.22, r: 60, g: 80, b:200, o:0.055 },
+  { cx:0.96, cy:0.90, rx:0.30, ry:0.15, a: 0.32, r: 90, g: 40, b:220, o:0.042 },
+  { cx:0.06, cy:0.10, rx:0.26, ry:0.12, a:-0.28, r: 40, g:100, b:240, o:0.038 },
+  { cx:0.94, cy:0.06, rx:0.22, ry:0.11, a: 0.38, r:120, g: 60, b:255, o:0.030 },
+  { cx:0.50, cy:0.97, rx:0.52, ry:0.14, a: 0.00, r: 70, g: 60, b:210, o:0.034 },
 ];
 const WISPS_R = [
-  { cx:0.96, cy:0.90, rx:0.34, ry:0.17, a: 0.36, r:162, g: 85, b:16, o:0.032 },
-  { cx:0.04, cy:0.92, rx:0.28, ry:0.15, a:-0.28, r:152, g: 88, b:20, o:0.024 },
-  { cx:0.92, cy:0.08, rx:0.24, ry:0.11, a: 0.40, r:168, g:118, b:36, o:0.018 },
-  { cx:0.06, cy:0.06, rx:0.20, ry:0.10, a:-0.18, r:138, g: 68, b:10, o:0.013 },
-  { cx:0.50, cy:0.96, rx:0.48, ry:0.13, a: 0.00, r:152, g: 78, b:12, o:0.018 },
+  { cx:0.96, cy:0.90, rx:0.34, ry:0.17, a: 0.36, r: 80, g:200, b:240, o:0.048 },
+  { cx:0.04, cy:0.92, rx:0.28, ry:0.15, a:-0.28, r: 60, g:180, b:220, o:0.038 },
+  { cx:0.92, cy:0.08, rx:0.24, ry:0.11, a: 0.40, r:100, g:160, b:255, o:0.030 },
+  { cx:0.06, cy:0.06, rx:0.20, ry:0.10, a:-0.18, r: 40, g:140, b:200, o:0.022 },
+  { cx:0.50, cy:0.96, rx:0.48, ry:0.13, a: 0.00, r: 70, g:180, b:230, o:0.030 },
 ];
 
 /* ── Orion — unchanged positions ── */
@@ -463,8 +463,8 @@ export function init(shared) {
     if (!dataR || dataR.W !== skyR.clientWidth || dataR.H !== skyR.clientHeight)
       dataR = initSkyData(skyR, 20240102);
 
-    drawSkyFull(skyL, dataL, 255, 107, 157, t, WISPS_L);
-    drawSkyFull(skyR, dataR, 247, 201,  72, t, WISPS_R);
+    drawSkyFull(skyL, dataL,  80, 140, 255, t, WISPS_L);
+    drawSkyFull(skyR, dataR, 100, 200, 255, t, WISPS_R);
 
     /* Shooting star overlay */
     for (const shoot of [{ s: shootL, cv: skyL }, { s: shootR, cv: skyR }]) {
