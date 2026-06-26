@@ -1529,7 +1529,7 @@ html[data-nav-dir="back"] .section.page-leaving {
   z-index: 1;
   flex: 1;
   min-height: 0;
-  max-height: 60vh;
+  max-height: 80vh;
   perspective: 800px;
 }
 
@@ -1562,11 +1562,11 @@ html[data-nav-dir="back"] .section.page-leaving {
 
 #sky-left, #sky-right {
   width: 100%;
-  height: clamp(120px, 20vh, 220px);
+  height: clamp(220px, 47vh, 520px);
   border-radius: 20px;
-  border: 1px solid rgba(255,107,157,0.08);
-  background: radial-gradient(ellipse at 50% 50%, rgba(16,6,24,1) 0%, rgba(6,4,16,1) 100%);
-  box-shadow: 0 0 40px rgba(0,0,0,0.5) inset, 0 0 20px rgba(255,107,157,0.05);
+  border: 1px solid rgba(255,107,157,0.14);
+  background: #030108;
+  box-shadow: 0 0 60px rgba(0,0,0,0.7) inset, 0 0 30px rgba(255,107,157,0.07), 0 0 0 1px rgba(255,107,157,0.04);
   transition: transform 0.4s ease, box-shadow 0.4s ease;
 }
 #sky-left:hover, #sky-right:hover {
