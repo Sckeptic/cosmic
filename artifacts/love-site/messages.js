@@ -183,6 +183,16 @@ export function init(shared) {
     }
   });
 
+  /* Character counter */
+  const counter = document.getElementById('msg-char-counter');
+  if (counter) {
+    _input.addEventListener('input', () => {
+      const rem = 200 - _input.value.length;
+      counter.textContent = rem;
+      counter.classList.toggle('near-limit', rem <= 30);
+    });
+  }
+
   _rafId = requestAnimationFrame(draw);
   setTimeout(drip, 800);
 }
