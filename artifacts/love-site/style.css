@@ -1679,15 +1679,20 @@ html[data-nav-dir="back"] .section.page-leaving {
     grid-template-rows: auto auto auto;
     justify-items: center;
     text-align: center;
-    gap: clamp(20px, 4vh, 36px);
+    gap: clamp(10px, 1.8vh, 20px);
+    align-content: center;
   }
   .signal-heading {
     align-items: center;
     justify-self: center;
   }
-  .signal-tagline { max-width: 100%; }
+  .signal-tagline { max-width: 100%; font-size: 0.78rem; }
   .signal-caption-text { grid-column: 1; }
   .phone-outer { justify-self: center; }
+  .phone {
+    height: min(42vh, 320px);
+  }
+  .signal-title { font-size: clamp(1.2rem, 5vw, 2rem); }
 
   .starmap-body-wrap {
     grid-template-columns: 1fr;
