@@ -4,26 +4,24 @@ import { initPortal } from './portal.js';
 
 let _shared;
 
-/* ── Nebula wisps — muted, barely perceptible, real-space palette ── */
+/* ── Nebula wisps — very faint, like real deep-field photography ── */
 const WISPS_L = [
-  { cx:0.07, cy:0.90, rx:0.58, ry:0.26, a:-0.28, r:195, g:55,  b:135, o:0.044 },
-  { cx:0.91, cy:0.85, rx:0.50, ry:0.24, a: 0.38, r:140, g:22,  b:170, o:0.034 },
-  { cx:0.50, cy:1.04, rx:0.74, ry:0.36, a: 0.06, r:110, g:12,  b:165, o:0.028 },
-  { cx:0.20, cy:0.58, rx:0.38, ry:0.22, a:-0.45, r:185, g:55,  b:148, o:0.022 },
-  { cx:0.76, cy:0.36, rx:0.30, ry:0.17, a: 0.42, r:110, g:12,  b:155, o:0.015 },
-  { cx:0.36, cy:0.92, rx:0.24, ry:0.14, a:-0.18, r:210, g:72,  b:165, o:0.030 },
-  { cx:0.50, cy:0.70, rx:0.88, ry:0.56, a: 0.00, r:55,  g:8,   b:85,  o:0.014 },
-  { cx:0.14, cy:0.28, rx:0.26, ry:0.15, a:-0.30, r:165, g:28,  b:148, o:0.012 },
+  { cx:0.10, cy:0.85, rx:0.45, ry:0.20, a:-0.28, r:180, g:40,  b:120, o:0.028 },
+  { cx:0.88, cy:0.82, rx:0.40, ry:0.18, a: 0.38, r:120, g:18,  b:150, o:0.022 },
+  { cx:0.50, cy:1.05, rx:0.62, ry:0.28, a: 0.06, r:100, g:10,  b:140, o:0.018 },
+  { cx:0.18, cy:0.55, rx:0.28, ry:0.16, a:-0.45, r:160, g:45,  b:130, o:0.014 },
+  { cx:0.75, cy:0.32, rx:0.22, ry:0.13, a: 0.42, r: 95, g:10,  b:130, o:0.010 },
+  { cx:0.35, cy:0.90, rx:0.18, ry:0.11, a:-0.18, r:190, g:60,  b:150, o:0.020 },
+  { cx:0.12, cy:0.25, rx:0.20, ry:0.12, a:-0.30, r:140, g:22,  b:128, o:0.008 },
 ];
 const WISPS_R = [
-  { cx:0.88, cy:0.68, rx:0.50, ry:0.36, a: 0.42, r:188, g:105, b:22,  o:0.040 },
-  { cx:0.11, cy:0.87, rx:0.48, ry:0.24, a:-0.32, r:195, g:118, b:28,  o:0.032 },
-  { cx:0.50, cy:1.02, rx:0.66, ry:0.30, a: 0.08, r:158, g:65,  b:10,  o:0.028 },
-  { cx:0.66, cy:0.26, rx:0.34, ry:0.18, a: 0.28, r:185, g:158, b:55,  o:0.018 },
-  { cx:0.94, cy:0.46, rx:0.32, ry:0.18, a: 0.50, r:196, g:105, b:18,  o:0.034 },
-  { cx:0.50, cy:0.66, rx:0.86, ry:0.52, a: 0.00, r:82,  g:37,  b:5,   o:0.013 },
-  { cx:0.22, cy:0.50, rx:0.28, ry:0.16, a:-0.20, r:168, g:85,  b:10,  o:0.016 },
-  { cx:0.80, cy:0.19, rx:0.22, ry:0.13, a: 0.35, r:205, g:150, b:48,  o:0.010 },
+  { cx:0.86, cy:0.65, rx:0.38, ry:0.28, a: 0.42, r:165, g: 90, b: 18, o:0.024 },
+  { cx:0.13, cy:0.84, rx:0.36, ry:0.18, a:-0.32, r:170, g:100, b: 22, o:0.018 },
+  { cx:0.50, cy:1.02, rx:0.52, ry:0.22, a: 0.08, r:130, g: 52, b:  8, o:0.016 },
+  { cx:0.64, cy:0.24, rx:0.26, ry:0.14, a: 0.28, r:160, g:130, b: 45, o:0.012 },
+  { cx:0.92, cy:0.44, rx:0.24, ry:0.14, a: 0.50, r:170, g: 88, b: 14, o:0.020 },
+  { cx:0.20, cy:0.48, rx:0.22, ry:0.12, a:-0.20, r:145, g: 72, b:  8, o:0.010 },
+  { cx:0.78, cy:0.17, rx:0.17, ry:0.10, a: 0.35, r:180, g:130, b: 40, o:0.007 },
 ];
 
 /* ── Orion constellation ── */
@@ -53,47 +51,56 @@ export function init(shared) {
     return () => { s = (s * 16807 + 0) % 2147483647; return (s - 1) / 2147483646; };
   }
 
-  /* ── Stars: three depth tiers + embedded clusters ── */
+  /* ── Stars: three depth tiers + clusters — rich density for deep-space feel ── */
   function buildStarData(rng, W, H) {
-    const TOTAL = Math.floor((W * H) / 1650);
+    const TOTAL = Math.floor((W * H) / 820); // Dense field — real space has thousands
     const stars = [];
 
     for (let i = 0; i < TOTAL; i++) {
       const roll = rng();
       let r, baseAlpha, speed, tier;
-      if (roll < 0.63) {
-        r = 0.10 + rng() * 0.28; baseAlpha = 0.08 + rng() * 0.24;
-        speed = 0.0002 + rng() * 0.0010; tier = 0;
-      } else if (roll < 0.90) {
-        r = 0.28 + rng() * 0.44; baseAlpha = 0.18 + rng() * 0.36;
-        speed = 0.0003 + rng() * 0.0013; tier = 1;
+      if (roll < 0.62) {
+        // Distant tiny stars — many, dim but visible
+        r = 0.12 + rng() * 0.30;
+        baseAlpha = 0.16 + rng() * 0.32;
+        speed = 0.0002 + rng() * 0.0009; tier = 0;
+      } else if (roll < 0.88) {
+        // Mid-field stars — soft halos
+        r = 0.30 + rng() * 0.48;
+        baseAlpha = 0.28 + rng() * 0.40;
+        speed = 0.0003 + rng() * 0.0012; tier = 1;
       } else {
-        r = 0.58 + rng() * 0.72; baseAlpha = 0.35 + rng() * 0.38;
-        speed = 0.0004 + rng() * 0.0018; tier = 2;
+        // Foreground bright stars
+        r = 0.65 + rng() * 0.80;
+        baseAlpha = 0.55 + rng() * 0.38;
+        speed = 0.0004 + rng() * 0.0016; tier = 2;
       }
       stars.push({
         x: rng() * W, y: rng() * H, r, baseAlpha,
         phase: rng() * Math.PI * 2, speed, tier,
-        depth: 0.12 + rng() * 0.88,
-        warm: rng() < 0.12,
+        depth: 0.10 + rng() * 0.90,
+        warm: rng() < 0.10, // 10% slightly warm
+        blue: rng() < 0.08, // 8% slightly blue-white
       });
     }
 
-    /* Star clusters — dense pockets of tiny stars */
-    const nClusters = 3 + Math.floor(rng() * 3);
+    /* Star clusters — 4–6 dense pockets */
+    const nClusters = 4 + Math.floor(rng() * 3);
     for (let c = 0; c < nClusters; c++) {
       const cx = (0.06 + rng() * 0.88) * W;
       const cy = (0.06 + rng() * 0.88) * H;
-      const cr = (0.035 + rng() * 0.065) * Math.min(W, H);
-      const n  = 8 + Math.floor(rng() * 13);
+      const cr = (0.04 + rng() * 0.07) * Math.min(W, H);
+      const n  = 10 + Math.floor(rng() * 16);
       for (let i = 0; i < n; i++) {
         const ang = rng() * Math.PI * 2;
         const d   = Math.sqrt(rng()) * cr;
         stars.push({
           x: cx + Math.cos(ang) * d, y: cy + Math.sin(ang) * d,
-          r: 0.09 + rng() * 0.20, baseAlpha: 0.10 + rng() * 0.26,
-          phase: rng() * Math.PI * 2, speed: 0.0002 + rng() * 0.0008,
-          tier: 0, depth: 0.08 + rng() * 0.18, warm: false,
+          r: 0.10 + rng() * 0.22,
+          baseAlpha: 0.18 + rng() * 0.32,
+          phase: rng() * Math.PI * 2,
+          speed: 0.0002 + rng() * 0.0007,
+          tier: 0, depth: 0.08 + rng() * 0.20, warm: false, blue: rng() < 0.2,
         });
       }
     }
@@ -155,13 +162,15 @@ export function init(shared) {
     const H = canvas.height = canvas.clientHeight;
     if (W < 4 || H < 4) return;
 
-    ctx.clearRect(0, 0, W, H);
+    /* 1 · Deep black space — fully opaque so CSS bleeds never show through */
+    ctx.fillStyle = 'rgb(2, 1, 7)';
+    ctx.fillRect(0, 0, W, H);
 
-    /* 1 · Deep black space background */
-    const bg = ctx.createRadialGradient(W*0.5, H*0.38, 0, W*0.5, H*0.5, Math.max(W,H)*0.85);
-    bg.addColorStop(0,   `rgba(${tintR},${tintG},${tintB},0.030)`);
-    bg.addColorStop(0.7, 'rgba(3,1,8,0.60)');
-    bg.addColorStop(1,   'rgba(1,0,4,0.85)');
+    /* Very faint radial center — just a breath of character, not a color wash */
+    const bg = ctx.createRadialGradient(W*0.42, H*0.40, 0, W*0.5, H*0.5, Math.max(W,H)*0.70);
+    bg.addColorStop(0,   `rgba(${tintR},${tintG},${tintB},0.012)`);
+    bg.addColorStop(0.5, `rgba(${tintR},${tintG},${tintB},0.004)`);
+    bg.addColorStop(1,   'transparent');
     ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
 
     /* 2 · Nebula wisps (very subtle) */
@@ -184,35 +193,37 @@ export function init(shared) {
         const alpha = s.baseAlpha * tw;
         const sx = s.x + px * s.depth, sy = s.y + py * s.depth;
 
+        const starClr = s.warm ? '255,228,188'
+                       : s.blue ? '178,208,255'
+                       : '218,235,255';
+
         if (s.tier === 0) {
-          /* Distant: single pixel-like point, no gradient overhead */
+          /* Distant stars — crisp points, no gradient */
           ctx.beginPath(); ctx.arc(sx, sy, s.r, 0, Math.PI * 2);
-          ctx.fillStyle = s.warm
-            ? `rgba(255,232,195,${alpha})`
-            : `rgba(208,228,255,${alpha})`;
+          ctx.fillStyle = `rgba(${starClr},${alpha})`;
           ctx.fill();
         } else if (s.tier === 1) {
-          /* Mid-distance: tiny diffuse halo */
-          const hw = s.r * 2.4;
+          /* Mid-field — small diffuse disc */
+          const hw = s.r * 2.2;
           const gw = ctx.createRadialGradient(sx,sy,0,sx,sy,hw);
-          gw.addColorStop(0,   `rgba(215,232,255,${alpha * 0.72})`);
-          gw.addColorStop(0.6, `rgba(200,220,255,${alpha * 0.15})`);
+          gw.addColorStop(0,   `rgba(${starClr},${alpha * 0.80})`);
+          gw.addColorStop(0.55,`rgba(${starClr},${alpha * 0.18})`);
           gw.addColorStop(1,   'transparent');
           ctx.beginPath(); ctx.arc(sx,sy,hw,0,Math.PI*2);
           ctx.fillStyle = gw; ctx.fill();
-          ctx.beginPath(); ctx.arc(sx,sy,s.r*0.55,0,Math.PI*2);
-          ctx.fillStyle = `rgba(232,244,255,${alpha})`; ctx.fill();
+          ctx.beginPath(); ctx.arc(sx,sy,s.r*0.5,0,Math.PI*2);
+          ctx.fillStyle = `rgba(${starClr},${alpha})`; ctx.fill();
         } else {
-          /* Closer: soft restrained bloom */
-          const hw = s.r * 3.6;
+          /* Foreground — restrained soft bloom */
+          const hw = s.r * 3.2;
           const gw = ctx.createRadialGradient(sx,sy,0,sx,sy,hw);
-          gw.addColorStop(0,   `rgba(220,236,255,${alpha * 0.60})`);
-          gw.addColorStop(0.5, `rgba(200,222,255,${alpha * 0.12})`);
+          gw.addColorStop(0,   `rgba(${starClr},${alpha * 0.55})`);
+          gw.addColorStop(0.5, `rgba(${starClr},${alpha * 0.10})`);
           gw.addColorStop(1,   'transparent');
           ctx.beginPath(); ctx.arc(sx,sy,hw,0,Math.PI*2);
           ctx.fillStyle = gw; ctx.fill();
           ctx.beginPath(); ctx.arc(sx,sy,s.r,0,Math.PI*2);
-          ctx.fillStyle = `rgba(238,247,255,${alpha})`; ctx.fill();
+          ctx.fillStyle = `rgba(${starClr},${Math.min(alpha * 1.1, 1)})`; ctx.fill();
         }
       }
     }
