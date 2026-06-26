@@ -52,7 +52,7 @@ input { outline: none; font: inherit; }
   background: #060410;
   opacity: 1;
   pointer-events: none;
-  transition: opacity 1.4s ease 0.3s;
+  transition: opacity 0.5s ease 0s;
 }
 #curtain.out { opacity: 0; }
 
@@ -71,16 +71,16 @@ input { outline: none; font: inherit; }
   z-index: 0;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 55% 45% at 15% 25%, rgba(255,107,157,0.10) 0%, transparent 65%),
-    radial-gradient(ellipse 40% 50% at 85% 75%, rgba(247,201,72,0.06) 0%, transparent 65%),
-    radial-gradient(ellipse 70% 55% at 50% 50%, rgba(200,50,120,0.06) 0%, transparent 75%),
-    radial-gradient(ellipse 30% 35% at 75% 20%, rgba(180,80,255,0.05) 0%, transparent 55%);
+    radial-gradient(ellipse 55% 45% at 15% 25%, rgba(255,107,157,0.18) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 50% at 85% 75%, rgba(247,201,72,0.10) 0%, transparent 65%),
+    radial-gradient(ellipse 70% 55% at 50% 50%, rgba(200,50,120,0.10) 0%, transparent 75%),
+    radial-gradient(ellipse 30% 35% at 75% 20%, rgba(180,80,255,0.08) 0%, transparent 55%);
   animation: nebula-drift 18s ease-in-out infinite alternate;
 }
 @keyframes nebula-drift {
-  0%   { opacity: 0.7; transform: scale(1); }
+  0%   { opacity: 0.85; transform: scale(1); }
   50%  { opacity: 1; }
-  100% { opacity: 0.85; transform: scale(1.04); }
+  100% { opacity: 0.9; transform: scale(1.04); }
 }
 
 /* ═══════════════════════════════════════════════════════════
@@ -98,11 +98,11 @@ input { outline: none; font: inherit; }
   overflow: hidden;
 
   opacity: 0;
-  transform: scale(1.04) translateX(28px);
+  transform: scale(1.02) translateX(16px);
   pointer-events: none;
   transition:
-    opacity  0.85s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+    opacity  0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 html[data-nav-dir="back"] .section {
@@ -126,12 +126,12 @@ html[data-nav-dir="back"] .section {
 
 .section.page-leaving {
   opacity: 0;
-  transform: scale(0.96) translateX(-28px);
+  transform: scale(0.97) translateX(-18px);
   pointer-events: none;
   z-index: 1;
 }
 html[data-nav-dir="back"] .section.page-leaving {
-  transform: scale(0.96) translateX(28px);
+  transform: scale(0.97) translateX(18px);
 }
 
 /* ─── Entrance animations ─── */
@@ -158,69 +158,69 @@ html[data-nav-dir="back"] .section.page-leaving {
 
 /* Hero entrance */
 .hero-section.page-entering .hero-ekg-section {
-  animation: ent-scale 1s 0.05s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: ent-scale 0.5s 0s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 .hero-section.page-entering .hero-kicker {
-  animation: ent-up 0.8s 0.25s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: ent-up 0.45s 0.05s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 .hero-section.page-entering .hero-headline {
-  animation: ent-up 0.9s 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: ent-up 0.5s 0.1s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 .hero-section.page-entering .hero-rule {
-  animation: ent-expand 0.7s 0.52s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: ent-expand 0.4s 0.18s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 .hero-section.page-entering .hero-sub {
-  animation: ent-up 0.8s 0.62s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: ent-up 0.45s 0.22s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 .hero-section.page-entering .hero-typewriter {
-  animation: ent-up 0.7s 0.80s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: ent-up 0.4s 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 .hero-section.page-entering .hero-heartbeats {
-  animation: ent-up 0.7s 0.95s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: ent-up 0.4s 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 /* Signal entrance */
 .signal-section.page-entering .signal-heading {
-  animation: ent-left 0.85s 0.1s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: ent-left 0.45s 0.05s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 .signal-section.page-entering .phone-outer {
-  animation: ent-right 0.9s 0.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: ent-right 0.5s 0.1s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 .signal-section.page-entering .signal-caption-text {
-  animation: ent-up 0.7s 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: ent-up 0.4s 0.2s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 /* Messages entrance */
 .messages-section.page-entering .messages-center-content {
-  animation: ent-up 0.9s 0.15s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: ent-up 0.5s 0.05s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 .messages-section.page-entering .messages-input-bar {
-  animation: ent-up 0.7s 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: ent-up 0.4s 0.15s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 /* Starmap entrance */
 .starmap-section.page-entering .starmap-header {
-  animation: ent-up 0.8s 0.1s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: ent-up 0.45s 0.05s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 .starmap-section.page-entering .starmap-body-wrap {
-  animation: ent-scale 0.9s 0.25s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: ent-scale 0.5s 0.12s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 .starmap-section.page-entering .starmap-footer {
-  animation: ent-up 0.7s 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: ent-up 0.4s 0.2s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 /* Countdown entrance */
 .countdown-section.page-entering .section-badge {
-  animation: ent-up 0.7s 0.1s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: ent-up 0.4s 0.05s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 .countdown-section.page-entering .countdown-eyebrow {
-  animation: ent-up 0.8s 0.22s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: ent-up 0.45s 0.1s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 .countdown-section.page-entering .countdown-input-group {
-  animation: ent-up 0.7s 0.32s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: ent-up 0.4s 0.15s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 .countdown-section.page-entering .countdown-display {
-  animation: ent-scale 0.9s 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: ent-scale 0.5s 0.2s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 
@@ -277,56 +277,56 @@ html[data-nav-dir="back"] .section.page-leaving {
 }
 
 .page-dot {
-  width: 2px;
-  height: 18px;
-  border-radius: 2px;
-  background: rgba(255,255,255,0.14);
+  width: 3px;
+  height: 20px;
+  border-radius: 3px;
+  background: rgba(255,255,255,0.22);
   border: none;
   cursor: pointer;
   padding: 0;
   position: relative;
-  transition: width 0.35s cubic-bezier(0.22,1,0.36,1),
-              height 0.35s cubic-bezier(0.22,1,0.36,1),
-              background 0.35s ease,
-              box-shadow 0.35s ease;
+  transition: height 0.4s cubic-bezier(0.22,1,0.36,1),
+              background 0.3s ease,
+              box-shadow 0.3s ease;
 }
+/* Label shown on active */
 .page-dot::before {
   content: attr(aria-label);
   position: absolute;
-  right: calc(100% + 14px);
+  right: calc(100% + 12px);
   top: 50%;
   transform: translateY(-50%);
   font-family: var(--font-head);
-  font-size: 0.64rem;
-  letter-spacing: 0.1em;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(255,150,180,0.0);
+  color: rgba(255,150,180,0);
   white-space: nowrap;
-  transition: color 0.25s ease, opacity 0.25s ease;
   pointer-events: none;
+  transition: color 0.3s ease;
 }
-/* Invisible hit area */
+/* Expanded hit area */
 .page-dot::after {
   content: '';
   position: absolute;
   top: -8px; bottom: -8px;
-  left: -12px; right: -12px;
+  left: -14px; right: -14px;
 }
 .page-dot:hover {
-  background: rgba(255,107,157,0.5);
-  width: 3px;
+  background: rgba(255,107,157,0.55);
 }
 .page-dot:hover::before {
-  color: rgba(255,150,180,0.75);
+  color: rgba(255,150,180,0.7);
 }
 .page-dot.active {
-  height: 36px;
-  width: 2px;
+  height: 40px;
   background: var(--glow);
-  box-shadow: 0 0 8px rgba(255,107,157,0.7), 0 0 20px rgba(255,107,157,0.25);
+  box-shadow:
+    0 0 10px rgba(255,107,157,0.8),
+    0 0 24px rgba(255,107,157,0.35);
 }
 .page-dot.active::before {
-  color: rgba(255,150,180,0.85);
+  color: rgba(255,150,180,0.9);
 }
 
 .page-counter {

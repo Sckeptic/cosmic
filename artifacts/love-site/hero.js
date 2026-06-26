@@ -59,20 +59,8 @@ function resize() {
 }
 
 let offset = 0;
-const STEPS = 700;
-
-/* Track peak (R-spike) position for the glowing dot */
-let peakT = 0;
-function findPeakT() {
-  let maxY = -Infinity, best = 0;
-  for (let i = 0; i < 200; i++) {
-    const t = i / 200;
-    const y = sampleBeat(t);
-    if (y > maxY) { maxY = y; best = t; }
-  }
-  peakT = best;
-}
-findPeakT();
+const STEPS  = 800;
+const REPEATS = 2.5;  // show 2.5 beats across the full width so it looks like a real heartbeat
 
 function draw() {
   if (!_canvas || !_ctx) { _rafId = requestAnimationFrame(draw); return; }
@@ -80,75 +68,80 @@ function draw() {
 
   _ctx.clearRect(0, 0, _W, _H);
 
-  const amp   = _H * 0.38 * (1 + (_shared?.musicReactive || 0) * 0.45);
-  const speed = 0.0012 + (_shared?.musicReactive || 0) * 0.0006;
+  const amp   = _H * 0.42 * (1 + (_shared?.musicReactive || 0) * 0.45);
+  /* 0.003 = one full cycle every ~333 frames ≈ ~5.5s at 60fps — readable */
+  const speed = 0.003 + (_shared?.musicReactive || 0) * 0.001;
   offset = (offset + speed) % 1;
   const midY = _H * 0.55;
 
+  /* Sample helper — repeats the beat REPEATS times across the canvas */
+  const sample = (nx) => sampleBeat(((nx * REPEATS) + offset) % 1);
+
   /* ── Soft ambient glow behind the line ── */
   _ctx.save();
-  _ctx.filter = 'blur(6px)';
-  _ctx.globalAlpha = 0.18;
-  _ctx.lineWidth   = 8;
+  _ctx.filter     = 'blur(7px)';
+  _ctx.globalAlpha = 0.22;
+  _ctx.lineWidth   = 10;
   _ctx.strokeStyle = '#FF6B9D';
   _ctx.beginPath();
   for (let i = 0; i <= STEPS; i++) {
     const nx = i / STEPS;
-    const y  = midY - sampleBeat((nx + offset) % 1) * amp;
+    const y  = midY - sample(nx) * amp;
     i === 0 ? _ctx.moveTo(0, y) : _ctx.lineTo(nx * _W, y);
   }
   _ctx.stroke();
   _ctx.restore();
 
-  /* ── Main ECG line with gradient ── */
+  /* ── Main ECG line ── */
   _ctx.save();
-  _ctx.lineWidth = 1.8;
-  _ctx.lineJoin  = 'round';
-  _ctx.lineCap   = 'round';
-  _ctx.shadowBlur  = 16;
-  _ctx.shadowColor = 'rgba(255,100,160,0.6)';
+  _ctx.lineWidth   = 2;
+  _ctx.lineJoin    = 'round';
+  _ctx.lineCap     = 'round';
+  _ctx.shadowBlur  = 18;
+  _ctx.shadowColor = 'rgba(255,80,160,0.65)';
 
   const grad = _ctx.createLinearGradient(0, 0, _W, 0);
   grad.addColorStop(0,    'rgba(255,107,157,0.0)');
-  grad.addColorStop(0.05, 'rgba(255,107,157,0.9)');
+  grad.addColorStop(0.06, 'rgba(255,107,157,1)');
   grad.addColorStop(0.35, 'rgba(255,80,140,1)');
-  grad.addColorStop(0.50, 'rgba(255,160,190,1)');
-  grad.addColorStop(0.65, 'rgba(247,201,72,0.9)');
-  grad.addColorStop(0.95, 'rgba(255,107,157,0.9)');
+  grad.addColorStop(0.55, 'rgba(255,160,200,1)');
+  grad.addColorStop(0.72, 'rgba(247,201,72,0.95)');
+  grad.addColorStop(0.94, 'rgba(255,107,157,1)');
   grad.addColorStop(1,    'rgba(255,107,157,0.0)');
   _ctx.strokeStyle = grad;
 
   _ctx.beginPath();
   for (let i = 0; i <= STEPS; i++) {
     const nx = i / STEPS;
-    const y  = midY - sampleBeat((nx + offset) % 1) * amp;
+    const y  = midY - sample(nx) * amp;
     i === 0 ? _ctx.moveTo(0, y) : _ctx.lineTo(nx * _W, y);
   }
   _ctx.stroke();
   _ctx.restore();
 
-  /* ── Travelling glowing dot — rides the waveform ── */
-  const dotFrac = 0.62;
-  const hx = _W * dotFrac;
-  const hy = midY - sampleBeat((dotFrac + offset) % 1) * amp;
-  const sampleVal = sampleBeat((dotFrac + offset) % 1);
-  /* Make glow pulse brightest at the R-spike */
-  const glowBoost = 1 + Math.max(0, sampleVal) * 2.5;
+  /* ── Travelling glow dot — sits at 65% across, rides the wave ── */
+  const dotX   = 0.65;
+  const hx     = _W * dotX;
+  const sv     = sample(dotX);
+  const hy     = midY - sv * amp;
+  const boost  = 1 + Math.max(0, sv) * 2.8;
 
-  const rg = _ctx.createRadialGradient(hx, hy, 0, hx, hy, 14 * glowBoost);
-  rg.addColorStop(0,    'rgba(255,255,255,1)');
-  rg.addColorStop(0.2,  'rgba(255,200,220,0.9)');
-  rg.addColorStop(0.5,  `rgba(255,107,157,${0.45 * glowBoost})`);
-  rg.addColorStop(1,    'transparent');
+  /* Outer halo */
+  const rg = _ctx.createRadialGradient(hx, hy, 0, hx, hy, 18 * boost);
+  rg.addColorStop(0,   'rgba(255,255,255,1)');
+  rg.addColorStop(0.2, 'rgba(255,200,220,0.85)');
+  rg.addColorStop(0.5, `rgba(255,107,157,${0.4 * boost})`);
+  rg.addColorStop(1,   'transparent');
   _ctx.beginPath();
-  _ctx.arc(hx, hy, 14 * glowBoost, 0, Math.PI * 2);
+  _ctx.arc(hx, hy, 18 * boost, 0, Math.PI * 2);
   _ctx.fillStyle = rg;
   _ctx.fill();
 
+  /* Bright core */
   _ctx.beginPath();
-  _ctx.arc(hx, hy, 2, 0, Math.PI * 2);
-  _ctx.fillStyle = '#fff';
-  _ctx.shadowBlur  = 10;
+  _ctx.arc(hx, hy, 2.5, 0, Math.PI * 2);
+  _ctx.fillStyle   = '#fff';
+  _ctx.shadowBlur  = 12;
   _ctx.shadowColor = '#fff';
   _ctx.fill();
 
