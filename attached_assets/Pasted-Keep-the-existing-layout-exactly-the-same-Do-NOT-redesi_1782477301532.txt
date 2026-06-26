@@ -1,0 +1,106 @@
+Keep the existing layout exactly the same.
+
+Do NOT redesign the section.
+
+Do NOT move any elements.
+
+The current version is good, but I want a premium AAA polish.
+
+Enhance both "PRINCE'S SKY" and "KP'S SKY" by approximately 20–30%, not 200%.
+
+Improve only the visual quality.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Inside each star map
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+• Increase star density by 15–20%.
+• Add a few tiny distant galaxies near the edges.
+• Add subtle nebula clouds only in the corners.
+• Add faint cosmic dust drifting slowly.
+• Give every major star a realistic HDR bloom.
+• Add soft atmospheric fog near the bottom.
+• Improve constellation lines into elegant glowing energy threads.
+• Add subtle depth with parallax.
+• Add tiny floating particles.
+• Add occasional shooting stars.
+• Add realistic glass reflections.
+• Improve vignette around card edges.
+• Add subtle depth shadows.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Fill Empty Areas
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+The empty regions should not stay flat.
+
+Fill them naturally using:
+
+• distant stars
+• soft nebula
+• faint galaxies
+• tiny dust particles
+• subtle light haze
+
+Do NOT clutter the scene.
+
+The background should still feel clean and luxurious.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Animation
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Very subtle.
+
+Stars twinkle slowly.
+
+Dust moves gently.
+
+Nebula slowly breathes.
+
+Occasional shooting star every 15–25 seconds.
+
+Everything loops seamlessly.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Visual Quality
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Apple Vision Pro quality.
+
+Interstellar inspired.
+
+NASA inspired.
+
+Premium luxury UI.
+
+Elegant.
+
+Minimal.
+
+Cinematic.
+
+High-end glassmorphism.
+
+Realistic lighting.
+
+Soft bloom.
+
+Depth of field.
+
+No excessive glow.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+IMPORTANT
+
+Do NOT make it flashy.
+
+Do NOT add huge planets.
+
+Do NOT add large galaxies.
+
+Do NOT fill every corner.
+
+The improvement should feel like the work of a senior Apple UI designer.
+
+When comparing before and after, users should immediately notice that the scene feels deeper, richer and more premium without understanding exactly why.
