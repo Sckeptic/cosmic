@@ -1,51 +1,89 @@
-/* signal.js — Fake phone call with glitch effects */
+/* signal.js — Fake phone call: ringing → calling → glitch fail → auto-retry */
+
+const RING_MS    = 3000;                       // "Ringing…" phase length
+const FAIL_MIN   = 10000;                      // earliest the call drops
+const FAIL_RANGE = 7000;                       // random range above min
+const RETRY_SEC  = 6;                          // seconds before auto-retry
 
 let _started = false;
 let _failed  = false;
 let _elapsed = 0;
-let _tickId  = null;
+let _tickId        = null;
 let _glitchTimeout = null;
+let _retryCountId  = null;
 
-let phone, glow, status, timer, glitchEl, scanEl, retryBtn;
+let phone, glow, status, timer, glitchEl, scanEl, endBtn, endLabel, endIcon;
 
 function fmt(s) {
-  const m = Math.floor(s / 60);
-  return `${m}:${String(s % 60).padStart(2, '0')}`;
+  return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+}
+
+function setStatus(text, failed = false) {
+  if (!status) return;
+  status.textContent = text;
+  status.classList.toggle('failed', failed);
+}
+
+function setEndMode(mode) {
+  if (!endBtn) return;
+  const isRetry = mode === 'retry';
+  endBtn.classList.toggle('retry-mode', isRetry);
+  if (endLabel) endLabel.textContent = isRetry ? 'Retry' : 'End';
+  if (endIcon) {
+    endIcon.innerHTML = isRetry
+      ? `<path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 005.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 013.51 15"/>`
+      : `<path d="M10.68 13.31a16 16 0 003.41 2.6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7 2 2 0 011.72 2v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.42 19.42 0 013.43 9.37 19.79 19.79 0 01.36 .72 2 2 0 012.34 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11z"/><line x1="23" y1="1" x2="1" y2="23"/>`;
+  }
 }
 
 function triggerGlitch() {
   if (_failed) return;
   _failed = true;
+  clearInterval(_tickId);
 
-  phone.classList.add('shaking');
-  phone.classList.add('chromatic');
+  phone.classList.add('shaking', 'chromatic');
   phone.style.borderColor = 'rgba(255,52,102,0.4)';
-  glitchEl.classList.add('active');
-  scanEl.classList.add('active');
+  glitchEl?.classList.add('active');
+  scanEl?.classList.add('active');
 
-  let sliceId = setInterval(() => {
-    phone.style.transform = `translateX(${(Math.random() - 0.5) * 8}px) skewX(${(Math.random() - 0.5) * 1.5}deg)`;
+  const sliceId = setInterval(() => {
+    if (phone) {
+      phone.style.transform =
+        `translateX(${(Math.random() - 0.5) * 8}px) skewX(${(Math.random() - 0.5) * 1.5}deg)`;
+    }
   }, 40);
 
   setTimeout(() => {
-    status.textContent = 'Call Failed';
-    status.classList.add('failed');
+    setStatus('Call Failed', true);
     glow?.classList.add('failed');
-  }, 200);
-
-  clearInterval(_tickId);
+    setEndMode('retry');
+  }, 220);
 
   setTimeout(() => {
     clearInterval(sliceId);
-    phone.style.transform = '';
-    phone.classList.remove('shaking', 'chromatic');
-    phone.style.borderColor = '';
-  }, 600);
+    if (phone) {
+      phone.style.transform = '';
+      phone.classList.remove('shaking', 'chromatic');
+      phone.style.borderColor = '';
+    }
+  }, 650);
 
   setTimeout(() => {
-    glitchEl.classList.remove('active');
-    scanEl.classList.remove('active');
-  }, 1200);
+    glitchEl?.classList.remove('active');
+    scanEl?.classList.remove('active');
+  }, 1300);
+
+  // Auto-retry countdown
+  let count = RETRY_SEC;
+  _retryCountId = setInterval(() => {
+    count--;
+    if (count <= 0) {
+      clearInterval(_retryCountId);
+      resetCall();
+    } else {
+      setStatus(`Call Failed — retrying in ${count}…`, true);
+    }
+  }, 1000);
 }
 
 function startCall() {
@@ -54,29 +92,34 @@ function startCall() {
   _failed  = false;
   _elapsed = 0;
   if (timer) timer.textContent = '0:00';
-  if (status) {
-    status.textContent = 'Calling…';
-    status.classList.remove('failed');
-  }
+  setStatus('Ringing…');
   glow?.classList.remove('failed');
   if (phone) phone.style.borderColor = '';
+  setEndMode('end');
 
+  // Ringing → Calling after ring phase
+  setTimeout(() => {
+    if (!_failed && _started) setStatus('Calling…');
+  }, RING_MS);
+
+  // Elapsed timer
   _tickId = setInterval(() => {
     _elapsed++;
     if (timer) timer.textContent = fmt(_elapsed);
   }, 1000);
 
-  const delay = 2500 + Math.random() * 1500;
-  _glitchTimeout = setTimeout(triggerGlitch, delay);
+  // Schedule the drop
+  _glitchTimeout = setTimeout(triggerGlitch, FAIL_MIN + Math.random() * FAIL_RANGE);
 }
 
 function resetCall() {
   clearInterval(_tickId);
   clearTimeout(_glitchTimeout);
+  clearInterval(_retryCountId);
   _started = false;
   _failed  = false;
   _elapsed = 0;
-  if (status) { status.textContent = 'Calling…'; status.classList.remove('failed'); }
+  setStatus('Calling…');
   glow?.classList.remove('failed');
   if (timer) timer.textContent = '0:00';
   if (phone) {
@@ -86,8 +129,9 @@ function resetCall() {
   }
   glitchEl?.classList.remove('active');
   scanEl?.classList.remove('active');
+  setEndMode('end');
 
-  setTimeout(startCall, 600);
+  setTimeout(startCall, 900);
 }
 
 export function init(shared) {
@@ -97,19 +141,20 @@ export function init(shared) {
   timer    = document.getElementById('call-timer');
   glitchEl = document.getElementById('glitch-overlay');
   scanEl   = document.getElementById('scanlines');
-  retryBtn = document.getElementById('retry-btn');
+  endBtn   = document.getElementById('retry-btn');
+  endLabel = document.getElementById('call-end-label');
+  endIcon  = document.getElementById('end-icon');
   if (!phone) return;
 
-  retryBtn?.addEventListener('click', resetCall);
+  endBtn?.addEventListener('click', resetCall);
 
-  // Live clock in the phone status bar
+  // Live clock in the status bar
   const clockEl = phone.querySelector('.status-time');
   if (clockEl) {
-    function updateClock() {
+    const updateClock = () => {
       const now = new Date();
-      const h = now.getHours(), m = String(now.getMinutes()).padStart(2, '0');
-      clockEl.textContent = `${h}:${m}`;
-    }
+      clockEl.textContent = `${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
+    };
     updateClock();
     setInterval(updateClock, 15000);
   }

@@ -805,55 +805,78 @@ html[data-nav-dir="back"] .section.page-leaving {
   font-family: var(--font-head);
   font-size: clamp(1rem, 2vw, 1.3rem);
   font-weight: 300;
-  letter-spacing: 0.12em;
-  color: rgba(255,255,255,0.5);
-  margin-bottom: 8px;
+  letter-spacing: 0.14em;
+  color: rgba(255,255,255,0.45);
+  margin-bottom: clamp(14px, 2.5vh, 22px);
   flex-shrink: 0;
 }
 
-.phone-divider {
-  width: 100%;
-  height: 1px;
-  background: rgba(255,255,255,0.06);
-  margin-bottom: 12px;
-  flex-shrink: 0;
-}
-
-.phone-actions-row {
+/* ─── iOS-style call control grid ─── */
+.call-ctrl-grid {
   width: 100%;
   display: flex;
   justify-content: space-around;
   align-items: center;
+  margin-bottom: clamp(14px, 2.5vh, 22px);
+  padding: 0 4px;
   flex-shrink: 0;
 }
-
-.phone-action-btn {
+.call-ctrl-btn {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
-  cursor: default;
+  gap: 7px;
 }
-button.phone-action-btn { cursor: pointer; }
-
-.phone-action-icon {
-  width: clamp(36px, 5vw, 46px);
-  height: clamp(36px, 5vw, 46px);
+.call-ctrl-ring {
+  width: clamp(46px, 7.5vw, 54px);
+  height: clamp(46px, 7.5vw, 54px);
   border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.07);
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.btn-mute    { background: rgba(255,255,255,0.06); }
-.btn-retry   { background: rgba(79,142,247,0.1); }
-.btn-decline { background: rgba(255,52,102,0.08); }
-
-button.phone-action-btn .btn-retry:hover { background: rgba(79,142,247,0.2); }
-
-.phone-action-label {
-  font-size: 0.6rem;
+.call-ctrl-btn span {
+  font-family: var(--font-head);
+  font-size: 0.58rem;
   color: rgba(255,255,255,0.35);
-  letter-spacing: 0.06em;
+  letter-spacing: 0.07em;
+}
+
+/* ─── End / Retry call button ─── */
+.call-end-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  margin-bottom: 4px;
+}
+.call-end-btn {
+  width: clamp(58px, 9vw, 68px);
+  height: clamp(58px, 9vw, 68px);
+  border-radius: 50%;
+  background: var(--glitch-red);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 28px rgba(255,52,102,0.5), 0 6px 18px rgba(0,0,0,0.5);
+  transition: background 0.45s ease, box-shadow 0.45s ease, transform 0.15s;
+}
+.call-end-btn:hover  { transform: scale(1.08); }
+.call-end-btn:active { transform: scale(0.93); }
+.call-end-btn.retry-mode {
+  background: rgba(79,142,247,0.9);
+  box-shadow: 0 0 28px rgba(79,142,247,0.5), 0 6px 18px rgba(0,0,0,0.5);
+}
+.call-end-label {
+  font-family: var(--font-head);
+  font-size: 0.6rem;
+  letter-spacing: 0.14em;
+  color: rgba(255,255,255,0.38);
 }
 
 /* Glitch overlay */
