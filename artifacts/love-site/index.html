@@ -136,30 +136,41 @@
 
       <div class="phone-outer" role="region" aria-label="Phone call interface">
         <div class="phone-glow" id="phone-glow"></div>
+
+        <!-- Hardware buttons (decorative) -->
+        <div class="phone-hw-btn phone-hw-silent"   aria-hidden="true"></div>
+        <div class="phone-hw-btn phone-hw-vol-up"   aria-hidden="true"></div>
+        <div class="phone-hw-btn phone-hw-vol-down" aria-hidden="true"></div>
+        <div class="phone-hw-btn phone-hw-power"    aria-hidden="true"></div>
+
         <div class="phone" id="phone-ui">
 
-          <div class="phone-notch" aria-hidden="true">
-            <div class="notch-camera"></div>
-            <div class="notch-speaker"></div>
-          </div>
+          <!-- Glass screen reflection -->
+          <div class="phone-screen-shimmer" aria-hidden="true"></div>
 
-          <div class="phone-status" aria-hidden="true">
+          <!-- Status bar -->
+          <div class="phone-top-bar" aria-hidden="true">
             <span class="status-time">9:41</span>
+            <div class="phone-dynamic-island">
+              <div class="di-camera"></div>
+              <div class="di-speaker-bar"></div>
+            </div>
             <div class="status-icons">
-              <svg width="18" height="12" viewBox="0 0 18 12" fill="rgba(255,255,255,0.7)">
-                <rect x="0"  y="8" width="3" height="4" rx="0.5"/>
-                <rect x="4"  y="5" width="3" height="7" rx="0.5"/>
-                <rect x="8"  y="3" width="3" height="9" rx="0.5"/>
-                <rect x="12" y="0" width="3" height="12" rx="0.5" opacity="0.3"/>
+              <svg width="17" height="11" viewBox="0 0 17 11" fill="none">
+                <rect x="0"   y="7"   width="3" height="4"  rx="0.8" fill="rgba(255,255,255,0.9)"/>
+                <rect x="4.5" y="4.5" width="3" height="6.5" rx="0.8" fill="rgba(255,255,255,0.9)"/>
+                <rect x="9"   y="2"   width="3" height="9"  rx="0.8" fill="rgba(255,255,255,0.9)"/>
+                <rect x="13.5" y="0"  width="3" height="11" rx="0.8" fill="rgba(255,255,255,0.2)"/>
               </svg>
-              <svg width="25" height="12" viewBox="0 0 25 12" fill="none">
-                <rect x="0.5" y="0.5" width="21" height="11" rx="2.5" stroke="rgba(255,255,255,0.5)" stroke-width="1"/>
-                <rect x="22" y="4" width="2.5" height="4" rx="1" fill="rgba(255,255,255,0.4)"/>
-                <rect x="2" y="2" width="13" height="8" rx="1.5" fill="rgba(255,255,255,0.7)"/>
+              <svg width="26" height="12" viewBox="0 0 26 12" fill="none">
+                <rect x="0.5" y="0.5" width="22" height="11" rx="3"   stroke="rgba(255,255,255,0.35)" stroke-width="1"/>
+                <rect x="23"  y="3.5" width="2.5" height="5" rx="1.2" fill="rgba(255,255,255,0.3)"/>
+                <rect x="2"   y="2"   width="14" height="8"  rx="1.5" fill="rgba(255,255,255,0.8)"/>
               </svg>
             </div>
           </div>
 
+          <!-- Caller section -->
           <div class="phone-caller-area">
             <div class="avatar-stack">
               <div class="avatar-pulse"></div>
@@ -168,57 +179,62 @@
             </div>
             <div class="caller-name-main">Panditain <span class="caller-heart" aria-hidden="true">❤️</span></div>
             <div class="call-status-text" id="call-status" aria-live="polite">Calling…</div>
+            <div class="call-timer-main" id="call-timer" aria-live="polite">0:00</div>
           </div>
 
-          <div class="call-timer-main" id="call-timer" aria-live="polite">0:00</div>
+          <!-- Controls -->
+          <div class="phone-controls-area">
+            <div class="call-ctrl-grid">
+              <div class="call-ctrl-btn" aria-hidden="true">
+                <div class="call-ctrl-ring">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.88)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="1" y1="1" x2="23" y2="23"/>
+                    <path d="M9 9v3a3 3 0 005.12 2.12M15 9.34V4a3 3 0 00-5.94-.6"/>
+                    <path d="M17 16.95A7 7 0 015 12v-2m14 0v2a7 7 0 01-.11 1.23"/>
+                    <line x1="12" y1="19" x2="12" y2="23"/>
+                    <line x1="8"  y1="23" x2="16" y2="23"/>
+                  </svg>
+                </div>
+                <span>mute</span>
+              </div>
+              <div class="call-ctrl-btn" aria-hidden="true">
+                <div class="call-ctrl-ring">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.88)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="2" width="18" height="20" rx="3"/>
+                    <path d="M9 8h.01M12 8h.01M15 8h.01M9 12h.01M12 12h.01M15 12h.01M9 16h.01M12 16h.01"/>
+                  </svg>
+                </div>
+                <span>keypad</span>
+              </div>
+              <div class="call-ctrl-btn" aria-hidden="true">
+                <div class="call-ctrl-ring">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.88)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+                    <path d="M15.54 8.46a5 5 0 010 7.07"/>
+                    <path d="M19.07 4.93a10 10 0 010 14.14"/>
+                  </svg>
+                </div>
+                <span>speaker</span>
+              </div>
+            </div>
 
-          <!-- iOS-style control grid -->
-          <div class="call-ctrl-grid">
-            <div class="call-ctrl-btn" aria-hidden="true">
-              <div class="call-ctrl-ring">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1.7" stroke-linecap="round">
-                  <line x1="1" y1="1" x2="23" y2="23"/>
-                  <path d="M9 9v3a3 3 0 005.12 2.12M15 9.34V4a3 3 0 00-5.94-.6"/>
-                  <path d="M17 16.95A7 7 0 015 12v-2m14 0v2a7 7 0 01-.11 1.23"/>
-                  <line x1="12" y1="19" x2="12" y2="23"/>
-                  <line x1="8" y1="23" x2="16" y2="23"/>
+            <!-- End / Retry call -->
+            <div class="call-end-wrap">
+              <button class="call-end-btn" id="retry-btn" aria-label="End or retry call">
+                <svg id="end-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M10.68 13.31a16 16 0 003.41 2.6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7 2 2 0 011.72 2v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.42 19.42 0 013.43 9.37 19.79 19.79 0 01.36 .72 2 2 0 012.34 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11z"/>
+                  <line x1="23" y1="1" x2="1" y2="23"/>
                 </svg>
-              </div>
-              <span>Mute</span>
-            </div>
-            <div class="call-ctrl-btn" aria-hidden="true">
-              <div class="call-ctrl-ring">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="1.7" stroke-linecap="round">
-                  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
-                  <path d="M15.54 8.46a5 5 0 010 7.07"/>
-                  <path d="M19.07 4.93a10 10 0 010 14.14"/>
-                </svg>
-              </div>
-              <span>Speaker</span>
-            </div>
-            <div class="call-ctrl-btn" aria-hidden="true">
-              <div class="call-ctrl-ring">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round">
-                  <circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/>
-                </svg>
-              </div>
-              <span>More</span>
+              </button>
+              <span class="call-end-label" id="call-end-label">end call</span>
             </div>
           </div>
 
-          <!-- End / Retry call button -->
-          <div class="call-end-wrap">
-            <button class="call-end-btn" id="retry-btn" aria-label="End or retry call">
-              <svg id="end-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M10.68 13.31a16 16 0 003.41 2.6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7 2 2 0 011.72 2v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.42 19.42 0 013.43 9.37 19.79 19.79 0 01.36 .72 2 2 0 012.34 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11z"/>
-                <line x1="23" y1="1" x2="1" y2="23"/>
-              </svg>
-            </button>
-            <span class="call-end-label" id="call-end-label">End</span>
-          </div>
+          <!-- Home bar -->
+          <div class="phone-home-bar" aria-hidden="true"></div>
 
           <div class="glitch-overlay" id="glitch-overlay" aria-hidden="true"></div>
-          <div class="scanlines" id="scanlines" aria-hidden="true"></div>
+          <div class="scanlines"     id="scanlines"     aria-hidden="true"></div>
         </div>
       </div>
 

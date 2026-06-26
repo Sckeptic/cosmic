@@ -827,260 +827,391 @@ html[data-nav-dir="back"] .section.page-leaving {
   line-height: 1.6;
 }
 
-/* Phone */
+/* ═══ PREMIUM iPHONE PHONE UI ═══ */
+
 .phone-outer {
   position: relative;
   justify-self: center;
   align-self: center;
-  perspective: 800px;
+  perspective: 1200px;
 }
 
+/* Ambient glow behind the phone */
 .phone-glow {
   position: absolute;
-  inset: -40px;
-  border-radius: 60px;
-  background: radial-gradient(ellipse at 50% 50%, rgba(255,107,157,0.20) 0%, transparent 70%);
+  inset: -50px;
+  border-radius: 80px;
+  background: radial-gradient(ellipse at 50% 65%,
+    rgba(255,107,157,0.22) 0%,
+    rgba(180,50,140,0.10) 40%,
+    transparent 70%);
   animation: phone-pulse 3s ease-in-out infinite;
   pointer-events: none;
 }
 .phone-glow.failed {
-  background: radial-gradient(ellipse at 50% 50%, rgba(255,20,97,0.22) 0%, transparent 70%);
+  background: radial-gradient(ellipse at 50% 65%,
+    rgba(255,20,80,0.22) 0%, transparent 65%);
 }
 @keyframes phone-pulse {
-  0%, 100% { opacity: 0.7; transform: scale(0.95); }
-  50%       { opacity: 1; transform: scale(1.05); }
+  0%, 100% { opacity: 0.6; transform: scale(0.96); }
+  50%       { opacity: 1;   transform: scale(1.04); }
 }
 
-.phone {
-  height: min(50vh, 400px);
-  width: auto;
-  aspect-ratio: 9/18;
-  background: linear-gradient(160deg, #100818 0%, #0a0514 60%, #060310 100%);
-  border-radius: clamp(28px, 4vw, 40px);
-  border: 1px solid rgba(255,107,157,0.12);
+/* ── Hardware side buttons (decorative) ── */
+.phone-hw-btn {
+  position: absolute;
+  background: linear-gradient(180deg, #2c1840 0%, #1a0e28 50%, #2a1a3c 100%);
+  border-radius: 2px;
   box-shadow:
-    0 0 0 1px rgba(0,0,0,0.6),
-    inset 0 1px 0 rgba(255,255,255,0.06),
-    0 30px 80px rgba(0,0,0,0.8),
-    0 0 40px rgba(255,107,157,0.08);
+    inset 0 1px 0 rgba(255,255,255,0.08),
+    inset 0 -1px 0 rgba(0,0,0,0.4),
+    1px 0 2px rgba(0,0,0,0.4);
+}
+.phone-hw-silent   { left: -4px; top: 16%; width: 4px; height: 5%; border-radius: 2px 0 0 2px; }
+.phone-hw-vol-up   { left: -4px; top: 26%; width: 4px; height: 9%; border-radius: 2px 0 0 2px; }
+.phone-hw-vol-down { left: -4px; top: 37%; width: 4px; height: 9%; border-radius: 2px 0 0 2px; }
+.phone-hw-power    { right: -4px; top: 28%; width: 4px; height: 13%; border-radius: 0 2px 2px 0; }
+
+/* ── Phone frame ── */
+.phone {
+  height: min(50vh, 410px);
+  width: auto;
+  aspect-ratio: 9 / 19.5;
+  position: relative;
+  border-radius: 46px;
+  /* Deep screen background */
+  background: linear-gradient(175deg,
+    #0e0618 0%,
+    #080412 40%,
+    #060310 70%,
+    #0a0416 100%
+  );
+  /* Titanium-style multi-layer border */
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.055),
+    0 0 0 2.5px rgba(28,12,42,1),
+    0 0 0 3.5px rgba(255,255,255,0.045),
+    0 0 0 4.5px rgba(18,8,30,1),
+    inset 0 1px 0 rgba(255,255,255,0.08),
+    inset 0 -1px 0 rgba(0,0,0,0.5),
+    0 28px 70px rgba(0,0,0,0.92),
+    0 8px 24px rgba(0,0,0,0.6),
+    0 0 0 6px rgba(255,255,255,0.018);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: clamp(14px, 2vw, 20px) clamp(12px, 2vw, 18px) clamp(16px, 2.5vw, 24px);
-  position: relative;
   overflow: hidden;
-  transition: transform 0.1s, border-color 0.3s, box-shadow 0.3s;
+  transition: transform 0.18s cubic-bezier(0.22,1,0.36,1), box-shadow 0.3s ease;
   transform-style: preserve-3d;
 }
 
-/* 3D phone hover tilt */
+/* 3D hover tilt */
 .phone-outer:hover .phone {
-  transform: rotateY(-6deg) rotateX(2deg);
+  transform: rotateY(-5deg) rotateX(2.5deg) translateZ(6px);
   box-shadow:
-    0 0 0 1px rgba(0,0,0,0.6),
-    inset 0 1px 0 rgba(255,255,255,0.08),
-    20px 40px 100px rgba(0,0,0,0.9),
-    0 0 60px rgba(255,107,157,0.12);
+    0 0 0 1px rgba(255,255,255,0.07),
+    0 0 0 2.5px rgba(28,12,42,1),
+    0 0 0 3.5px rgba(255,255,255,0.06),
+    0 0 0 4.5px rgba(18,8,30,1),
+    inset 0 1px 0 rgba(255,255,255,0.1),
+    inset 0 -1px 0 rgba(0,0,0,0.5),
+    18px 36px 90px rgba(0,0,0,0.96),
+    0 0 50px rgba(255,107,157,0.1),
+    0 0 0 6px rgba(255,255,255,0.025);
 }
 
-.phone-notch {
-  width: 40%;
-  height: 22px;
-  background: #000;
-  border-radius: 0 0 12px 12px;
+/* Glass screen reflection */
+.phone-screen-shimmer {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 52%;
+  border-radius: 46px 46px 55% 55%;
+  background: linear-gradient(168deg,
+    rgba(255,255,255,0.045) 0%,
+    rgba(255,255,255,0.02) 40%,
+    transparent 65%
+  );
+  pointer-events: none;
+  z-index: 20;
+}
+
+/* ── Status bar + Dynamic Island ── */
+.phone-top-bar {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 6px;
-  margin-bottom: 8px;
-  flex-shrink: 0;
-}
-.notch-camera {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: #111;
-  border: 1px solid #222;
-}
-.notch-speaker {
-  width: 28px; height: 4px;
-  border-radius: 2px;
-  background: #111;
-}
-
-.phone-status {
-  width: 100%;
-  display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 4px;
+  padding: 14px 22px 0;
+  position: relative;
+  z-index: 6;
   flex-shrink: 0;
+  min-height: 46px;
 }
+
 .status-time {
-  font-size: 0.7rem;
+  font-family: -apple-system, 'SF Pro Text', system-ui, sans-serif;
+  font-size: 0.8rem;
   font-weight: 600;
-  color: rgba(255,255,255,0.8);
+  color: rgba(255,255,255,0.9);
+  letter-spacing: -0.02em;
+  line-height: 1;
 }
+
 .status-icons {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
 }
 
+/* Dynamic Island pill */
+.phone-dynamic-island {
+  position: absolute;
+  top: 11px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 38%;
+  height: 30px;
+  background: #000;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.04) inset,
+    0 2px 8px rgba(0,0,0,0.6);
+  z-index: 7;
+}
+.di-camera {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #1c1c2e, #0a0a18);
+  box-shadow: inset 0 0 3px rgba(0,0,0,0.9), 0 0 0 1px rgba(255,255,255,0.03);
+  position: relative;
+  flex-shrink: 0;
+}
+.di-camera::after {
+  content: '';
+  position: absolute;
+  top: 1.5px; left: 1.5px;
+  width: 3px; height: 3px;
+  border-radius: 50%;
+  background: rgba(80,160,255,0.25);
+}
+.di-speaker-bar {
+  width: 50px; height: 5px;
+  border-radius: 3px;
+  background: #080808;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.9);
+  flex-shrink: 0;
+}
+
+/* ── Caller area ── */
 .phone-caller-area {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  padding: 8px 0;
+  padding: 0 0 6px;
+  gap: 0;
+  min-height: 0;
 }
 
 .avatar-stack {
   position: relative;
-  width: clamp(48px, 7vw, 64px);
-  height: clamp(48px, 7vw, 64px);
+  width: 72px; height: 72px;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 12px;
 }
-.avatar-stack { position: relative; }
 .avatar-pulse, .avatar-pulse-2 {
   position: absolute;
-  inset: -6px;
+  inset: -8px;
   border-radius: 50%;
-  border: 1.5px solid rgba(255,107,157,0.45);
+  border: 1.5px solid rgba(255,107,157,0.38);
   animation: av-pulse 2.8s ease-out infinite;
   pointer-events: none;
 }
 .avatar-pulse-2 {
-  inset: -12px;
-  border-color: rgba(255,107,157,0.2);
+  inset: -18px;
+  border-color: rgba(255,107,157,0.15);
   animation-delay: 1.4s;
 }
 @keyframes av-pulse {
-  0%   { transform: scale(1); opacity: 0.75; }
-  100% { transform: scale(1.7); opacity: 0; }
+  0%   { transform: scale(1); opacity: 0.9; }
+  100% { transform: scale(1.55); opacity: 0; }
 }
 .avatar-img {
-  width: clamp(60px, 8vw, 80px);
-  height: clamp(60px, 8vw, 80px);
+  width: 72px; height: 72px;
   border-radius: 50%;
-  background: linear-gradient(135deg, rgba(255,107,157,0.6) 0%, rgba(200,80,255,0.45) 100%);
-  border: 2px solid rgba(255,107,157,0.7);
+  background: linear-gradient(148deg,
+    rgba(255,107,157,0.55) 0%,
+    rgba(190,60,220,0.45) 55%,
+    rgba(120,35,180,0.4) 100%
+  );
+  border: 1.5px solid rgba(255,107,157,0.45);
   box-shadow:
-    0 0 30px rgba(255,107,157,0.5),
-    0 0 70px rgba(255,107,157,0.25),
-    0 0 120px rgba(255,107,157,0.1),
-    inset 0 1px 0 rgba(255,255,255,0.25);
+    0 0 0 1px rgba(255,255,255,0.07),
+    0 6px 28px rgba(0,0,0,0.65),
+    0 0 22px rgba(255,107,157,0.28);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-head);
-  font-size: clamp(1.4rem, 2.5vw, 1.8rem);
-  font-weight: 700;
+  font-family: -apple-system, 'SF Pro Display', system-ui, sans-serif;
+  font-size: 1.7rem;
+  font-weight: 600;
   color: rgba(255,255,255,0.95);
   position: relative;
   z-index: 1;
-  text-shadow: 0 0 16px rgba(255,107,157,0.8);
   animation: avatar-glow-pulse 3s ease-in-out infinite;
 }
 @keyframes avatar-glow-pulse {
-  0%, 100% { box-shadow: 0 0 30px rgba(255,107,157,0.5), 0 0 70px rgba(255,107,157,0.2), inset 0 1px 0 rgba(255,255,255,0.25); }
-  50%       { box-shadow: 0 0 50px rgba(255,107,157,0.8), 0 0 100px rgba(255,107,157,0.4), inset 0 1px 0 rgba(255,255,255,0.3); }
+  0%, 100% { box-shadow: 0 0 0 1px rgba(255,255,255,0.07), 0 6px 28px rgba(0,0,0,0.65), 0 0 22px rgba(255,107,157,0.28); }
+  50%       { box-shadow: 0 0 0 1px rgba(255,255,255,0.09), 0 6px 28px rgba(0,0,0,0.65), 0 0 36px rgba(255,107,157,0.48); }
 }
 
 .caller-name-main {
-  font-family: var(--font-head);
-  font-size: clamp(0.85rem, 1.6vw, 1.05rem);
+  font-family: -apple-system, 'SF Pro Display', system-ui, sans-serif;
+  font-size: 1.15rem;
   font-weight: 600;
-  color: rgba(255,255,255,0.9);
-  letter-spacing: 0.02em;
+  color: rgba(255,255,255,0.96);
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  margin-bottom: 4px;
 }
-.caller-heart { filter: drop-shadow(0 0 6px rgba(255,107,157,0.8)); }
+.caller-heart {
+  filter: drop-shadow(0 0 4px rgba(255,107,157,0.6));
+  font-size: 0.85em;
+}
 
 .call-status-text {
-  font-size: 0.68rem;
-  color: rgba(255,255,255,0.4);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-family: -apple-system, 'SF Pro Text', system-ui, sans-serif;
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: rgba(255,255,255,0.42);
+  letter-spacing: 0.01em;
+  text-transform: none;
+  margin-bottom: 2px;
 }
 .call-status-text.failed {
-  color: var(--glitch-red);
-  text-shadow: 0 0 8px rgba(255,20,97,0.6);
+  color: #ff3a5c;
+  font-weight: 500;
 }
 
 .call-timer-main {
-  font-family: var(--font-head);
-  font-size: clamp(0.9rem, 1.6vw, 1.1rem);
+  font-family: -apple-system, 'SF Pro Text', system-ui, sans-serif;
+  font-size: 0.7rem;
   font-variant-numeric: tabular-nums;
-  color: rgba(255,255,255,0.3);
-  letter-spacing: 0.06em;
+  color: rgba(255,255,255,0.28);
+  letter-spacing: 0.01em;
+  padding: 0;
+}
+
+/* ── Controls area ── */
+.phone-controls-area {
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
   flex-shrink: 0;
-  padding: 4px 0;
 }
 
 .call-ctrl-grid {
   display: flex;
-  gap: clamp(10px, 2vw, 18px);
+  gap: clamp(12px, 2.5vw, 20px);
   justify-content: center;
-  flex-shrink: 0;
-  margin: 8px 0 4px;
+  margin: 0;
 }
 .call-ctrl-btn {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
-  font-size: 0.58rem;
-  color: rgba(255,255,255,0.35);
-  letter-spacing: 0.04em;
-  width: clamp(40px, 6vw, 52px);
+  gap: 5px;
+  font-family: -apple-system, 'SF Pro Text', system-ui, sans-serif;
+  font-size: 0.55rem;
+  font-weight: 400;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 0.02em;
 }
 .call-ctrl-ring {
-  width: clamp(36px, 5.5vw, 46px);
-  height: clamp(36px, 5.5vw, 46px);
+  width: clamp(40px, 5.5vw, 48px);
+  height: clamp(40px, 5.5vw, 48px);
   border-radius: 50%;
-  background: rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.09);
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow:
+    0 2px 8px rgba(0,0,0,0.35),
+    inset 0 1px 0 rgba(255,255,255,0.1);
+  transition: background 0.18s, transform 0.14s;
+}
+.call-ctrl-ring:hover {
+  background: rgba(255,255,255,0.16);
+  transform: scale(1.05);
 }
 
+/* End / retry call button */
 .call-end-wrap {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   flex-shrink: 0;
-  margin-top: 6px;
 }
 .call-end-btn {
-  width: clamp(46px, 7vw, 58px);
-  height: clamp(46px, 7vw, 58px);
+  width: 60px; height: 60px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #e01055, #b0003d);
+  background: linear-gradient(180deg, #e8214c 0%, #bf0f34 100%);
+  border: none;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.2s, box-shadow 0.2s;
-  box-shadow: 0 4px 20px rgba(224,16,85,0.4);
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 4px 18px rgba(220,16,52,0.55),
+    0 1px 0 rgba(255,255,255,0.15) inset,
+    0 -2px 0 rgba(0,0,0,0.2) inset;
+  transition: transform 0.14s ease, box-shadow 0.14s ease;
 }
-.call-end-btn:hover {
-  transform: scale(1.08);
-  box-shadow: 0 6px 28px rgba(224,16,85,0.6);
+.call-end-btn::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 48%;
+  border-radius: 30px 30px 50% 50%;
+  background: rgba(255,255,255,0.1);
+  pointer-events: none;
 }
+.call-end-btn:hover  { transform: scale(1.06); box-shadow: 0 6px 24px rgba(220,16,52,0.7), 0 1px 0 rgba(255,255,255,0.15) inset; }
+.call-end-btn:active { transform: scale(0.96); }
 .call-end-btn.retry-mode {
-  background: linear-gradient(135deg, #22a866, #168050);
-  box-shadow: 0 4px 20px rgba(34,168,102,0.4);
+  background: linear-gradient(180deg, #28d472 0%, #1aaa56 100%);
+  box-shadow: 0 4px 18px rgba(28,170,86,0.55), 0 1px 0 rgba(255,255,255,0.15) inset;
 }
 .call-end-label {
-  font-size: 0.6rem;
-  color: rgba(255,255,255,0.35);
-  letter-spacing: 0.08em;
+  font-family: -apple-system, 'SF Pro Text', system-ui, sans-serif;
+  font-size: 0.58rem;
+  font-weight: 400;
+  color: rgba(255,255,255,0.38);
+  letter-spacing: 0.03em;
 }
 
-/* Glitch overlay — Bug fix: was missing */
+/* Home bar indicator */
+.phone-home-bar {
+  width: 32%;
+  height: 4px;
+  background: rgba(255,255,255,0.22);
+  border-radius: 2px;
+  margin: 8px auto 10px;
+  flex-shrink: 0;
+}
+
+/* Glitch overlay */
 .glitch-overlay {
   position: absolute;
   inset: 0;
@@ -1696,8 +1827,20 @@ html[data-nav-dir="back"] .section.page-leaving {
   .signal-caption-text { grid-column: 1; }
   .phone-outer { justify-self: center; }
   .phone {
-    height: min(42vh, 320px);
+    height: min(46vh, 360px);
+    aspect-ratio: 9 / 18;
+    border-radius: 38px;
   }
+  .phone-screen-shimmer { border-radius: 38px 38px 55% 55%; }
+  .phone-top-bar { padding: 12px 18px 0; min-height: 40px; }
+  .phone-dynamic-island { width: 42%; height: 26px; top: 10px; }
+  .call-ctrl-ring { width: 38px; height: 38px; }
+  .call-ctrl-grid { gap: 10px; }
+  .phone-controls-area { gap: 10px; }
+  .call-end-btn { width: 54px; height: 54px; }
+  .caller-name-main { font-size: 1rem; }
+  .avatar-img { width: 62px; height: 62px; font-size: 1.5rem; }
+  .avatar-stack { width: 62px; height: 62px; margin-bottom: 10px; }
   .signal-title { font-size: clamp(1.2rem, 5vw, 2rem); }
 
   .starmap-body-wrap {
