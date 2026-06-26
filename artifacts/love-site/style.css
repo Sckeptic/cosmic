@@ -1028,6 +1028,7 @@ html[data-nav-dir="back"] .section.page-leaving {
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 20px;
   margin-bottom: 12px;
 }
 .avatar-pulse, .avatar-pulse-2 {
@@ -1094,7 +1095,7 @@ html[data-nav-dir="back"] .section.page-leaving {
   font-family: -apple-system, 'SF Pro Text', system-ui, sans-serif;
   font-size: 0.7rem;
   font-weight: 400;
-  color: rgba(255,255,255,0.42);
+  color: rgba(255,255,255,0.72);
   letter-spacing: 0.01em;
   text-transform: none;
   margin-bottom: 2px;
@@ -1115,7 +1116,7 @@ html[data-nav-dir="back"] .section.page-leaving {
 
 /* ── Controls area ── */
 .phone-controls-area {
-  padding: 0 16px;
+  padding: 0 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1214,7 +1215,7 @@ html[data-nav-dir="back"] .section.page-leaving {
   height: 4px;
   background: rgba(255,255,255,0.22);
   border-radius: 2px;
-  margin: 8px auto 10px;
+  margin: 22px auto 10px;
   flex-shrink: 0;
 }
 
@@ -1257,7 +1258,7 @@ html[data-nav-dir="back"] .section.page-leaving {
   );
   transition: opacity 0.2s;
 }
-.scanlines.active { opacity: 1; }
+.scanlines.active { opacity: 0.4; }
 
 /* Phone shake — Bug fix: was missing */
 @keyframes phone-shake {
