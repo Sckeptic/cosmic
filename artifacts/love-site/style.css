@@ -2177,6 +2177,10 @@ html[data-nav-dir="back"] .section.page-leaving {
 
 .site-footer {
   background: radial-gradient(ellipse 60% 50% at 50% 60%, rgba(255,107,157,0.06) 0%, transparent 70%);
+  overflow-y: auto;
+  justify-content: flex-start;
+  padding-top: clamp(40px, 6vh, 80px);
+  padding-bottom: clamp(40px, 6vh, 80px);
 }
 
 .site-footer-inner {
@@ -2219,6 +2223,13 @@ html[data-nav-dir="back"] .section.page-leaving {
   line-height: 1.9;
   font-weight: 300;
   letter-spacing: 0.01em;
+}
+
+.footer-quote {
+  font-style: italic;
+  color: rgba(255, 107, 157, 0.75) !important;
+  font-size: clamp(0.95rem, 2.3vw, 1.05rem) !important;
+  padding: 6px 0;
 }
 
 .footer-last-line {
