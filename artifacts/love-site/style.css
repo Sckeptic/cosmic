@@ -1527,7 +1527,7 @@ html[data-nav-dir="back"] .section.page-leaving {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   gap: 0;
-  align-items: stretch;
+  align-items: start;
   position: relative;
   z-index: 1;
   flex: 1;
@@ -1577,19 +1577,71 @@ html[data-nav-dir="back"] .section.page-leaving {
   box-shadow: 0 0 40px rgba(0,0,0,0.55) inset, 0 12px 40px rgba(60,100,255,0.18), 0 0 80px rgba(80,160,255,0.08);
 }
 
-.starmap-thread-col {
-  width: clamp(100px, 13vw, 160px);
+/* ── Starmap divider ── */
+.starmap-divider {
+  width: clamp(60px, 8vw, 90px);
   display: flex;
-  align-items: flex-end;
+  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  padding-top: 0;
-  overflow: hidden;
-}
-#thread-canvas {
-  width: 100%;
+  gap: 0;
+  padding-top: clamp(24px, 3.5vh, 40px); /* offset for label row */
   height: clamp(220px, 47vh, 520px);
+  margin-top: auto;
+}
+
+.sd-line {
+  flex: 1;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, rgba(255,107,157,0.25), transparent);
+}
+
+.sd-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 10px 0;
+}
+
+.sd-km {
+  font-family: var(--font-head);
+  font-size: clamp(0.9rem, 1.6vw, 1.1rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, var(--glow), var(--gold));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1;
+}
+
+.sd-unit {
+  font-family: var(--font-head);
+  font-size: 0.55rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted-2);
+}
+
+.sd-heart {
+  font-size: 0.8rem;
+  color: var(--glow);
+  text-shadow: 0 0 8px var(--glow);
+  animation: heart-beat-node 1.2s ease-in-out infinite;
   display: block;
-  flex-shrink: 0;
+  margin: 4px 0;
+}
+
+.sd-apart {
+  font-family: var(--font-head);
+  font-size: 0.5rem;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--muted-2);
+  opacity: 0.6;
 }
 
 /* ── Same Sky Moment ── */
@@ -2088,13 +2140,19 @@ html[data-nav-dir="back"] .section.page-leaving {
     grid-template-columns: 1fr;
     grid-template-rows: auto auto auto;
   }
-  .starmap-thread-col {
+  .starmap-divider {
     width: 100%;
-    height: 120px;
+    height: 48px;
+    flex-direction: row;
     padding-top: 0;
-    padding-left: 0;
   }
-  #thread-canvas { width: 100%; height: 120px; }
+  .sd-line {
+    flex: 1;
+    width: auto;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(255,107,157,0.25), transparent);
+  }
+  .sd-badge { flex-direction: row; gap: 6px; padding: 0 10px; }
   .page-nav { right: 10px; }
   .arrow-prev { bottom: calc(50% + 42px); right: 10px; }
   .arrow-next { bottom: calc(50% - 78px); right: 10px; }
