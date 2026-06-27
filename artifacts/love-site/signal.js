@@ -58,7 +58,7 @@ function triggerGlitch() {
 
   // Phase 2 — Status lands (220 ms)
   setTimeout(() => {
-    setStatus('Call Failed', true);
+    setStatus('Lost.', true);
     glow?.classList.add('failed');
     setEndMode('retry');
   }, 220);
@@ -100,7 +100,7 @@ function triggerGlitch() {
       clearInterval(_retryCountId);
       resetCall();
     } else {
-      setStatus(`Call Failed — retrying in ${count}…`, true);
+      setStatus(`Lost — reaching again in ${count}…`, true);
     }
   }, 1000);
 }
@@ -111,14 +111,14 @@ function startCall() {
   _failed  = false;
   _elapsed = 0;
   if (timer) timer.textContent = '0:00';
-  setStatus('Ringing…');
+  setStatus('Reaching…');
   glow?.classList.remove('failed');
   if (phone) phone.style.borderColor = '';
   setEndMode('end');
 
   // Ringing → Calling after ring phase
   setTimeout(() => {
-    if (!_failed && _started) setStatus('Calling…');
+    if (!_failed && _started) setStatus('She\u2019s there\u2026');
   }, RING_MS);
 
   // Elapsed timer
@@ -138,7 +138,7 @@ function resetCall() {
   _started = false;
   _failed  = false;
   _elapsed = 0;
-  setStatus('Calling…');
+  setStatus('Reaching…');
   glow?.classList.remove('failed');
   if (timer) timer.textContent = '0:00';
   if (phone) {

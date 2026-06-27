@@ -1,0 +1,98 @@
+You are an award-winning emotional UX writer and storyteller.
+
+Your task is NOT to redesign the website.
+
+Your task is ONLY to rewrite every piece of text so the website feels unforgettable.
+
+Theme:
+A long-distance love website between two people who can't always talk. The relationship is warm, genuine, hopeful, and deeply emotional. The feeling should be like looking at the stars at 2 AM after a missed call.
+
+Writing Style:
+
+* Cinematic.
+* Deeply emotional.
+* Minimal yet powerful.
+* Romantic without being cheesy.
+* Hopeful, never depressing.
+* Every sentence should feel quote-worthy.
+* Make visitors stop scrolling just to read.
+* Use natural English.
+* No cringe.
+* No AI clichés.
+* No generic "I love you forever" lines.
+* Every section should feel like it belongs to one continuous story.
+
+Important Rules:
+
+* Rewrite EVERY heading.
+* Rewrite EVERY subtitle.
+* Rewrite EVERY paragraph.
+* Rewrite EVERY placeholder.
+* Rewrite EVERY button label if a better alternative exists.
+* Rewrite every tooltip, helper text, loading text, empty state, countdown text, call screen text, and footer.
+
+Each section should emotionally flow into the next.
+
+The emotional intensity should slowly increase throughout the page.
+
+The website should feel like this journey:
+
+Distance →
+Missing each other →
+Silence →
+Hope →
+Stars →
+Hidden memories →
+Waiting →
+Meeting again →
+Love.
+
+Enhance these sections especially:
+
+• Hero
+Make the opening immediately emotional.
+
+• Distance Counter
+Turn kilometres into feelings.
+
+• Heartbeat Counter
+Make it feel like every heartbeat travels across the distance.
+
+• Failed Call Screen
+This should become the emotional center of the website.
+The silence should hurt more than the missed call.
+
+• Floating Message
+Encourage the visitor to type something they couldn't say.
+
+• Star Map
+Talk about sharing the same sky despite different places.
+
+• Hidden Memory
+Make discovering it feel magical.
+
+• Countdown
+Build anticipation instead of simply showing numbers.
+
+• "Why I Love You"
+Rewrite every reason so it feels deeply personal, unique, and memorable.
+Each card should feel like a tiny love letter.
+
+• Footer
+End the story beautifully so the visitor leaves with goosebumps.
+
+Tone Reference:
+Imagine the emotional feeling of:
+
+* quiet midnight conversations
+* missed calls that still mean everything
+* stars connecting two distant people
+* handwritten letters
+* memories that never fade
+* hope stronger than distance
+
+The finished website should feel less like a webpage and more like reading someone's heart.
+
+Your goal is to make at least five different sections emotionally powerful enough that users want to screenshot them and share them as quotes.
+
+Return only the rewritten website copy in the same structure as the original. Do not explain your changes. Do not change the layout or functionality. Only improve the writing.

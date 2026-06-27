@@ -27,14 +27,24 @@ function pillPath(ctx, x, y, w, h, r) {
 }
 
 const ghosts = [
-  'miss you', 'just one call', 'good night, my love',
-  'be safe', 'thinking about you always', 'come back soon ❤️',
-  '274 km feels like forever', 'i love you so much',
-  'are you sleeping?', 'wish i was right there',
-  'same moon, different sky', 'call me when you can',
-  'you make everything better', 'i carry you with me',
-  'distance means so little', 'my heart is with you',
-  'you are my home', 'forever isn\'t long enough',
+  'i keep replaying the last thing you said',
+  'goodnight — even if you can\'t hear it',
+  'i almost called. then didn\'t. then almost did again',
+  'the quiet after a missed call is the loudest thing',
+  'are you awake too?',
+  'i\'m okay. i just miss you',
+  '274 km and i still feel you next to me',
+  'don\'t overthink. just call',
+  'i saved your voice note just to hear your voice',
+  'same moon tonight. i checked',
+  'you don\'t have to say anything. just be there',
+  'the signal drops. the feeling never does',
+  'i wish you could hear how much i mean this',
+  'some days the distance weighs more than others',
+  'you make everything quieter in the best way',
+  'i\'m still here. always',
+  'waiting feels different when it\'s for you',
+  'come back soon — the stars aren\'t the same without you',
 ];
 let ghostIdx = 0;
 let dripTimer = null;

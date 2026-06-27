@@ -1,18 +1,18 @@
 /* reasons.js — "Reasons I Love You" page */
 
 const REASONS = [
-  { emoji: '✨', text: 'You are simple — no drama, no games, just real.' },
-  { emoji: '🤍', text: 'Your kindness is quiet but it reaches everywhere.' },
-  { emoji: '🐻', text: 'You always support Bholu, no matter what.' },
-  { emoji: '💬', text: 'You share everything on your mind — and that takes courage.' },
-  { emoji: '🌙', text: 'You say what you feel instead of hiding it.' },
-  { emoji: '🌍', text: 'The way you see the world is universal — every girl wishes she thought like you.' },
-  { emoji: '💫', text: 'You make ordinary moments feel like they matter.' },
-  { emoji: '🌸', text: 'Your presence calms every storm inside me.' },
-  { emoji: '🔥', text: 'You are honest even when it is hard. That is rare.' },
-  { emoji: '🫀', text: 'You love with your whole heart, not just words.' },
-  { emoji: '🌟', text: 'You carry yourself with a grace that most people never learn.' },
-  { emoji: '☕', text: 'Even the small things you do feel like home.' },
+  { emoji: '✨', text: 'You don\'t perform kindness. You just are it — quietly, without needing anyone to notice.' },
+  { emoji: '🤍', text: 'The way you hold space for people, even when you\'re the one who needs holding.' },
+  { emoji: '🐻', text: 'The love you have for Bholu. That kind of gentleness doesn\'t come from nowhere.' },
+  { emoji: '💬', text: 'You say what\'s actually on your mind. In a world full of half-truths, that\'s everything.' },
+  { emoji: '🌙', text: 'You see through the pretense and the noise. You go straight to what\'s real.' },
+  { emoji: '🌍', text: 'There\'s something in the way you think that feels universal — like every girl should think like you.' },
+  { emoji: '💫', text: 'You make the ordinary feel significant. A conversation with you never feels small.' },
+  { emoji: '🌸', text: 'Your presence doesn\'t demand anything. It just makes everything calmer.' },
+  { emoji: '🔥', text: 'You tell the truth even when it\'s uncomfortable. That takes more courage than people realize.' },
+  { emoji: '🫀', text: 'When you love something, you really love it. No performance. No conditions.' },
+  { emoji: '🌟', text: 'The way you carry yourself — there\'s a grace there that most people spend their whole lives looking for.' },
+  { emoji: '☕', text: 'Even the small things you do feel like being home. And I\'ve been looking for that for a long time.' },
 ];
 
 let _revealed = 0;

@@ -190,14 +190,14 @@ function initCursorTrail() {
    TYPEWRITER QUOTE (hero)
 ══════════════════════════════════════════════ */
 const QUOTES = [
-  "distance is just a test of how far love can travel",
-  "i think about you in colours that don't have names",
-  "wherever you are is my favourite place",
-  "274 km — and every single one is full of you",
-  "i carry your heart with me, always",
-  "the stars know how much i miss you",
-  "some loves are worth every kilometre",
-  "you are the reason the moon still makes sense",
+  "distance is the space between heartbeats, not between people",
+  "i don't miss you at night — i miss you at 2 AM, when everything goes quiet",
+  "274 km. every single one of them knows your name",
+  "some feelings don't travel by phone. they just arrive",
+  "i think about you in a frequency only you can hear",
+  "the stars don't care about distance. neither do i",
+  "you're the reason silence doesn't feel empty anymore",
+  "the signal drops. the feeling never does",
 ];
 
 function initTypewriter() {
