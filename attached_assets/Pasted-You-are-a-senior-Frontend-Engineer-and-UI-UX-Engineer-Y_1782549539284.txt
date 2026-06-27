@@ -1,0 +1,333 @@
+You are a senior Frontend Engineer and UI/UX Engineer.
+
+Your task is to make this ENTIRE website perfectly responsive for every modern mobile device while preserving the exact visual design.
+
+══════════════════════════════════════════════
+ABSOLUTE RULES
+══════════════════════════════════════════════
+
+DO NOT redesign anything.
+
+DO NOT remove any content.
+
+DO NOT simplify any section.
+
+DO NOT hide any element.
+
+DO NOT reduce animations.
+
+DO NOT replace components.
+
+DO NOT change colors.
+
+DO NOT change typography.
+
+DO NOT change branding.
+
+DO NOT change spacing style.
+
+DO NOT change visual hierarchy.
+
+DO NOT modify desktop appearance.
+
+The desktop version must remain visually identical.
+
+══════════════════════════════════════════════
+PRIMARY GOAL
+══════════════════════════════════════════════
+
+The mobile version should look like the desktop version scaled intelligently.
+
+Nothing should feel like a separate mobile design.
+
+Every section should preserve the same premium cinematic experience.
+
+The website should feel like it was originally designed for both desktop and mobile.
+
+══════════════════════════════════════════════
+RESPONSIVE AUDIT
+══════════════════════════════════════════════
+
+Audit EVERY component individually.
+
+Hero
+
+Signal Lost Phone
+
+Messages
+
+Star Map
+
+Countdown
+
+Navigation
+
+Footer
+
+Particles
+
+Canvas
+
+Backgrounds
+
+Modals
+
+Every animation
+
+Every absolute positioned element
+
+Every canvas
+
+Every flex container
+
+Every grid
+
+Every SVG
+
+Every image
+
+Every text block
+
+Every button
+
+Every icon
+
+Every overlay
+
+══════════════════════════════════════════════
+FIX THE ROOT CAUSE
+══════════════════════════════════════════════
+
+Do NOT use quick CSS hacks.
+
+Do NOT solve problems using:
+
+overflow:hidden
+
+negative margins
+
+random translate()
+
+random scale()
+
+hardcoded heights
+
+hardcoded widths
+
+device-specific hacks
+
+Instead,
+
+identify WHY the layout breaks,
+
+then rebuild only the layout logic while preserving the appearance.
+
+══════════════════════════════════════════════
+LAYOUT SYSTEM
+══════════════════════════════════════════════
+
+Replace fragile layouts with robust responsive layouts.
+
+Prefer:
+
+CSS Grid
+
+Flexbox
+
+clamp()
+
+min()
+
+max()
+
+aspect-ratio
+
+container sizing
+
+logical spacing
+
+fluid typography
+
+responsive sizing
+
+Maintain consistent proportions.
+
+No clipping.
+
+No stretching.
+
+No compression.
+
+══════════════════════════════════════════════
+PHONE COMPONENT
+══════════════════════════════════════════════
+
+The phone mockup must always remain perfectly proportional.
+
+Dynamic Island
+
+Status Bar
+
+Avatar
+
+Caller
+
+Buttons
+
+Controls
+
+Home Indicator
+
+Everything must stay aligned.
+
+No content may move outside the phone.
+
+Nothing should compress vertically.
+
+Nothing should overlap.
+
+══════════════════════════════════════════════
+STAR MAP
+══════════════════════════════════════════════
+
+Both star maps must remain completely visible.
+
+Canvas must never overflow.
+
+Constellations must never be cropped.
+
+The center connection must stay aligned.
+
+Maintain rendering quality.
+
+Maintain animations.
+
+══════════════════════════════════════════════
+MESSAGES
+══════════════════════════════════════════════
+
+Message bubbles must wrap naturally.
+
+No overflow.
+
+No clipping.
+
+Input must remain usable.
+
+Spacing must stay consistent.
+
+══════════════════════════════════════════════
+COUNTDOWN
+══════════════════════════════════════════════
+
+Timer blocks must resize proportionally.
+
+Numbers must never overlap.
+
+Everything must remain centered.
+
+══════════════════════════════════════════════
+ANIMATIONS
+══════════════════════════════════════════════
+
+Keep ALL animations.
+
+Keep ALL interactions.
+
+Keep ALL particle systems.
+
+Keep ALL canvas effects.
+
+Only make them responsive.
+
+Do NOT disable animations on mobile.
+
+══════════════════════════════════════════════
+PERFORMANCE
+══════════════════════════════════════════════
+
+Maintain smooth scrolling.
+
+Maintain 60 FPS.
+
+Avoid layout shifts.
+
+Avoid unnecessary reflows.
+
+Optimize rendering.
+
+Optimize canvas scaling.
+
+Use ResizeObserver where appropriate.
+
+Respect devicePixelRatio.
+
+══════════════════════════════════════════════
+TEST ON
+══════════════════════════════════════════════
+
+320
+
+360
+
+375
+
+390
+
+393
+
+412
+
+430
+
+480
+
+540
+
+600
+
+768
+
+Portrait
+
+Landscape
+
+══════════════════════════════════════════════
+VALIDATION
+══════════════════════════════════════════════
+
+Before finishing, verify every page.
+
+✔ No horizontal scrolling
+
+✔ No clipped content
+
+✔ No overlapping elements
+
+✔ No broken canvas
+
+✔ No stretched images
+
+✔ No compressed components
+
+✔ No overflowing text
+
+✔ No layout jumps
+
+✔ Desktop unchanged
+
+✔ Mobile visually identical
+
+✔ Every interaction still works
+
+══════════════════════════════════════════════
+FINAL REQUIREMENT
+══════════════════════════════════════════════
+
+Do NOT stop after fixing the first visible issue.
+
+Continue auditing and fixing every section until the ENTIRE website is fully responsive.
+
+If any responsive issue still exists, continue fixing it automatically until all pages pass the validation checklist.
+
+The final result should feel like a handcrafted premium production website that was designed for desktop and mobile from the beginning, with zero compromises.
