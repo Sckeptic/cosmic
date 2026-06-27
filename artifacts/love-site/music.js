@@ -10,9 +10,13 @@ export function createMusicEngine() {
 
   function buildAudio() {
     audio          = new Audio('/assets/music/our-song.mp3');
-    audio.loop     = true;
+    audio.loop     = false;
     audio.preload  = 'none';
     audio.crossOrigin = 'anonymous';
+    audio.addEventListener('ended', () => {
+      audio.currentTime = 26;
+      audio.play();
+    });
   }
 
   return {
