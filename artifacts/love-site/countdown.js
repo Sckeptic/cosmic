@@ -31,16 +31,18 @@ export function init(shared) {
   }
 
   function sendCallDateToWhatsApp(raw) {
-    const when = formatDateLovingly(raw);
+    const d = new Date(raw);
+    const dateStr = d.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    const timeStr = d.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
     const msg =
-      `Kp 👀 ♥\n\n` +
-      `Maine ek waqt fix kiya hai —\n` +
-      `${when}\n\n` +
-      `274 km ki doori hai, par jab tu call uthayegi,\n` +
-      `lagega jaise tu bilkul paas hai.\n\n` +
-      `Har second count kar raha hoon tere liye.\n` +
-      `Bas ek baar aawaz sun loon — sab theek ho jaata hai. 🌙\n\n` +
-      `— tera Prince ♥`;
+      `Prince ♥\n\n` +
+      `Mujhe pata hai beech mein thodi dikkat hui,\n` +
+      `par tension mat lena — kuch dino mein sab theek ho jayega.\n\n` +
+      `📅 ${dateStr}\n` +
+      `🕐 ${timeStr}\n\n` +
+      `Is din se, is waqt se — wapas aa jaana.\n` +
+      `Main yahan hoon. Hamesha. 🌙\n\n` +
+      `— Kp 👀 ♥`;
     const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
     window.open(url, '_blank', 'noopener');
   }
