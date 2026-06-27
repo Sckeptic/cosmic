@@ -39,6 +39,8 @@ html, body {
   color: var(--text);
   font-family: var(--font-body);
   line-height: 1.6;
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
 }
 img, canvas { display: block; max-width: 100%; }
 button { cursor: pointer; border: none; background: none; font: inherit; color: inherit; }
@@ -96,6 +98,7 @@ input { outline: none; font: inherit; }
   justify-content: center;
   padding: clamp(24px, 3.5vh, 52px) clamp(20px, 5vw, 80px);
   overflow: hidden;
+  touch-action: pan-y;
 
   opacity: 0;
   transform: scale(1.02) translateX(16px);
@@ -1991,6 +1994,8 @@ html[data-nav-dir="back"] .section.page-leaving {
   align-items: center;
   justify-content: center;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
 }
 
 .reasons-inner {
@@ -2177,7 +2182,9 @@ html[data-nav-dir="back"] .section.page-leaving {
     padding: 0 clamp(16px, 4vw, 40px);
   }
   .messages-input-bar { padding: clamp(14px, 2.5vh, 24px) clamp(16px, 4vw, 48px); }
-  .messages-input { font-size: 0.9rem; padding: 13px 22px; }
+  /* 16px minimum — prevents iOS Safari auto-zoom on focus */
+  .messages-input { font-size: 16px; padding: 13px 22px; }
+  .countdown-date-input { font-size: 16px; }
   .messages-watermark { font-size: clamp(2.5rem, 8vw, 6rem); }
 
   /* ── PAGE 4 · STAR MAP ── */
@@ -2429,6 +2436,8 @@ html[data-nav-dir="back"] .section.page-leaving {
 .site-footer {
   background: transparent;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
   justify-content: flex-start;
   padding-top: clamp(40px, 6vh, 80px);
   padding-bottom: clamp(60px, 8vh, 100px);
