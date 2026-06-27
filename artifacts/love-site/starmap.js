@@ -508,8 +508,11 @@ export function init(shared) {
   function drawSkyFull(canvas, data, W, H, tR, tG, tB, t, wisps, consts, pleiades) {
     const ctx = canvas.getContext('2d');
     if (W < 4 || H < 4) return;
-    canvas.width  = W;
-    canvas.height = H;
+    /* Only reset canvas dimensions when they actually change — avoids forced re-layout every frame */
+    if (canvas.width !== W || canvas.height !== H) {
+      canvas.width  = W;
+      canvas.height = H;
+    }
 
     /* 1. Deep black base */
     ctx.fillStyle = '#010108';

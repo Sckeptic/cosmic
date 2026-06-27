@@ -11,6 +11,7 @@ let _elapsed = 0;
 let _tickId        = null;
 let _glitchTimeout = null;
 let _retryCountId  = null;
+let _startTimeout  = null;
 
 let phone, glow, status, timer, glitchEl, scanEl, endBtn, endLabel, endIcon;
 
@@ -135,6 +136,7 @@ function resetCall() {
   clearInterval(_tickId);
   clearTimeout(_glitchTimeout);
   clearInterval(_retryCountId);
+  clearTimeout(_startTimeout);
   _started = false;
   _failed  = false;
   _elapsed = 0;
@@ -151,7 +153,7 @@ function resetCall() {
   scanEl?.classList.remove('active');
   setEndMode('end');
 
-  setTimeout(startCall, 900);
+  _startTimeout = setTimeout(startCall, 900);
 }
 
 export function init(shared) {

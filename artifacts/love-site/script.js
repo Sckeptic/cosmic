@@ -55,8 +55,18 @@ function drawStars() {
     if (s.y > starCanvas.height + 2) s.y = -2;
 
     const a = s.alpha * (0.5 + 0.5 * Math.sin(s.tw)) * boost;
-    const glow = s.r * 3.5 * boost;
 
+    /* Small stars: skip the radial gradient — just a plain circle (major GC win) */
+    if (s.r < 0.85) {
+      starCtx.beginPath();
+      starCtx.arc(s.x, s.y, s.r * boost, 0, Math.PI * 2);
+      starCtx.fillStyle = `rgba(255,220,235,${a})`;
+      starCtx.fill();
+      continue;
+    }
+
+    /* Larger stars get the full glow gradient */
+    const glow = s.r * 3.5 * boost;
     const g = starCtx.createRadialGradient(s.x, s.y, 0, s.x, s.y, glow);
     g.addColorStop(0,   `rgba(255,180,200,${a * 0.7})`);
     g.addColorStop(0.4, `rgba(200,140,200,${a * 0.25})`);
@@ -564,6 +574,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initHeartbeats();
 
   let _letterAbort = null; // fix: prevent scroll listener accumulation
+  let _lRafId = null;      // fix: prevent leaked RAF loop on letter re-entry
 
   function letterEnter() {
     const el = document.getElementById('letter');
@@ -618,7 +629,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('letter-particles');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
-    let _lRafId; // renamed to avoid shadowing the module-level rafId
     const dots = [];
 
     function resizeCanvas() {

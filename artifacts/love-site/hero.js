@@ -77,12 +77,13 @@ function draw() {
   /* Sample helper — repeats the beat REPEATS times across the canvas */
   const sample = (nx) => sampleBeat(((nx * REPEATS) + offset) % 1);
 
-  /* ── Soft ambient glow behind the line ── */
+  /* ── Soft ambient glow behind the line (shadowBlur — no ctx.filter, GPU-safe) ── */
   _ctx.save();
-  _ctx.filter     = 'blur(7px)';
-  _ctx.globalAlpha = 0.22;
-  _ctx.lineWidth   = 10;
+  _ctx.globalAlpha = 0.28;
+  _ctx.lineWidth   = 8;
   _ctx.strokeStyle = '#FF6B9D';
+  _ctx.shadowBlur  = 22;
+  _ctx.shadowColor = 'rgba(255,80,160,0.55)';
   _ctx.beginPath();
   for (let i = 0; i <= STEPS; i++) {
     const nx = i / STEPS;
