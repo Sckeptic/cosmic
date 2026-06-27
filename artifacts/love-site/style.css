@@ -2100,53 +2100,105 @@ html[data-nav-dir="back"] .section.page-leaving {
    RESPONSIVE
    ═══════════════════════════════════════════════════════════ */
 
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE — TABLET / LARGE PHONE  (≤ 768px)
+   ═══════════════════════════════════════════════════════════ */
 @media (max-width: 768px) {
+
+  /* ── SECTION base ── */
+  .section { padding: clamp(20px, 3vh, 44px) clamp(16px, 4vw, 40px); }
+
+  /* ── KEY HINT (keyboard instruction – irrelevant on touch) ── */
+  .key-hint { display: none; }
+
+  /* ── NAVIGATION ── */
+  .page-nav  { right: 10px; gap: 8px; }
+  .page-dot  { height: 16px; }
+  .page-dot.active { height: 32px; }
+  .page-dot::before { display: none; }
+  .arrow-prev { bottom: calc(50% + 36px); right: 10px; }
+  .arrow-next { bottom: calc(50% - 70px); right: 10px; }
+  .page-arrow { width: 32px; height: 32px; }
+
+  /* ── MUSIC BUTTON ── */
+  .music-btn { right: 52px; bottom: 16px; padding: 10px 16px; }
+  .music-blocked-msg { right: 52px; }
+
+  /* ── PAGE 1 · HERO ── */
+  .hero-ekg-wrap { height: clamp(48px, 7vh, 72px); }
+  .node { width: clamp(60px, 14vw, 88px); gap: 6px; }
+  .node-name { font-size: 0.72rem; margin-top: 8px; }
+  .node-city { font-size: 0.6rem; }
+  .hero-heartbeats { padding: 6px 14px; gap: 6px; }
+  .hb-label { font-size: 0.65rem; white-space: normal; max-width: 100px; line-height: 1.3; }
+  .km-number { font-size: clamp(48px, 16vw, 100px); }
+
+  /* ── PAGE 2 · SIGNAL LOST ── */
   .signal-inner {
     grid-template-columns: 1fr;
     grid-template-rows: auto auto auto;
     justify-items: center;
     text-align: center;
-    gap: clamp(10px, 1.8vh, 20px);
+    gap: clamp(8px, 1.5vh, 18px);
     align-content: center;
+    max-height: none;
+    height: auto;
   }
-  .signal-heading {
-    align-items: center;
-    justify-self: center;
-  }
+  .signal-heading { align-items: center; justify-self: center; }
   .signal-tagline { max-width: 100%; font-size: 0.78rem; }
   .signal-caption-text { grid-column: 1; }
   .phone-outer { justify-self: center; }
   .phone {
-    width: min(50vw, 180px);
-    height: auto;
-    aspect-ratio: 9 / 18;
-    border-radius: 38px;
+    width: min(50vw, 185px);
+    aspect-ratio: 9 / 19.5;
+    border-radius: 40px;
   }
-  .phone-screen-shimmer { border-radius: 38px 38px 55% 55%; }
-  .phone-di-zone { height: 30px; padding-top: 8px; }
-  .phone-dynamic-island { height: 20px; border-radius: 10px; }
-  .phone-top-bar { padding: 2px 14px 5px; }
-  .status-time { font-size: 0.68rem; }
-  .call-ctrl-ring { width: 36px; height: 36px; }
+  .phone-screen-shimmer { border-radius: 40px 40px 55% 55%; }
+  .phone-di-zone { height: 28px; padding-top: 6px; }
+  .phone-dynamic-island { height: 18px; border-radius: 9px; }
+  .phone-top-bar { padding: 2px 13px 4px; }
+  .status-time { font-size: 0.66rem; }
+  .call-ctrl-ring { width: 35px; height: 35px; }
   .call-ctrl-grid { gap: 8px; }
-  .phone-controls-area { gap: 10px; padding: 0 12px; }
+  .phone-controls-area { gap: 10px; padding: 0 11px; }
   .call-end-btn { width: 52px; height: 52px; }
-  .caller-name-main { font-size: 0.95rem; }
+  .caller-name-main { font-size: 0.92rem; }
   .avatar-img { width: 60px; height: 60px; font-size: 1.4rem; }
-  .avatar-stack { width: 60px; height: 60px; margin-top: 0; margin-bottom: 8px; }
-  .phone-caller-area { padding-top: 16px; }
+  .avatar-stack { width: 60px; height: 60px; margin-bottom: 8px; }
+  .phone-caller-area { padding-top: 14px; }
   .avatar-pulse  { inset: -6px; }
   .avatar-pulse-2 { inset: -14px; }
-  .phone-home-bar { margin: 8px auto 6px; }
+  .phone-home-bar { margin: 7px auto 5px; }
   .signal-title { font-size: clamp(1.2rem, 5vw, 2rem); }
 
+  /* ── PAGE 3 · MESSAGES ── */
+  .messages-center-content {
+    bottom: clamp(100px, 17vh, 145px);
+    padding: 0 clamp(16px, 4vw, 40px);
+  }
+  .messages-input-bar { padding: clamp(14px, 2.5vh, 24px) clamp(16px, 4vw, 48px); }
+  .messages-input { font-size: 0.9rem; padding: 13px 22px; }
+  .messages-watermark { font-size: clamp(2.5rem, 8vw, 6rem); }
+
+  /* ── PAGE 4 · STAR MAP ── */
+  .starmap-section {
+    padding: clamp(12px, 1.8vh, 28px) clamp(12px, 3vw, 32px);
+    justify-content: flex-start;
+  }
+  .starmap-header { margin-bottom: clamp(6px, 1vh, 14px); gap: 6px; }
+  .starmap-title-main { font-size: clamp(1.1rem, 4vw, 1.8rem); }
   .starmap-body-wrap {
     grid-template-columns: 1fr;
     grid-template-rows: auto auto auto;
+    max-height: none;
+  }
+  #sky-left, #sky-right {
+    height: clamp(140px, 26vh, 210px);
+    border-radius: 16px;
   }
   .starmap-divider {
     width: 100%;
-    height: 48px;
+    height: 44px;
     flex-direction: row;
     padding-top: 0;
   }
@@ -2157,18 +2209,190 @@ html[data-nav-dir="back"] .section.page-leaving {
     background: linear-gradient(to right, transparent, rgba(255,107,157,0.25), transparent);
   }
   .sd-badge { flex-direction: row; gap: 6px; padding: 0 10px; }
-  .page-nav { right: 10px; }
-  .arrow-prev { bottom: calc(50% + 42px); right: 10px; }
-  .arrow-next { bottom: calc(50% - 78px); right: 10px; }
-  .km-number { font-size: clamp(48px, 16vw, 100px); }
+  .starmap-footer { margin-top: clamp(4px, 1vh, 12px); }
+  .same-sky-msg { padding: 12px 20px; font-size: 0.72rem; }
+
+  /* ── PAGE 5 · COUNTDOWN ── */
+  .countdown-inner { gap: clamp(10px, 1.8vh, 20px); }
+  .countdown-display { gap: clamp(6px, 2vw, 14px); }
+  .cd-num { font-size: clamp(2.5rem, 8.5vw, 4rem); }
+  .cd-sep { font-size: clamp(1.2rem, 3.5vw, 1.8rem); padding-top: 4px; }
+  .cd-label { font-size: 0.55rem; }
+  .countdown-eyebrow { font-size: 0.88rem; max-width: 90%; }
+
+  /* ── PAGE 6 · REASONS ── */
+  .reasons-grid { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: clamp(8px, 1.2vw, 14px); }
+  .reason-card { padding: clamp(12px, 1.8vh, 18px) clamp(12px, 1.8vw, 18px); }
+
+  /* ── PAGE 7 · LETTER ── */
+  .site-footer-inner { gap: 24px; max-width: 95%; }
+  .footer-letter p { font-size: clamp(0.84rem, 2vw, 0.96rem); }
 }
 
+
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE — SMALL PHONE  (≤ 480px)
+   ═══════════════════════════════════════════════════════════ */
 @media (max-width: 480px) {
-  .countdown-display { gap: 6px; }
-  .cd-sep { font-size: clamp(1.5rem, 5vw, 2.5rem); }
-  .music-btn { right: 50px; bottom: 16px; }
-  .page-nav { right: 8px; }
-  .arrow-prev, .arrow-next { right: 8px; }
+
+  /* ── SECTION base ── */
+  .section { padding: clamp(14px, 2.5vh, 32px) clamp(12px, 3.5vw, 20px); }
+
+  /* ── NAVIGATION ── */
+  .page-nav  { right: 8px; gap: 6px; }
+  .arrow-prev { right: 8px; }
+  .arrow-next { right: 8px; }
+  .page-arrow { width: 28px; height: 28px; font-size: 0.7rem; }
+
+  /* ── MUSIC BUTTON ── */
+  .music-btn { right: 46px; bottom: 14px; padding: 9px 12px; gap: 6px; }
+  .music-btn-text { display: none; }
+  .music-blocked-msg { right: 46px; }
+
+  /* ── PAGE 1 · HERO ── */
+  .hero-inner { gap: clamp(5px, 1vh, 12px); }
+  .hero-ekg-wrap { height: 42px; }
+  .node { width: 50px; gap: 4px; }
+  .node-dot-wrap { width: 32px; height: 32px; }
+  .node-ring-outer { width: 32px; height: 32px; }
+  .node-heart { font-size: 18px; }
+  .node-name { font-size: 0.62rem; letter-spacing: 0.08em; margin-top: 5px; }
+  .node-city { display: none; }
+  .hero-text-block { gap: clamp(4px, 0.8vh, 9px); }
+  .hero-kicker { font-size: 0.62rem; letter-spacing: 0.18em; }
+  .km-unit { font-size: clamp(0.7rem, 3vw, 1.1rem); letter-spacing: 0.12em; }
+  .hero-heartbeats { padding: 5px 12px; gap: 5px; }
+  .hb-label { display: none; }
+  .hb-count { font-size: 0.9rem; }
+  .hero-typewriter { font-size: 0.72rem; }
+  .hero-sub { font-size: clamp(0.88rem, 3vw, 1.1rem); }
+
+  /* ── PAGE 2 · SIGNAL LOST ── */
+  .phone {
+    width: min(54vw, 175px);
+    border-radius: 36px;
+  }
+  .phone-screen-shimmer { border-radius: 36px 36px 55% 55%; }
+  .signal-inner { gap: clamp(6px, 1.2vh, 12px); }
+  .signal-title { font-size: clamp(1.1rem, 5.5vw, 1.8rem); }
+  .signal-tagline { font-size: 0.74rem; }
+
+  /* ── PAGE 3 · MESSAGES ── */
+  .messages-center-content { bottom: clamp(88px, 15vh, 130px); }
+  .messages-input-bar { padding: clamp(10px, 2vh, 18px) clamp(12px, 3vw, 28px); }
+  .messages-input { font-size: 0.85rem; padding: 11px 18px; }
+  .messages-watermark { font-size: clamp(2rem, 7vw, 4rem); bottom: clamp(68px, 12vh, 100px); }
+  .messages-title { font-size: clamp(1.7rem, 7vw, 2.8rem); }
+
+  /* ── PAGE 4 · STAR MAP ── */
+  #sky-left, #sky-right {
+    height: clamp(110px, 21vh, 170px);
+    border-radius: 12px;
+  }
+  .starmap-title-main { font-size: clamp(1rem, 4.5vw, 1.4rem); }
+  .starmap-caption { font-size: 0.82rem; }
+  .starmap-divider { height: 38px; }
+
+  /* ── PAGE 5 · COUNTDOWN ── */
+  .countdown-display { gap: clamp(3px, 1vw, 8px); }
+  .cd-num { font-size: clamp(2rem, 9.5vw, 3rem); }
+  .cd-sep { font-size: clamp(1rem, 3.5vw, 1.5rem); }
+  .cd-label { font-size: 0.48rem; letter-spacing: 0.12em; }
+  .countdown-eyebrow { font-size: 0.82rem; line-height: 1.6; }
+  .countdown-date-input { font-size: 0.8rem; padding: 8px 12px; }
+
+  /* ── PAGE 6 · REASONS ── */
+  .reasons-inner { gap: clamp(12px, 2vh, 20px); padding: clamp(18px, 3vh, 32px) clamp(12px, 3vw, 24px); }
+  .reasons-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .reason-text { font-size: 0.74rem; line-height: 1.5; }
+  .reason-emoji { font-size: 1.4rem; }
+  .reason-card { padding: 12px 10px; gap: 8px; }
+  .reasons-title { font-size: clamp(1.7rem, 6vw, 2.4rem); }
+
+  /* ── PAGE 7 · LETTER ── */
+  .site-footer { padding-top: clamp(28px, 4.5vh, 56px); padding-bottom: clamp(40px, 6vh, 72px); }
+  .site-footer-inner { gap: 20px; }
+  .footer-letter { gap: 12px; }
+  .footer-letter p { font-size: 0.83rem; line-height: 1.85; }
+  .footer-quote { font-size: clamp(0.88rem, 3.5vw, 0.98rem) !important; }
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE — TINY PHONE  (≤ 360px)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 360px) {
+
+  /* ── HERO ── */
+  .node { width: 44px; }
+  .node-dot-wrap { width: 28px; height: 28px; }
+  .node-ring-outer { width: 28px; height: 28px; }
+  .node-heart { font-size: 16px; }
+  .node-name { font-size: 0.58rem; }
+  .km-number { font-size: clamp(40px, 17vw, 80px); }
+
+  /* ── SIGNAL ── */
+  .phone { width: min(58vw, 165px); border-radius: 34px; }
+  .phone-screen-shimmer { border-radius: 34px 34px 55% 55%; }
+  .signal-title { font-size: clamp(1rem, 5.5vw, 1.5rem); }
+
+  /* ── STARMAP ── */
+  #sky-left, #sky-right { height: clamp(95px, 19vh, 150px); }
+
+  /* ── COUNTDOWN ── */
+  .cd-num { font-size: clamp(1.7rem, 11vw, 2.6rem); }
+  .cd-sep { font-size: clamp(0.9rem, 3.5vw, 1.2rem); padding-top: 2px; }
+  .countdown-display { gap: 2px; }
+  .cd-label { font-size: 0.44rem; }
+
+  /* ── REASONS ── */
+  .reasons-grid { grid-template-columns: 1fr; }
+
+  /* ── MESSAGES ── */
+  .messages-input { font-size: 0.8rem; }
+}
+
+
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE — LANDSCAPE PHONES
+   ═══════════════════════════════════════════════════════════ */
+@media (max-height: 500px) and (orientation: landscape) {
+
+  /* HERO — compress vertical layout */
+  .hero-ekg-wrap { height: 38px; }
+  .node-city { display: none; }
+  .hero-inner { gap: 6px; }
+  .hero-text-block { gap: 4px; }
+  .hero-heartbeats { padding: 4px 10px; }
+  .km-number { font-size: clamp(40px, 10vh, 80px); }
+
+  /* SIGNAL — phone stays on side, reduce height */
+  .signal-inner { gap: 8px; }
+  .phone { width: min(22vh, 140px); }
+  .avatar-img { width: 48px; height: 48px; font-size: 1.1rem; }
+  .avatar-stack { width: 48px; height: 48px; margin-bottom: 5px; }
+  .phone-caller-area { padding-top: 8px; }
+
+  /* STARMAP — smaller canvases */
+  .starmap-section { padding: 10px clamp(12px, 3vw, 28px); }
+  .starmap-header { margin-bottom: 6px; }
+  #sky-left, #sky-right { height: clamp(100px, 55vh, 240px); }
+  .starmap-footer { margin-top: 6px; }
+
+  /* COUNTDOWN — tighter */
+  .countdown-inner { gap: 8px; }
+  .cd-num { font-size: clamp(2rem, 8vh, 3.5rem); }
+
+  /* REASONS — scrollable in landscape is fine */
+  .reasons-section { align-items: flex-start; }
+  .reasons-inner { padding-top: 16px; padding-bottom: 24px; }
+
+  /* LETTER */
+  .site-footer { padding-top: 20px; padding-bottom: 28px; }
+
+  /* NAV arrows — shift for shorter screens */
+  .arrow-prev { bottom: calc(50% + 30px); }
+  .arrow-next { bottom: calc(50% - 64px); }
 }
 
 /* ═══════════════════════════════════════════════════════════
