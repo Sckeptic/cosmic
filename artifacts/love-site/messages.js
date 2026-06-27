@@ -48,14 +48,25 @@ const ghosts = [
 ];
 let ghostIdx = 0;
 let dripTimer = null;
+let _zoneIdx  = 0; // cycles through horizontal zones so bubbles don't pile up
 
 function resize() {
   if (!_canvas) return;
-  /* Bug fix: use window dimensions as fallback if canvas has no layout size */
   const w = _canvas.offsetWidth  || _canvas.parentElement?.offsetWidth  || window.innerWidth;
   const h = _canvas.offsetHeight || _canvas.parentElement?.offsetHeight || window.innerHeight;
   _W = _canvas.width  = w;
   _H = _canvas.height = h;
+}
+
+/* Split the canvas into 4 horizontal lanes — pick the next one in order */
+function nextZoneX() {
+  const ZONES = 4;
+  const lane  = _zoneIdx % ZONES;
+  _zoneIdx++;
+  // Each lane is 25% wide; centre the bubble in the lane with a small random offset
+  const laneW   = _W / ZONES;
+  const centreX = laneW * lane + laneW / 2;
+  return centreX + (Math.random() - 0.5) * laneW * 0.55;
 }
 
 function spawnBubble(text) {
@@ -65,20 +76,20 @@ function spawnBubble(text) {
   const fz  = Math.min(15, Math.max(11, 200 / (text.length + 8)));
   bubbles.push({
     text,
-    x:       _W * 0.12 + Math.random() * _W * 0.76,
-    y:       _H * 0.85,
-    vy:     -(0.45 + Math.random() * 0.75),
-    vx:      (Math.random() - 0.5) * 0.35,
+    x:       nextZoneX(),
+    y:       _H * 0.82 + (Math.random() - 0.5) * _H * 0.06,
+    vy:     -(0.70 + Math.random() * 0.70),   // rise faster → clears before next spawn
+    vx:      (Math.random() - 0.5) * 0.50,
     alpha:   1,
     life:    0,
-    maxLife: 280 + Math.random() * 140,
+    maxLife: 220 + Math.random() * 100,        // shorter life so sky stays clear
     col, fz,
   });
 }
 
 function drip() {
-  if (bubbles.length < 16) spawnBubble(ghosts[ghostIdx++ % ghosts.length]);
-  dripTimer = setTimeout(drip, 3200 + Math.random() * 3800);
+  if (bubbles.length < 6) spawnBubble(ghosts[ghostIdx++ % ghosts.length]);
+  dripTimer = setTimeout(drip, 4800 + Math.random() * 4400); // slower rain
 }
 
 let _rafId = null;
