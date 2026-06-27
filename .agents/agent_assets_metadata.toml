@@ -12,3 +12,9 @@ id = "_giadTmqNDUhw83LXajjE"
 uri = "file://artifacts/love-site/love-site-netlify.zip"
 type = "unspecified"
 title = "love-site-netlify.zip — drag & drop to Netlify"
+
+[[outputs]]
+id = "RRFzBczIB3ozT_rJMWw3U"
+uri = "file://artifacts/love-site/love-site.tar.gz"
+type = "unspecified"
+title = "Love Site — Production Build"
