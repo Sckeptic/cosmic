@@ -226,6 +226,34 @@ html[data-nav-dir="back"] .section.page-leaving {
   animation: ent-scale 0.5s 0.2s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
+/* Reasons entrance */
+.reasons-section.page-entering .section-badge {
+  animation: ent-up 0.4s 0.04s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.reasons-section.page-entering .reasons-title {
+  animation: ent-up 0.48s 0.10s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.reasons-section.page-entering .reasons-sub {
+  animation: ent-up 0.42s 0.16s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.reasons-section.page-entering .reasons-reveal-btn {
+  animation: ent-up 0.4s 0.22s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Letter entrance */
+.site-footer.page-entering .letter-seal {
+  animation: ent-scale 0.6s 0s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+.site-footer.page-entering .letter-header {
+  animation: ent-up 0.45s 0.12s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.site-footer.page-entering .footer-letter {
+  animation: ent-up 0.5s 0.2s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.site-footer.page-entering .footer-signature {
+  animation: ent-up 0.4s 0.28s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
 
 /* ═══════════════════════════════════════════════════════════
    FLOATING HEARTS OVERLAY
@@ -1992,10 +2020,21 @@ html[data-nav-dir="back"] .section.page-leaving {
 .reasons-section {
   display: flex;
   align-items: center;
-  justify-content: center;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   touch-action: pan-y;
+  justify-content: flex-start;
+  padding-top: clamp(20px, 3vh, 48px);
+  padding-bottom: clamp(48px, 7vh, 88px);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,107,157,0.3) transparent;
+}
+.reasons-section::-webkit-scrollbar { width: 3px; }
+.reasons-section::-webkit-scrollbar-track { background: transparent; }
+.reasons-section::-webkit-scrollbar-thumb { background: rgba(255,107,157,0.3); border-radius: 2px; }
+
+.reasons-section::before {
+  background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(255,107,157,0.07) 0%, transparent 70%);
 }
 
 .reasons-inner {
@@ -2003,7 +2042,7 @@ html[data-nav-dir="back"] .section.page-leaving {
   flex-direction: column;
   align-items: center;
   gap: clamp(16px, 2.5vh, 28px);
-  padding: clamp(24px, 4vh, 48px) clamp(16px, 4vw, 48px);
+  padding: clamp(16px, 2.5vh, 32px) clamp(16px, 4vw, 48px);
   max-width: 820px;
   width: 100%;
   text-align: center;
@@ -2496,6 +2535,50 @@ html[data-nav-dir="back"] .section.page-leaving {
   align-items: center;
   gap: 32px;
   text-align: center;
+}
+
+/* ── Wax seal ── */
+.letter-seal {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  opacity: 0;
+  transform: scale(0.6) rotate(-15deg);
+  transition: opacity 0.8s ease 0.2s, transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s;
+}
+.site-footer.page-active .letter-seal {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+.letter-seal-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255,107,157,0.45);
+  box-shadow:
+    0 0 0 4px rgba(255,107,157,0.08),
+    0 0 20px rgba(255,107,157,0.35),
+    0 0 40px rgba(255,107,157,0.15);
+  animation: seal-breathe 3s ease-in-out infinite;
+}
+@keyframes seal-breathe {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(255,107,157,0.08), 0 0 20px rgba(255,107,157,0.35), 0 0 40px rgba(255,107,157,0.15); }
+  50%       { box-shadow: 0 0 0 6px rgba(255,107,157,0.12), 0 0 30px rgba(255,107,157,0.55), 0 0 60px rgba(255,107,157,0.25); }
+}
+.letter-seal-inner {
+  font-size: 1.8rem;
+  color: var(--glow);
+  text-shadow:
+    0 0 8px var(--glow),
+    0 0 20px var(--glow),
+    0 0 40px rgba(255,107,157,0.7);
+  animation: heart-beat-node 1.2s ease-in-out infinite;
+  position: relative;
+  z-index: 1;
 }
 
 /* Header decoration */
