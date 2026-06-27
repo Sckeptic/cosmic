@@ -497,6 +497,16 @@ document.addEventListener('DOMContentLoaded', () => {
   initTypewriter();
   initHeartbeats();
 
+  function letterEnter() {
+    const el = document.getElementById('letter');
+    if (!el) return;
+    const paras = el.querySelectorAll('.footer-letter p, .footer-signature');
+    paras.forEach(p => p.classList.remove('letter-visible'));
+    paras.forEach((p, i) => {
+      setTimeout(() => p.classList.add('letter-visible'), 300 + i * 200);
+    });
+  }
+
   const pages = [
     { el: document.getElementById('hero'),      onEnter: heroEnter      },
     { el: document.getElementById('signal'),    onEnter: signalEnter    },
@@ -504,7 +514,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { el: document.getElementById('starmap'),   onEnter: starmapEnter   },
     { el: document.getElementById('countdown'), onEnter: countdownEnter },
     { el: document.getElementById('reasons'),   onEnter: reasonsEnter   },
-    { el: document.getElementById('letter'),    onEnter: () => {}       },
+    { el: document.getElementById('letter'),    onEnter: letterEnter    },
   ];
 
   window.pageMgr = new PageManager(pages);
