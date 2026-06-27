@@ -152,25 +152,29 @@ export function init(shared) {
     return () => { s = (s * 16807 + 0) % 2147483647; return (s - 1) / 2147483646; };
   }
 
-  /* ── Dense background star field ── */
+  /* ── Background star field (sparse, clean) ── */
   function buildStarData(rng, W, H) {
-    const TOTAL = Math.floor(W * H / 100);
+    // ~280px² per star keeps the sky readable without clutter
+    const TOTAL = Math.floor(W * H / 280);
     const stars = [];
     for (let i = 0; i < TOTAL; i++) {
       const roll = rng();
       let size, alpha, tier;
-      if (roll < 0.68) {
-        size = 0.15 + rng() * 0.55; alpha = 0.15 + rng() * 0.40; tier = 0;
-      } else if (roll < 0.91) {
-        size = 0.45 + rng() * 0.75; alpha = 0.28 + rng() * 0.42; tier = 1;
+      if (roll < 0.72) {
+        // Faint pinpoints — majority of the field
+        size = 0.18 + rng() * 0.42; alpha = 0.12 + rng() * 0.30; tier = 0;
+      } else if (roll < 0.94) {
+        // Mid-brightness soft dots
+        size = 0.45 + rng() * 0.60; alpha = 0.22 + rng() * 0.32; tier = 1;
       } else {
-        size = 0.90 + rng() * 1.10; alpha = 0.48 + rng() * 0.38; tier = 2;
+        // Bright field stars — kept sparse
+        size = 0.80 + rng() * 0.90; alpha = 0.38 + rng() * 0.30; tier = 2;
       }
       stars.push({
         x: rng() * W, y: rng() * H, size, alpha,
-        phase: rng() * Math.PI * 2, speed: 0.00012 + rng() * 0.00090,
+        phase: rng() * Math.PI * 2, speed: 0.00012 + rng() * 0.00070,
         tier, depth: 0.06 + rng() * 0.94,
-        warm: rng() < 0.09, blue: rng() < 0.08,
+        warm: rng() < 0.07, blue: rng() < 0.07,
       });
     }
     return stars;
@@ -208,43 +212,34 @@ export function init(shared) {
     }
   }
 
-  /* ── Animated Milky Way band ── */
+  /* ── Animated Milky Way band — subtle atmospheric haze ── */
   function drawMilkyWay(ctx, W, H, t) {
     ctx.save();
     ctx.translate(W / 2, H / 2);
-    ctx.rotate(-0.40); // ~23° — actual Milky Way tilt
+    ctx.rotate(-0.40); // ~23° actual tilt
 
-    const breath = 0.80 + 0.20 * Math.sin(t * 0.000065);
-    const drift  = Math.sin(t * 0.000028) * W * 0.04; // slow sway
+    const breath = 0.88 + 0.12 * Math.sin(t * 0.000065);
+    const drift  = Math.sin(t * 0.000028) * W * 0.025;
 
+    // Narrower, lower-opacity layers — just a hint of galactic haze
     const layers = [
-      { hw: W * 0.60, hh: H * 0.26, r:  50, g:  70, b: 190, o: 0.030 },
-      { hw: W * 0.42, hh: H * 0.16, r:  90, g: 110, b: 230, o: 0.038 },
-      { hw: W * 0.22, hh: H * 0.09, r: 130, g: 155, b: 255, o: 0.034 },
-      { hw: W * 0.10, hh: H * 0.04, r: 180, g: 200, b: 255, o: 0.024 },
+      { hw: W * 0.52, hh: H * 0.18, r:  55, g:  75, b: 180, o: 0.016 },
+      { hw: W * 0.34, hh: H * 0.10, r:  90, g: 110, b: 220, o: 0.020 },
+      { hw: W * 0.16, hh: H * 0.05, r: 140, g: 160, b: 255, o: 0.015 },
     ];
 
     for (const l of layers) {
       const o = l.o * breath;
       const g = ctx.createLinearGradient(drift, -l.hh, drift, l.hh);
       g.addColorStop(0.00, 'transparent');
-      g.addColorStop(0.20, `rgba(${l.r},${l.g},${l.b},${(o * 0.4).toFixed(4)})`);
+      g.addColorStop(0.25, `rgba(${l.r},${l.g},${l.b},${(o * 0.35).toFixed(4)})`);
       g.addColorStop(0.50, `rgba(${l.r},${l.g},${l.b},${o.toFixed(4)})`);
-      g.addColorStop(0.80, `rgba(${l.r},${l.g},${l.b},${(o * 0.4).toFixed(4)})`);
+      g.addColorStop(0.75, `rgba(${l.r},${l.g},${l.b},${(o * 0.35).toFixed(4)})`);
       g.addColorStop(1.00, 'transparent');
       ctx.fillStyle = g;
       ctx.fillRect(-l.hw + drift, -l.hh, l.hw * 2, l.hh * 2);
     }
-
-    /* Sparse bright dust in core */
-    ctx.globalAlpha = 0.22 * breath;
-    ctx.globalCompositeOperation = 'screen';
-    const cg = ctx.createRadialGradient(drift, 0, 0, drift, 0, W * 0.18);
-    cg.addColorStop(0,   'rgba(180,200,255,0.25)');
-    cg.addColorStop(0.5, 'rgba(140,160,255,0.06)');
-    cg.addColorStop(1,   'transparent');
-    ctx.fillStyle = cg;
-    ctx.fillRect(-W * 0.22, -H * 0.07, W * 0.44, H * 0.14);
+    // No screen-blend core — avoids the harsh bright band
     ctx.restore();
   }
 
