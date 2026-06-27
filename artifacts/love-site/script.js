@@ -500,11 +500,86 @@ document.addEventListener('DOMContentLoaded', () => {
   function letterEnter() {
     const el = document.getElementById('letter');
     if (!el) return;
-    const paras = el.querySelectorAll('.footer-letter p, .footer-signature');
+
+    // Reset scroll
+    el.scrollTop = 0;
+
+    // Scroll progress bar
+    const progress = document.getElementById('letter-progress');
+    function updateProgress() {
+      if (!el.classList.contains('page-active')) return;
+      const max = el.scrollHeight - el.clientHeight;
+      const pct = max > 0 ? (el.scrollTop / max) * 100 : 0;
+      if (progress) progress.style.width = pct + '%';
+    }
+    el.addEventListener('scroll', updateProgress, { passive: true });
+    updateProgress();
+
+    // Cursor
+    const cursor = document.getElementById('letter-cursor');
+    const paras  = Array.from(el.querySelectorAll('.footer-letter p, .footer-signature'));
     paras.forEach(p => p.classList.remove('letter-visible'));
+    if (cursor) { cursor.classList.remove('done'); cursor.classList.add('active'); }
+
     paras.forEach((p, i) => {
-      setTimeout(() => p.classList.add('letter-visible'), 300 + i * 200);
+      setTimeout(() => {
+        p.classList.add('letter-visible');
+        // Move cursor just below this paragraph
+        if (cursor && i < paras.length - 1) {
+          const rect = p.getBoundingClientRect();
+          const parentRect = el.getBoundingClientRect();
+          cursor.style.top = (rect.bottom - parentRect.top + el.scrollTop + 4) + 'px';
+        }
+        // Hide cursor after last item
+        if (i === paras.length - 1 && cursor) {
+          setTimeout(() => { cursor.classList.remove('active'); cursor.classList.add('done'); }, 800);
+        }
+      }, 300 + i * 200);
     });
+
+    // Ambient letter particles
+    const canvas = document.getElementById('letter-particles');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let rafId;
+    const dots = [];
+
+    function resizeCanvas() {
+      canvas.width  = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+
+    for (let i = 0; i < 28; i++) {
+      dots.push({
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        r: 0.5 + Math.random() * 1.2,
+        vy: -(0.1 + Math.random() * 0.25),
+        vx: (Math.random() - 0.5) * 0.15,
+        alpha: 0.1 + Math.random() * 0.25,
+        life: Math.random(),
+      });
+    }
+
+    function drawParticles() {
+      if (!el.classList.contains('page-active')) { cancelAnimationFrame(rafId); return; }
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      dots.forEach(d => {
+        d.y  += d.vy;
+        d.x  += d.vx;
+        d.life += 0.003;
+        const a = d.alpha * Math.abs(Math.sin(d.life * Math.PI));
+        ctx.beginPath();
+        ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255,107,157,${a})`;
+        ctx.fill();
+        if (d.y < -10) { d.y = canvas.height + 10; d.x = Math.random() * canvas.width; }
+      });
+      rafId = requestAnimationFrame(drawParticles);
+    }
+    cancelAnimationFrame(rafId);
+    drawParticles();
   }
 
   const pages = [

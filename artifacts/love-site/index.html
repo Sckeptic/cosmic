@@ -419,11 +419,18 @@
        FOOTER · THE LAST HEARTBEAT
   ════════════════════════════════════════ -->
   <footer id="letter" class="section site-footer" aria-label="Closing message">
+    <canvas id="letter-particles" class="letter-particles-canvas" aria-hidden="true"></canvas>
+    <div class="letter-scroll-progress" id="letter-progress" aria-hidden="true"></div>
     <div class="site-footer-inner">
 
-      <div class="footer-rule" aria-hidden="true"></div>
+      <div class="letter-header">
+        <div class="letter-header-line" aria-hidden="true"></div>
+        <span class="letter-label">a letter</span>
+        <div class="letter-header-line" aria-hidden="true"></div>
+      </div>
 
       <div class="footer-letter">
+        <span class="letter-cursor" id="letter-cursor" aria-hidden="true"></span>
         <p>You're probably going to smile after reading this.</p>
         <p>Maybe you'll call me.<br/>Maybe you won't.</p>
         <p>Knowing you...<br/>you'll probably sit quietly for a minute first.</p>
