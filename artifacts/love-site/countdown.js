@@ -33,10 +33,14 @@ export function init(shared) {
   function sendCallDateToWhatsApp(raw) {
     const when = formatDateLovingly(raw);
     const msg =
-      `💕 Prince just set our next call —\n\n` +
-      `📅 ${when}\n\n` +
-      `Every second until then is just me thinking of you. ` +
-      `Don't be late, Kp 👀 ♥`;
+      `Kp 👀 ♥\n\n` +
+      `Maine ek waqt fix kiya hai —\n` +
+      `${when}\n\n` +
+      `274 km ki doori hai, par jab tu call uthayegi,\n` +
+      `lagega jaise tu bilkul paas hai.\n\n` +
+      `Har second count kar raha hoon tere liye.\n` +
+      `Bas ek baar aawaz sun loon — sab theek ho jaata hai. 🌙\n\n` +
+      `— tera Prince ♥`;
     const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
     window.open(url, '_blank', 'noopener');
   }
