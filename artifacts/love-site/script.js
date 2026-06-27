@@ -504,6 +504,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { el: document.getElementById('starmap'),   onEnter: starmapEnter   },
     { el: document.getElementById('countdown'), onEnter: countdownEnter },
     { el: document.getElementById('reasons'),   onEnter: reasonsEnter   },
+    { el: document.getElementById('letter'),    onEnter: () => {}       },
   ];
 
   window.pageMgr = new PageManager(pages);

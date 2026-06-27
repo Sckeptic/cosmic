@@ -2171,3 +2171,69 @@ html[data-nav-dir="back"] .section.page-leaving {
   .arrow-prev, .arrow-next { right: 8px; }
 }
 
+/* ═══════════════════════════════════════════════════════════
+   FOOTER — THE LAST HEARTBEAT
+   ═══════════════════════════════════════════════════════════ */
+
+.site-footer {
+  background: radial-gradient(ellipse 60% 50% at 50% 60%, rgba(255,107,157,0.06) 0%, transparent 70%);
+}
+
+.site-footer-inner {
+  max-width: 560px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  text-align: center;
+}
+
+.footer-rule {
+  width: 1px;
+  height: 60px;
+  background: linear-gradient(to bottom, transparent, rgba(255,107,157,0.4), transparent);
+  margin: 0 auto;
+}
+
+.footer-tagline {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: clamp(0.85rem, 2vw, 0.95rem);
+  color: var(--muted);
+  line-height: 1.8;
+  letter-spacing: 0.01em;
+}
+
+.footer-letter {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+.footer-letter p {
+  font-family: var(--font-body);
+  font-size: clamp(0.9rem, 2.2vw, 1rem);
+  color: rgba(240, 232, 240, 0.65);
+  line-height: 1.9;
+  font-weight: 300;
+  letter-spacing: 0.01em;
+}
+
+.footer-last-line {
+  color: rgba(240, 232, 240, 0.85) !important;
+  font-style: italic;
+  padding-top: 10px;
+}
+
+.footer-signature {
+  font-family: var(--font-head);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--glow);
+  letter-spacing: 0.08em;
+  opacity: 0.7;
+  margin-top: 10px;
+}
+
