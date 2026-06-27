@@ -378,15 +378,15 @@ function LoveStory() {
 
 // ───────────────────── REASONS SECTION ─────────────────────
 const reasons = [
-  { icon: "🌙", text: "Teri hansi se poori duniya roshan ho jaati hai" },
-  { icon: "☀️", text: "Tumhe hamesha pata hota hai kya kehna hai" },
-  { icon: "🎵", text: "Tere saath naachna bilkul udne jaisa lagta hai" },
-  { icon: "🌊", text: "Teri daryaadili kisi bhi samundar se gehri hai" },
-  { icon: "🔥", text: "Tum mujhe roz apna best version banne ki inspiration dete ho" },
-  { icon: "🌸", text: "Teri har jhappi mein ghar jaisa sukoon milta hai" },
-  { icon: "⭐", text: "Tum har cheez mein khubsurti dhundh lete ho" },
-  { icon: "🦋", text: "Tum aam lamhon ko bhi jadui bana dete ho" },
-  { icon: "🌈", text: "Teri muskaan is poori duniya mein meri sabse pyaari cheez hai" },
+  { icon: "🌙", text: "Aapki hansi se poori duniya roshan ho jaati hai" },
+  { icon: "☀️", text: "Aapko hamesha pata hota hai kya kehna hai" },
+  { icon: "🎵", text: "Aapke saath naachna bilkul udne jaisa lagta hai" },
+  { icon: "🌊", text: "Aapki daryaadili kisi bhi samundar se gehri hai" },
+  { icon: "🔥", text: "Aap mujhe roz apna best version banne ki inspiration dete ho" },
+  { icon: "🌸", text: "Aapki har jhappi mein ghar jaisa sukoon milta hai" },
+  { icon: "⭐", text: "Aap har cheez mein khubsurti dhundh lete ho" },
+  { icon: "🦋", text: "Aap aam lamhon ko bhi jadui bana dete ho" },
+  { icon: "🌈", text: "Aapki muskaan is poori duniya mein meri sabse pyaari cheez hai" },
 ];
 
 function ReasonsSection() {

@@ -1,18 +1,18 @@
 /* reasons.js — "Reasons I Love You" page */
 
 const REASONS = [
-  { emoji: '✨', text: 'You don\'t perform kindness. You just are it — quietly, without needing anyone to notice.' },
-  { emoji: '🤍', text: 'The way you hold space for people, even when you\'re the one who needs holding.' },
-  { emoji: '🐻', text: 'The love you have for Bholu. That kind of gentleness doesn\'t come from nowhere.' },
-  { emoji: '💬', text: 'You say what\'s actually on your mind. In a world full of half-truths, that\'s everything.' },
-  { emoji: '🌙', text: 'You see through the pretense and the noise. You go straight to what\'s real.' },
-  { emoji: '🌍', text: 'There\'s something in the way you think that feels universal — like every girl should think like you.' },
-  { emoji: '💫', text: 'You make the ordinary feel significant. A conversation with you never feels small.' },
-  { emoji: '🌸', text: 'Your presence doesn\'t demand anything. It just makes everything calmer.' },
-  { emoji: '🔥', text: 'You tell the truth even when it\'s uncomfortable. That takes more courage than people realize.' },
-  { emoji: '🫀', text: 'When you love something, you really love it. No performance. No conditions.' },
-  { emoji: '🌟', text: 'The way you carry yourself — there\'s a grace there that most people spend their whole lives looking for.' },
-  { emoji: '☕', text: 'Even the small things you do feel like being home. And I\'ve been looking for that for a long time.' },
+  { emoji: '✨', text: 'Aap kindness dikhate nahi. Aap bas hote hi hain woh — bina awaaz ke, bina kisi ki notice ki zaroorat ke.' },
+  { emoji: '🤍', text: 'Aap doosron ke liye space rakhte ho, tab bhi jab aapko khud sahare ki zaroorat hoti hai.' },
+  { emoji: '🐻', text: 'Bholu ke liye aapka pyaar — yeh gentleness andar se aati hai. Aisi cheez kahi se nahi milti.' },
+  { emoji: '💬', text: 'Aap woh kehte ho jo sach mein dil mein hota hai. Aadhe-sacch ki is duniya mein yeh sab kuch hai.' },
+  { emoji: '🌙', text: 'Aap dikhave aur shor ke paar dekh lete ho. Seedha asli cheez tak pahunch jaate ho.' },
+  { emoji: '🌍', text: 'Aapke sochne ka andaz kuch aisa hai — jaise har ladki ko aisi hi sochni chahiye.' },
+  { emoji: '💫', text: 'Aap aam cheezein bhi khaas bana dete ho. Aapke saath baat kabhi chhoti nahi lagti.' },
+  { emoji: '🌸', text: 'Aapki maujoodgi kuch maangti nahi. Bas sab kuch shant kar deti hai.' },
+  { emoji: '🔥', text: 'Aap sach bolte ho chahe woh uncomfortable ho. Iske liye jitni himmat chahiye — log samjhte nahi.' },
+  { emoji: '🫀', text: 'Jab aap kisi cheez se pyaar karte ho, toh sach mein karte ho. Koi dikhawa nahi. Koi shart nahi.' },
+  { emoji: '🌟', text: 'Aapka apne aap ko sambhalna — us mein ek woh khamoshi hai jo zyaadatar log poori zindagi dhundhte rehte hain.' },
+  { emoji: '☕', text: 'Aap jo chhoti-chhoti cheezein karte ho, woh ghar jaisi lagti hain. Aur main yeh kaafi waqt se dhundh raha tha.' },
 ];
 
 let _revealed = 0;
