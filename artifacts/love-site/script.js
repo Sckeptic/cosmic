@@ -3,6 +3,7 @@ import { init as initSignal,    onEnter as signalEnter    } from '/signal.js';
 import { init as initMessages,  onEnter as messagesEnter  } from '/messages.js';
 import { init as initStarmap,   onEnter as starmapEnter   } from '/starmap.js';
 import { init as initCountdown, onEnter as countdownEnter } from '/countdown.js';
+import { init as initReasons,   onEnter as reasonsEnter   } from '/reasons.js';
 import { createMusicEngine }                               from '/music.js';
 
 /* ── Shared reactive state ── */
@@ -496,6 +497,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initMessages(shared);
   initStarmap(shared);
   initCountdown(shared);
+  initReasons(shared);
   initMusic();
 
   initFloatingHearts();
@@ -509,6 +511,7 @@ document.addEventListener('DOMContentLoaded', () => {
     { el: document.getElementById('messages'),  onEnter: messagesEnter  },
     { el: document.getElementById('starmap'),   onEnter: starmapEnter   },
     { el: document.getElementById('countdown'), onEnter: countdownEnter },
+    { el: document.getElementById('reasons'),   onEnter: reasonsEnter   },
   ];
 
   window.pageMgr = new PageManager(pages);

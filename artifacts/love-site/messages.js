@@ -175,16 +175,29 @@ export function init(shared) {
     }
   }
 
+  const WA_NUMBER = '918178804731';
+  const counter = document.getElementById('msg-char-counter');
+
+  function sendToWhatsApp(txt) {
+    const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(txt)}`;
+    window.open(url, '_blank', 'noopener');
+  }
+
   _input.addEventListener('keydown', e => {
     e.stopPropagation();
     if (e.key === 'Enter') {
       const txt = _input.value.trim();
-      if (txt.length) { spawnBubble(txt); heartBurst(_input); _input.value = ''; }
+      if (txt.length) {
+        spawnBubble(txt);
+        heartBurst(_input);
+        sendToWhatsApp(txt);
+        _input.value = '';
+        if (counter) { counter.textContent = '200'; counter.classList.remove('near-limit'); }
+      }
     }
   });
 
   /* Character counter */
-  const counter = document.getElementById('msg-char-counter');
   if (counter) {
     _input.addEventListener('input', () => {
       const rem = 200 - _input.value.length;
