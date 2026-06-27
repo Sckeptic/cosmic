@@ -378,15 +378,15 @@ function LoveStory() {
 
 // ───────────────────── REASONS SECTION ─────────────────────
 const reasons = [
-  { icon: "🌙", text: "The way you laugh makes the whole world brighter" },
-  { icon: "☀️", text: "You always know exactly what to say" },
-  { icon: "🎵", text: "Dancing with you feels like flying" },
-  { icon: "🌊", text: "Your kindness is deeper than any ocean" },
-  { icon: "🔥", text: "You inspire me to be my best self every day" },
-  { icon: "🌸", text: "Every hug from you feels like coming home" },
-  { icon: "⭐", text: "You see the beauty in everything around you" },
-  { icon: "🦋", text: "You make ordinary moments feel magical" },
-  { icon: "🌈", text: "Your smile is my favourite thing in the world" },
+  { icon: "🌙", text: "Teri hansi se poori duniya roshan ho jaati hai" },
+  { icon: "☀️", text: "Tumhe hamesha pata hota hai kya kehna hai" },
+  { icon: "🎵", text: "Tere saath naachna bilkul udne jaisa lagta hai" },
+  { icon: "🌊", text: "Teri daryaadili kisi bhi samundar se gehri hai" },
+  { icon: "🔥", text: "Tum mujhe roz apna best version banne ki inspiration dete ho" },
+  { icon: "🌸", text: "Teri har jhappi mein ghar jaisa sukoon milta hai" },
+  { icon: "⭐", text: "Tum har cheez mein khubsurti dhundh lete ho" },
+  { icon: "🦋", text: "Tum aam lamhon ko bhi jadui bana dete ho" },
+  { icon: "🌈", text: "Teri muskaan is poori duniya mein meri sabse pyaari cheez hai" },
 ];
 
 function ReasonsSection() {
