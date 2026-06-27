@@ -14,11 +14,12 @@ export function init(shared) {
 
   const LS_KEY = 'ls_countdown_date';
   const saved  = localStorage.getItem(LS_KEY);
-  if (saved) {
+  if (saved && !isNaN(new Date(saved).getTime())) {
     dateInput.value = saved;
   } else {
     const d = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000);
     dateInput.value = d.toISOString().slice(0, 16);
+    if (saved) localStorage.removeItem(LS_KEY);
   }
 
   const WA_NUMBER = '918178804731';

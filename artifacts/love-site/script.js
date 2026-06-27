@@ -1,10 +1,10 @@
-import { init as initHero,      onEnter as heroEnter      } from '/hero.js';
-import { init as initSignal,    onEnter as signalEnter    } from '/signal.js';
-import { init as initMessages,  onEnter as messagesEnter  } from '/messages.js';
-import { init as initStarmap,   onEnter as starmapEnter   } from '/starmap.js';
-import { init as initCountdown, onEnter as countdownEnter } from '/countdown.js';
-import { init as initReasons,   onEnter as reasonsEnter   } from '/reasons.js';
-import { createMusicEngine }                               from '/music.js';
+import { init as initHero,      onEnter as heroEnter      } from './hero.js';
+import { init as initSignal,    onEnter as signalEnter    } from './signal.js';
+import { init as initMessages,  onEnter as messagesEnter  } from './messages.js';
+import { init as initStarmap,   onEnter as starmapEnter   } from './starmap.js';
+import { init as initCountdown, onEnter as countdownEnter } from './countdown.js';
+import { init as initReasons,   onEnter as reasonsEnter   } from './reasons.js';
+import { createMusicEngine }                               from './music.js';
 
 /* ── Shared reactive state ── */
 export const shared = {
@@ -475,10 +475,10 @@ class PageManager {
    MUSIC SYSTEM
 ══════════════════════════════════════════════ */
 function initMusic() {
-  const btn     = document.getElementById('music-btn');
+  const btn = document.getElementById('music-btn');
+  if (!btn) return;
   const btnText = btn.querySelector('.music-btn-text');
   const ripple  = btn.querySelector('.music-ripple');
-  if (!btn) return;
 
   const engine      = createMusicEngine();
   let   engineReady = false;

@@ -46,12 +46,6 @@ export function createMusicEngine() {
       if (playing) return;
       if (ctx.state === 'suspended') await ctx.resume();
 
-      if (!audio.src || audio.readyState === 0) {
-        buildAudio();
-        sourceNode = ctx.createMediaElementSource(audio);
-        sourceNode.connect(master);
-      }
-
       audio.currentTime = 26;
       await audio.play();
       playing = true;
