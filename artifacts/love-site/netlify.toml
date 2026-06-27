@@ -1,6 +1,7 @@
 [build]
-  command   = "pnpm run build"
-  publish   = "dist"
+  base    = "artifacts/love-site"
+  command = "npm install -g pnpm@9 && pnpm install --no-frozen-lockfile && pnpm run build"
+  publish = "dist"
 
 [build.environment]
   NODE_VERSION = "20"

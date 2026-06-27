@@ -563,14 +563,20 @@ document.addEventListener('DOMContentLoaded', () => {
   initTypewriter();
   initHeartbeats();
 
+  let _letterAbort = null; // fix: prevent scroll listener accumulation
+
   function letterEnter() {
     const el = document.getElementById('letter');
     if (!el) return;
 
+    // Abort any previous scroll listener for this page
+    if (_letterAbort) { _letterAbort.abort(); }
+    _letterAbort = new AbortController();
+
     // Reset scroll
     el.scrollTop = 0;
 
-    // Scroll progress bar
+    // Scroll progress bar — single listener per visit (AbortController removes it automatically)
     const progress = document.getElementById('letter-progress');
     function updateProgress() {
       if (!el.classList.contains('page-active')) return;
@@ -578,13 +584,18 @@ document.addEventListener('DOMContentLoaded', () => {
       const pct = max > 0 ? (el.scrollTop / max) * 100 : 0;
       if (progress) progress.style.width = pct + '%';
     }
-    el.addEventListener('scroll', updateProgress, { passive: true });
+    el.addEventListener('scroll', updateProgress, { passive: true, signal: _letterAbort.signal });
     updateProgress();
 
-    // Cursor
+    // Cursor + paragraphs
     const cursor = document.getElementById('letter-cursor');
     const paras  = Array.from(el.querySelectorAll('.footer-letter p, .footer-signature'));
-    paras.forEach(p => p.classList.remove('letter-visible'));
+
+    // Reset: remove visible class so animation can replay cleanly
+    paras.forEach(p => {
+      p.classList.remove('letter-visible');
+      void p.offsetWidth; // force reflow so animation restarts
+    });
     if (cursor) { cursor.classList.remove('done'); cursor.classList.add('active'); }
 
     paras.forEach((p, i) => {
@@ -592,15 +603,15 @@ document.addEventListener('DOMContentLoaded', () => {
         p.classList.add('letter-visible');
         // Move cursor just below this paragraph
         if (cursor && i < paras.length - 1) {
-          const rect = p.getBoundingClientRect();
+          const rect       = p.getBoundingClientRect();
           const parentRect = el.getBoundingClientRect();
           cursor.style.top = (rect.bottom - parentRect.top + el.scrollTop + 4) + 'px';
         }
         // Hide cursor after last item
         if (i === paras.length - 1 && cursor) {
-          setTimeout(() => { cursor.classList.remove('active'); cursor.classList.add('done'); }, 800);
+          setTimeout(() => { cursor.classList.remove('active'); cursor.classList.add('done'); }, 900);
         }
-      }, 300 + i * 200);
+      }, 350 + i * 130); // faster: 130ms gap vs old 200ms
     });
 
     // Ambient letter particles
