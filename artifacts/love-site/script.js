@@ -618,7 +618,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('letter-particles');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
-    let rafId;
+    let _lRafId; // renamed to avoid shadowing the module-level rafId
     const dots = [];
 
     function resizeCanvas() {
@@ -640,7 +640,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function drawParticles() {
-      if (!el.classList.contains('page-active')) { cancelAnimationFrame(rafId); return; }
+      if (!el.classList.contains('page-active')) { cancelAnimationFrame(_lRafId); return; }
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       dots.forEach(d => {
         d.y  += d.vy;
@@ -653,9 +653,9 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.fill();
         if (d.y < -10) { d.y = canvas.height + 10; d.x = Math.random() * canvas.width; }
       });
-      rafId = requestAnimationFrame(drawParticles);
+      _lRafId = requestAnimationFrame(drawParticles);
     }
-    cancelAnimationFrame(rafId);
+    cancelAnimationFrame(_lRafId);
     drawParticles();
   }
 

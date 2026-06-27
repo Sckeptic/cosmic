@@ -88,13 +88,21 @@ function spawnBubble(text) {
 }
 
 function drip() {
-  if (bubbles.length < 6) spawnBubble(ghosts[ghostIdx++ % ghosts.length]);
-  dripTimer = setTimeout(drip, 4800 + Math.random() * 4400); // slower rain
+  // BUG FIX: only spawn bubbles when the messages page is actually visible
+  if (_isActive() && bubbles.length < 6) spawnBubble(ghosts[ghostIdx++ % ghosts.length]);
+  dripTimer = setTimeout(drip, 4800 + Math.random() * 4400);
+}
+
+function _isActive() {
+  return _canvas?.closest('.section')?.classList.contains('page-active') ?? false;
 }
 
 let _rafId = null;
 function draw() {
   if (!_ctx) { _rafId = requestAnimationFrame(draw); return; }
+
+  // BUG FIX: skip drawing when messages page is not visible (saves GPU on other pages)
+  if (!_isActive()) { _rafId = requestAnimationFrame(draw); return; }
 
   /* Re-check canvas dimensions in case resize was needed */
   if (!_W || !_H) resize();

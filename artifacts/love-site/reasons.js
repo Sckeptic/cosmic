@@ -17,6 +17,7 @@ const REASONS = [
 
 let _revealed = 0;
 let _started  = false;
+let _visitToken = 0; // BUG FIX: cancel stale setTimeout callbacks on re-visit
 
 function buildCards() {
   const grid = document.getElementById('reasons-grid');
@@ -54,8 +55,10 @@ function revealAll() {
 function startReveal() {
   if (_started) return;
   _started = true;
+  const token = _visitToken; // capture token at start — stale callbacks check this
   let i = 0;
   function step() {
+    if (token !== _visitToken) return; // stale callback from previous visit — discard
     if (i < REASONS.length) {
       revealNext();
       i++;
@@ -73,6 +76,10 @@ export function init(shared) {
     btn.addEventListener('click', () => {
       if (_revealed < REASONS.length) {
         revealAll();
+        // BUG FIX: give feedback after all revealed — fade out the button
+        btn.style.transition = 'opacity 0.6s ease';
+        btn.style.opacity = '0';
+        btn.style.pointerEvents = 'none';
       }
     });
   }
@@ -81,9 +88,19 @@ export function init(shared) {
 export function onEnter() {
   _revealed = 0;
   _started  = false;
+  _visitToken++; // BUG FIX: invalidate any pending step() callbacks from last visit
+
   document.querySelectorAll('.reason-card').forEach(c => {
     c.classList.add('reason-hidden');
     c.classList.remove('reason-visible');
   });
+
+  // Re-show reveal button in case it was hidden
+  const btn = document.getElementById('reasons-reveal-btn');
+  if (btn) {
+    btn.style.opacity = '';
+    btn.style.pointerEvents = '';
+  }
+
   startReveal();
 }
