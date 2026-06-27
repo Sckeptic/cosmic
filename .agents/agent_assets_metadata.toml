@@ -18,3 +18,9 @@ id = "RRFzBczIB3ozT_rJMWw3U"
 uri = "file://artifacts/love-site/love-site.tar.gz"
 type = "unspecified"
 title = "Love Site — public/ folder build"
+
+[[outputs]]
+id = "ZvW4q9y0jkdXUmRJVmjIC"
+uri = "file://artifacts/love-site/love-site.zip"
+type = "unspecified"
+title = "Love Site — public/ folder (ZIP)"
