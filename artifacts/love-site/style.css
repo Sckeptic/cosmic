@@ -101,15 +101,18 @@ input { outline: none; font: inherit; }
   touch-action: pan-y;
 
   opacity: 0;
-  transform: scale(1.02) translateX(16px);
+  transform: scale(1.02) translate3d(16px, 0, 0);
   pointer-events: none;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
   transition:
     opacity  0.4s cubic-bezier(0.22, 1, 0.36, 1),
     transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 html[data-nav-dir="back"] .section {
-  transform: scale(1.04) translateX(-28px);
+  transform: scale(1.04) translate3d(-28px, 0, 0);
 }
 
 .section::before {
@@ -122,37 +125,37 @@ html[data-nav-dir="back"] .section {
 
 .section.page-active {
   opacity: 1;
-  transform: scale(1);
+  transform: scale(1) translate3d(0, 0, 0);
   pointer-events: auto;
   z-index: 2;
 }
 
 .section.page-leaving {
   opacity: 0;
-  transform: scale(0.97) translateX(-18px);
+  transform: scale(0.97) translate3d(-18px, 0, 0);
   pointer-events: none;
   z-index: 1;
 }
 html[data-nav-dir="back"] .section.page-leaving {
-  transform: scale(0.97) translateX(18px);
+  transform: scale(0.97) translate3d(18px, 0, 0);
 }
 
-/* ─── Entrance animations ─── */
+/* ─── Entrance animations (translate3d for GPU compositing) ─── */
 @keyframes ent-up {
-  from { opacity: 0; transform: translateY(32px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translate3d(0, 32px, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
 }
 @keyframes ent-scale {
-  from { opacity: 0; transform: scale(0.92); }
-  to   { opacity: 1; transform: scale(1); }
+  from { opacity: 0; transform: scale(0.92) translate3d(0, 0, 0); }
+  to   { opacity: 1; transform: scale(1)    translate3d(0, 0, 0); }
 }
 @keyframes ent-left {
-  from { opacity: 0; transform: translateX(-32px); }
-  to   { opacity: 1; transform: translateX(0); }
+  from { opacity: 0; transform: translate3d(-32px, 0, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
 }
 @keyframes ent-right {
-  from { opacity: 0; transform: translateX(32px); }
-  to   { opacity: 1; transform: translateX(0); }
+  from { opacity: 0; transform: translate3d(32px, 0, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
 }
 @keyframes ent-expand {
   from { opacity: 0; transform: scaleX(0); }
@@ -2652,12 +2655,13 @@ html[data-nav-dir="back"] .section.page-leaving {
   font-weight: 300;
   letter-spacing: 0.012em;
   opacity: 0;
-  transform: translateY(12px);
+  transform: translate3d(0, 12px, 0);
+  will-change: transform, opacity;
   transition: opacity 0.75s ease, transform 0.75s ease;
 }
 .footer-letter p.letter-visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: translate3d(0, 0, 0);
 }
 
 .footer-quote {
@@ -2684,13 +2688,14 @@ html[data-nav-dir="back"] .section.page-leaving {
   color: var(--glow);
   letter-spacing: 0.1em;
   opacity: 0;
-  transform: translateY(10px);
+  transform: translate3d(0, 10px, 0);
+  will-change: transform, opacity;
   transition: opacity 0.75s ease, transform 0.75s ease;
   margin-top: 8px;
 }
 .footer-signature.letter-visible {
   opacity: 0.75;
-  transform: translateY(0);
+  transform: translate3d(0, 0, 0);
   animation: sig-pulse 2.5s ease-out 0.8s 1 both;
 }
 
