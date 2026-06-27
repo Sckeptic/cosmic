@@ -364,24 +364,90 @@ class PageManager {
 
   bindSwipe() {
     let startX = 0, startY = 0, startTime = 0;
-    const threshold = 50;
+    let locked = null; // 'h' | 'v' | null
+    let activeDrag = false;
+    const HORIZ_THRESHOLD = 48;   // min px to commit a swipe
+    const HORIZ_BIAS      = 1.6;  // dx must be this times ady to count as horizontal
+    const MAX_DURATION    = 520;  // ms — flicks only
 
+    // ── Swipe hint indicator (two faint chevrons) ──
+    const hint = document.createElement('div');
+    hint.id = 'swipe-hint';
+    hint.innerHTML = '<span>‹</span><span>›</span>';
+    hint.style.cssText = [
+      'position:fixed',
+      'bottom:clamp(20px,4vh,36px)',
+      'left:50%',
+      'transform:translateX(-50%)',
+      'z-index:201',
+      'display:flex',
+      'gap:6px',
+      'pointer-events:none',
+      'opacity:0',
+      'transition:opacity 0.25s ease',
+      'font-family:var(--font-head)',
+      'font-size:1.1rem',
+      'color:rgba(255,107,157,0.55)',
+      'letter-spacing:4px',
+    ].join(';');
+    document.body.appendChild(hint);
+
+    // Show hint briefly when drag starts horizontal
+    let hintTimer;
+    const showHint = () => {
+      clearTimeout(hintTimer);
+      hint.style.opacity = '1';
+      hintTimer = setTimeout(() => { hint.style.opacity = '0'; }, 600);
+    };
+
+    // ── Track finger ──
     window.addEventListener('touchstart', e => {
-      startX = e.touches[0].clientX;
-      startY = e.touches[0].clientY;
+      startX    = e.touches[0].clientX;
+      startY    = e.touches[0].clientY;
       startTime = Date.now();
+      locked    = null;
+      activeDrag = false;
+    }, { passive: true });
+
+    window.addEventListener('touchmove', e => {
+      if (!locked) {
+        const dx = Math.abs(e.touches[0].clientX - startX);
+        const dy = Math.abs(e.touches[0].clientY - startY);
+        if (dx > 8 || dy > 8) {
+          locked = (dx > dy * HORIZ_BIAS) ? 'h' : 'v';
+          if (locked === 'h') { activeDrag = true; showHint(); }
+        }
+      }
     }, { passive: true });
 
     window.addEventListener('touchend', e => {
-      if (Date.now() - startTime > 500) return;
-      const dx = e.changedTouches[0].clientX - startX;
-      const dy = e.changedTouches[0].clientY - startY;
-      const adx = Math.abs(dx), ady = Math.abs(dy);
-      if (Math.max(adx, ady) < threshold) return;
-      if (adx > ady) { dx < 0 ? this.next() : this.prev(); }
-      else           { dy < 0 ? this.next() : this.prev(); }
+      if (!activeDrag) return;
+      activeDrag = false;
+      hint.style.opacity = '0';
+
+      if (Date.now() - startTime > MAX_DURATION) return;
+
+      const dx  = e.changedTouches[0].clientX - startX;
+      const dy  = e.changedTouches[0].clientY - startY;
+      const adx = Math.abs(dx);
+      const ady = Math.abs(dy);
+
+      // Must be clearly horizontal and past threshold
+      if (adx < HORIZ_THRESHOLD) return;
+      if (adx < ady * HORIZ_BIAS) return;
+
+      // Don't navigate if the swipe started inside a scrollable element
+      const target = e.changedTouches[0].target;
+      const scrollable = target.closest('[data-swipe-ignore], .messages-input, textarea, input');
+      if (scrollable) return;
+
+      dx < 0 ? this.next() : this.prev();
     }, { passive: true });
 
+    window.addEventListener('touchcancel', () => {
+      activeDrag = false;
+      hint.style.opacity = '0';
+    }, { passive: true });
   }
 
   bindArrows() {
