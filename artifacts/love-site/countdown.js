@@ -21,8 +21,31 @@ export function init(shared) {
     dateInput.value = d.toISOString().slice(0, 16);
   }
 
+  const WA_NUMBER = '918178804731';
+
+  function formatDateLovingly(raw) {
+    const d = new Date(raw);
+    const dateStr = d.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+    const timeStr = d.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
+    return `${dateStr} at ${timeStr}`;
+  }
+
+  function sendCallDateToWhatsApp(raw) {
+    const when = formatDateLovingly(raw);
+    const msg =
+      `💕 Prince just set our next call —\n\n` +
+      `📅 ${when}\n\n` +
+      `Every second until then is just me thinking of you. ` +
+      `Don't be late, Kp 👀 ♥`;
+    const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
+    window.open(url, '_blank', 'noopener');
+  }
+
   dateInput.addEventListener('change', () => {
     localStorage.setItem(LS_KEY, dateInput.value);
+    if (dateInput.value) {
+      setTimeout(() => sendCallDateToWhatsApp(dateInput.value), 400);
+    }
   });
 
   function pad2(n) { return String(n).padStart(2, '0'); }
