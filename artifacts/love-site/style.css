@@ -1580,14 +1580,16 @@ html[data-nav-dir="back"] .section.page-leaving {
 .starmap-thread-col {
   width: clamp(100px, 13vw, 160px);
   display: flex;
-  align-items: stretch;
+  align-items: flex-end;
   justify-content: center;
   padding-top: 0;
+  overflow: hidden;
 }
 #thread-canvas {
   width: 100%;
-  height: 100%;
+  height: clamp(220px, 47vh, 520px);
   display: block;
+  flex-shrink: 0;
 }
 
 /* ── Same Sky Moment ── */
