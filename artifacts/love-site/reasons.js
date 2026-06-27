@@ -1,18 +1,18 @@
 /* reasons.js — "Reasons I Love You" page */
 
 const REASONS = [
-  { emoji: '✨', text: 'Aap kindness dikhate nahi. Aap bas hote hi hain woh — bina awaaz ke, bina kisi ki notice ki zaroorat ke.' },
-  { emoji: '🤍', text: 'Aap doosron ke liye space rakhte ho, tab bhi jab aapko khud sahare ki zaroorat hoti hai.' },
-  { emoji: '🐻', text: 'Bholu ke liye aapka pyaar — yeh gentleness andar se aati hai. Aisi cheez kahi se nahi milti.' },
-  { emoji: '💬', text: 'Aap woh kehte ho jo sach mein dil mein hota hai. Aadhe-sacch ki is duniya mein yeh sab kuch hai.' },
-  { emoji: '🌙', text: 'Aap dikhave aur shor ke paar dekh lete ho. Seedha asli cheez tak pahunch jaate ho.' },
-  { emoji: '🌍', text: 'Aapke sochne ka andaz kuch aisa hai — jaise har ladki ko aisi hi sochni chahiye.' },
-  { emoji: '💫', text: 'Aap aam cheezein bhi khaas bana dete ho. Aapke saath baat kabhi chhoti nahi lagti.' },
-  { emoji: '🌸', text: 'Aapki maujoodgi kuch maangti nahi. Bas sab kuch shant kar deti hai.' },
-  { emoji: '🔥', text: 'Aap sach bolte ho chahe woh uncomfortable ho. Iske liye jitni himmat chahiye — log samjhte nahi.' },
-  { emoji: '🫀', text: 'Jab aap kisi cheez se pyaar karte ho, toh sach mein karte ho. Koi dikhawa nahi. Koi shart nahi.' },
-  { emoji: '🌟', text: 'Aapka apne aap ko sambhalna — us mein ek woh khamoshi hai jo zyaadatar log poori zindagi dhundhte rehte hain.' },
-  { emoji: '☕', text: 'Aap jo chhoti-chhoti cheezein karte ho, woh ghar jaisi lagti hain. Aur main yeh kaafi waqt se dhundh raha tha.' },
+  { emoji: '✨', text: 'Tum kindness karte nahi — tum hote hi ho woh, bina dikhaye.' },
+  { emoji: '🤍', text: 'Doosron ke liye space rakhti ho, tab bhi jab tumhe khud zaroorat ho.' },
+  { emoji: '🐻', text: 'Bholu ke liye tera pyaar. Yeh gentleness andar se aati hai.' },
+  { emoji: '💬', text: 'Jo dil mein hota hai woh kehti ho seedha. Is duniya mein yeh rare hai.' },
+  { emoji: '🌙', text: 'Shor aur dikhave ke paar dekh leti ho. Seedha asli tak.' },
+  { emoji: '🌍', text: 'Tumhara sochne ka andaz — jaise har ladki ko aisa hi sochna chahiye.' },
+  { emoji: '💫', text: 'Aam baatein bhi tumhare saath khaas lagti hain.' },
+  { emoji: '🌸', text: 'Tumhari maujoodgi kuch maangti nahi. Bas sab shant ho jaata hai.' },
+  { emoji: '🔥', text: 'Uncomfortable sach bhi bol deti ho. Bahut kam log yeh kar paate hain.' },
+  { emoji: '🫀', text: 'Jab pyaar karti ho toh sach mein karti ho. Koi act nahi, koi shart nahi.' },
+  { emoji: '🌟', text: 'Teri apni ek grace hai jo log poori zindagi dhundhte hain.' },
+  { emoji: '☕', text: 'Teri chhoti-chhoti cheezein ghar jaisi lagti hain. Bahut waqt baad mila yeh.' },
 ];
 
 let _revealed = 0;
