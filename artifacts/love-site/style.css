@@ -1541,6 +1541,8 @@ html[data-nav-dir="back"] .section.page-leaving {
   flex-direction: column;
   gap: 12px;
   min-height: 0;
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 
 .starmap-panel-label {
@@ -1567,14 +1569,16 @@ html[data-nav-dir="back"] .section.page-leaving {
   width: 100%;
   height: clamp(220px, 47vh, 520px);
   border-radius: 20px;
-  border: 1px solid rgba(80,140,255,0.18);
+  border: 1px solid rgba(80,140,255,0.22);
   background: #020108;
-  box-shadow: 0 0 60px rgba(0,0,0,0.75) inset, 0 0 30px rgba(60,100,255,0.10), 0 0 0 1px rgba(80,120,255,0.06);
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
-}
-#sky-left:hover, #sky-right:hover {
-  transform: rotateX(-3deg) rotateY(3deg) translateZ(8px);
-  box-shadow: 0 0 40px rgba(0,0,0,0.55) inset, 0 12px 40px rgba(60,100,255,0.18), 0 0 80px rgba(80,160,255,0.08);
+  box-shadow:
+    0 0 70px rgba(0,0,0,0.80) inset,
+    0 0 40px rgba(60,100,255,0.14),
+    0 0 0 1px rgba(80,120,255,0.08),
+    0 20px 60px rgba(0,0,0,0.55);
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  display: block;
 }
 
 /* ── Starmap divider ── */

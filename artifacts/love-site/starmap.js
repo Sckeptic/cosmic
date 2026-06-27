@@ -140,6 +140,12 @@ export function init(shared) {
   const plane  = document.getElementById('plane-canvas');
   if (!skyL || !skyR) return;
 
+  const panelL = skyL.closest('.starmap-panel');
+  const panelR = skyR.closest('.starmap-panel');
+
+  /* ── 3D tilt state (lerped) ── */
+  let tiltX = 0, tiltY = 0, tTargetX = 0, tTargetY = 0;
+
   /* ── Seeded RNG ── */
   function mkRng(seed) {
     let s = seed;
@@ -170,16 +176,17 @@ export function init(shared) {
     return stars;
   }
 
-  function initSkyData(canvas, seed) {
-    const W = canvas.clientWidth, H = canvas.clientHeight;
+  function initSkyData(canvas, W, H, seed) {
     if (W < 4 || H < 4) return null;
     return { stars: buildStarData(mkRng(seed), W, H), W, H };
   }
 
   let mouseX = 0.5, mouseY = 0.5;
   document.addEventListener('mousemove', e => {
-    mouseX = e.clientX / window.innerWidth;
-    mouseY = e.clientY / window.innerHeight;
+    mouseX    = e.clientX / window.innerWidth;
+    mouseY    = e.clientY / window.innerHeight;
+    tTargetX  = (mouseY - 0.5) *  9;   // rotateX: tilt forward/back
+    tTargetY  = (mouseX - 0.5) * -7;   // rotateY: tilt left/right
   }, { passive: true });
 
   /* ── Edge nebula ── */
@@ -199,6 +206,46 @@ export function init(shared) {
       ctx.fillStyle = g; ctx.fill();
       ctx.restore();
     }
+  }
+
+  /* ── Animated Milky Way band ── */
+  function drawMilkyWay(ctx, W, H, t) {
+    ctx.save();
+    ctx.translate(W / 2, H / 2);
+    ctx.rotate(-0.40); // ~23° — actual Milky Way tilt
+
+    const breath = 0.80 + 0.20 * Math.sin(t * 0.000065);
+    const drift  = Math.sin(t * 0.000028) * W * 0.04; // slow sway
+
+    const layers = [
+      { hw: W * 0.60, hh: H * 0.26, r:  50, g:  70, b: 190, o: 0.030 },
+      { hw: W * 0.42, hh: H * 0.16, r:  90, g: 110, b: 230, o: 0.038 },
+      { hw: W * 0.22, hh: H * 0.09, r: 130, g: 155, b: 255, o: 0.034 },
+      { hw: W * 0.10, hh: H * 0.04, r: 180, g: 200, b: 255, o: 0.024 },
+    ];
+
+    for (const l of layers) {
+      const o = l.o * breath;
+      const g = ctx.createLinearGradient(drift, -l.hh, drift, l.hh);
+      g.addColorStop(0.00, 'transparent');
+      g.addColorStop(0.20, `rgba(${l.r},${l.g},${l.b},${(o * 0.4).toFixed(4)})`);
+      g.addColorStop(0.50, `rgba(${l.r},${l.g},${l.b},${o.toFixed(4)})`);
+      g.addColorStop(0.80, `rgba(${l.r},${l.g},${l.b},${(o * 0.4).toFixed(4)})`);
+      g.addColorStop(1.00, 'transparent');
+      ctx.fillStyle = g;
+      ctx.fillRect(-l.hw + drift, -l.hh, l.hw * 2, l.hh * 2);
+    }
+
+    /* Sparse bright dust in core */
+    ctx.globalAlpha = 0.22 * breath;
+    ctx.globalCompositeOperation = 'screen';
+    const cg = ctx.createRadialGradient(drift, 0, 0, drift, 0, W * 0.18);
+    cg.addColorStop(0,   'rgba(180,200,255,0.25)');
+    cg.addColorStop(0.5, 'rgba(140,160,255,0.06)');
+    cg.addColorStop(1,   'transparent');
+    ctx.fillStyle = cg;
+    ctx.fillRect(-W * 0.22, -H * 0.07, W * 0.44, H * 0.14);
+    ctx.restore();
   }
 
   /* ── Draw one star (background field) ── */
@@ -250,67 +297,116 @@ export function init(shared) {
 
   function drawConstellationStar(ctx, sx, sy, mag, temp, name, t, labelAlpha) {
     const br  = starRadius(mag);
-    const tw  = 0.96 + 0.04 * Math.sin(t * 0.0011 + sx * 0.009);
+    const tw  = 0.92 + 0.08 * Math.sin(t * 0.0011 + sx * 0.009);
     const col = starColor(temp);
 
+    /* ── Diffraction spikes (bright stars only) ── */
+    if (mag < 1.5) {
+      const spikeLen = br * (mag < -0.5 ? 18 : mag < 0.5 ? 13 : 9);
+      const spikeAlpha = Math.max(0.06, 0.40 - mag * 0.10);
+      ctx.save();
+      ctx.globalCompositeOperation = 'screen';
+      for (const angle of [0, Math.PI / 2]) {
+        for (const dir of [-1, 1]) {
+          const ex = sx + Math.cos(angle) * dir * spikeLen;
+          const ey = sy + Math.sin(angle) * dir * spikeLen;
+          const sg = ctx.createLinearGradient(sx, sy, ex, ey);
+          sg.addColorStop(0,    `rgba(${col.core},${spikeAlpha.toFixed(3)})`);
+          sg.addColorStop(0.30, `rgba(${col.halo},${(spikeAlpha * 0.30).toFixed(3)})`);
+          sg.addColorStop(1,    'transparent');
+          ctx.lineWidth   = Math.max(0.35, br * 0.18);
+          ctx.strokeStyle = sg;
+          ctx.shadowBlur  = 5;
+          ctx.shadowColor = `rgba(${col.halo},0.45)`;
+          ctx.beginPath(); ctx.moveTo(sx, sy); ctx.lineTo(ex, ey); ctx.stroke();
+        }
+      }
+      ctx.restore();
+    }
+
+    /* Wide diffuse bloom (screen blend) */
+    ctx.save();
+    ctx.globalCompositeOperation = 'screen';
+    const h0 = ctx.createRadialGradient(sx, sy, 0, sx, sy, br * 6.5 * tw);
+    h0.addColorStop(0,    `rgba(${col.halo},0.10)`);
+    h0.addColorStop(0.40, `rgba(${col.halo},0.03)`);
+    h0.addColorStop(1,    'transparent');
+    ctx.beginPath(); ctx.arc(sx, sy, br * 6.5 * tw, 0, Math.PI * 2);
+    ctx.fillStyle = h0; ctx.fill();
+    ctx.restore();
+
     /* Outer halo */
-    const h1 = ctx.createRadialGradient(sx, sy, 0, sx, sy, br * 4.5 * tw);
-    h1.addColorStop(0,    `rgba(${col.halo},0.06)`);
-    h1.addColorStop(0.55, `rgba(${col.halo},0.01)`);
+    const h1 = ctx.createRadialGradient(sx, sy, 0, sx, sy, br * 4.0 * tw);
+    h1.addColorStop(0,    `rgba(${col.halo},0.09)`);
+    h1.addColorStop(0.50, `rgba(${col.halo},0.02)`);
     h1.addColorStop(1,    'transparent');
-    ctx.beginPath(); ctx.arc(sx, sy, br * 4.5 * tw, 0, Math.PI * 2);
+    ctx.beginPath(); ctx.arc(sx, sy, br * 4.0 * tw, 0, Math.PI * 2);
     ctx.fillStyle = h1; ctx.fill();
 
     /* Soft corona */
-    const h2 = ctx.createRadialGradient(sx, sy, 0, sx, sy, br * 2.0 * tw);
-    h2.addColorStop(0,    'rgba(255,255,255,0.92)');
-    h2.addColorStop(0.28, `rgba(${col.halo},0.55)`);
-    h2.addColorStop(0.65, `rgba(${col.halo},0.08)`);
+    const h2 = ctx.createRadialGradient(sx, sy, 0, sx, sy, br * 2.2 * tw);
+    h2.addColorStop(0,    'rgba(255,255,255,0.95)');
+    h2.addColorStop(0.25, `rgba(${col.halo},0.65)`);
+    h2.addColorStop(0.60, `rgba(${col.halo},0.12)`);
     h2.addColorStop(1,    'transparent');
-    ctx.beginPath(); ctx.arc(sx, sy, br * 2.0 * tw, 0, Math.PI * 2);
+    ctx.beginPath(); ctx.arc(sx, sy, br * 2.2 * tw, 0, Math.PI * 2);
     ctx.fillStyle = h2; ctx.fill();
 
     /* Coloured disc */
-    const h3 = ctx.createRadialGradient(sx, sy, 0, sx, sy, br * 0.7 * tw);
-    h3.addColorStop(0, `rgba(${col.core},0.97)`);
-    h3.addColorStop(1, `rgba(${col.core},0.18)`);
-    ctx.beginPath(); ctx.arc(sx, sy, br * 0.7 * tw, 0, Math.PI * 2);
+    const h3 = ctx.createRadialGradient(sx, sy, 0, sx, sy, br * 0.8 * tw);
+    h3.addColorStop(0, `rgba(${col.core},0.98)`);
+    h3.addColorStop(1, `rgba(${col.core},0.22)`);
+    ctx.beginPath(); ctx.arc(sx, sy, br * 0.8 * tw, 0, Math.PI * 2);
     ctx.fillStyle = h3; ctx.fill();
 
     /* White-hot pinpoint */
-    ctx.beginPath(); ctx.arc(sx, sy, Math.max(0.5, br * 0.22 * tw), 0, Math.PI * 2);
+    ctx.beginPath(); ctx.arc(sx, sy, Math.max(0.6, br * 0.26 * tw), 0, Math.PI * 2);
     ctx.fillStyle = '#fff'; ctx.fill();
 
     /* Star label */
     if (name && br > 2.5) {
       ctx.save();
-      ctx.font = `400 7px "Space Grotesk",system-ui`;
-      ctx.fillStyle = `rgba(180,210,255,${(labelAlpha * 0.60).toFixed(3)})`;
+      ctx.font = `500 7.5px "Space Grotesk",system-ui`;
+      ctx.fillStyle = `rgba(190,215,255,${(labelAlpha * 0.68).toFixed(3)})`;
       ctx.textAlign = 'center';
-      ctx.fillText(name, sx, sy - br * 2.6 - 2);
+      ctx.shadowBlur  = 4;
+      ctx.shadowColor = `rgba(${col.halo},0.5)`;
+      ctx.fillText(name, sx, sy - br * 2.8 - 2);
       ctx.restore();
     }
   }
 
   /* ── Draw constellation lines ── */
   function drawConstellationLines(ctx, W, H, consts, t) {
-    const lb = 0.18 + 0.06 * Math.sin(t * 0.00045);
+    const pulse = 0.22 + 0.10 * Math.sin(t * 0.00045);
     for (const c of consts) {
       const [r, g, b] = c.lineColor;
       for (const [a, bb] of c.lines) {
         const sa = c.stars[a], sb = c.stars[bb];
         const ax = sa.x * W, ay = sa.y * H;
         const bx = sb.x * W, by = sb.y * H;
-        /* Outer whisper */
-        ctx.lineWidth   = 2.0;
-        ctx.strokeStyle = `rgba(${r},${g},${b},0.012)`;
+
+        /* Wide screen-blended glow */
+        ctx.save();
+        ctx.globalCompositeOperation = 'screen';
+        ctx.lineWidth   = 5.0;
+        ctx.strokeStyle = `rgba(${r},${g},${b},0.04)`;
         ctx.shadowBlur  = 0;
         ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(bx, by); ctx.stroke();
-        /* Filament core */
-        ctx.lineWidth   = 0.5;
-        ctx.strokeStyle = `rgba(${r},${g},${b},${lb.toFixed(3)})`;
-        ctx.shadowBlur  = 3.0;
-        ctx.shadowColor = `rgba(${r},${g},${b},0.25)`;
+        ctx.restore();
+
+        /* Mid glow */
+        ctx.lineWidth   = 2.0;
+        ctx.strokeStyle = `rgba(${r},${g},${b},0.07)`;
+        ctx.shadowBlur  = 6;
+        ctx.shadowColor = `rgba(${r},${g},${b},0.3)`;
+        ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(bx, by); ctx.stroke();
+
+        /* Crisp core filament */
+        ctx.lineWidth   = 0.6;
+        ctx.strokeStyle = `rgba(${r},${g},${b},${pulse.toFixed(3)})`;
+        ctx.shadowBlur  = 4;
+        ctx.shadowColor = `rgba(${r},${g},${b},0.55)`;
         ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(bx, by); ctx.stroke();
       }
     }
@@ -414,11 +510,11 @@ export function init(shared) {
   }
 
   /* ── Main sky draw ── */
-  function drawSkyFull(canvas, data, tR, tG, tB, t, wisps, consts, pleiades) {
+  function drawSkyFull(canvas, data, W, H, tR, tG, tB, t, wisps, consts, pleiades) {
     const ctx = canvas.getContext('2d');
-    const W = canvas.width  = canvas.clientWidth;
-    const H = canvas.height = canvas.clientHeight;
     if (W < 4 || H < 4) return;
+    canvas.width  = W;
+    canvas.height = H;
 
     /* 1. Deep black base */
     ctx.fillStyle = '#010108';
@@ -427,14 +523,8 @@ export function init(shared) {
     /* 2. Edge nebula */
     drawNebula(ctx, W, H, wisps, t);
 
-    /* 3. Milky Way hint */
-    const mw = ctx.createLinearGradient(W*0.08, H*0.05, W*0.92, H*0.95);
-    mw.addColorStop(0,    'transparent');
-    mw.addColorStop(0.35, `rgba(${tR},${tG},${tB},0.006)`);
-    mw.addColorStop(0.50, `rgba(${tR},${tG},${tB},0.012)`);
-    mw.addColorStop(0.65, `rgba(${tR},${tG},${tB},0.006)`);
-    mw.addColorStop(1,    'transparent');
-    ctx.fillStyle = mw; ctx.fillRect(0, 0, W, H);
+    /* 3. Animated Milky Way band */
+    drawMilkyWay(ctx, W, H, t);
 
     /* 4. Background star field with parallax */
     const px = (mouseX - 0.5) * 5.0;
@@ -625,13 +715,27 @@ export function init(shared) {
   function renderAll(ts) {
     const t = ts - startTime;
 
-    if (!dataL || dataL.W !== skyL.clientWidth || dataL.H !== skyL.clientHeight)
-      dataL = initSkyData(skyL, 20240101);
-    if (!dataR || dataR.W !== skyR.clientWidth || dataR.H !== skyR.clientHeight)
-      dataR = initSkyData(skyR, 20240102);
+    /* ── 1. READ all layout metrics first — no writes before this ── */
+    const lW = skyL.clientWidth,  lH = skyL.clientHeight;
+    const rW = skyR.clientWidth,  rH = skyR.clientHeight;
 
-    drawSkyFull(skyL, dataL, 80, 140, 255, t, WISPS_L, CONSTELLATIONS,   PLEIADES);
-    drawSkyFull(skyR, dataR, 100, 200, 255, t, WISPS_R, CONSTELLATIONS_R, PLEIADES_R);
+    /* ── 2. WRITE transforms (after reads, so no forced sync layout) ── */
+    const ease = 0.06;
+    tiltX += (tTargetX - tiltX) * ease;
+    tiltY += (tTargetY - tiltY) * ease;
+    if (panelL) panelL.style.transform =
+      `perspective(1100px) rotateX(${tiltX.toFixed(2)}deg) rotateY(${(tiltY - 3).toFixed(2)}deg)`;
+    if (panelR) panelR.style.transform =
+      `perspective(1100px) rotateX(${tiltX.toFixed(2)}deg) rotateY(${(tiltY + 3).toFixed(2)}deg)`;
+
+    /* ── 3. Rebuild star data only when size changes ── */
+    if (!dataL || dataL.W !== lW || dataL.H !== lH)
+      dataL = initSkyData(skyL, lW, lH, 20240101);
+    if (!dataR || dataR.W !== rW || dataR.H !== rH)
+      dataR = initSkyData(skyR, rW, rH, 20240102);
+
+    drawSkyFull(skyL, dataL, lW, lH, 80,  140, 255, t, WISPS_L, CONSTELLATIONS,   PLEIADES);
+    drawSkyFull(skyR, dataR, rW, rH, 100, 200, 255, t, WISPS_R, CONSTELLATIONS_R, PLEIADES_R);
 
     /* Shooting stars */
     if (shootL) { drawShootStar(shootL, skyL); if (shootL.life >= shootL.maxLife) shootL = null; }
