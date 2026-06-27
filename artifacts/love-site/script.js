@@ -382,14 +382,6 @@ class PageManager {
       else           { dy < 0 ? this.next() : this.prev(); }
     }, { passive: true });
 
-    let wheelTimer = null;
-    window.addEventListener('wheel', e => {
-      if (e.target.closest('.messages-input-bar')) return;
-      clearTimeout(wheelTimer);
-      wheelTimer = setTimeout(() => {
-        e.deltaY > 0 ? this.next() : this.prev();
-      }, 80);
-    }, { passive: true });
   }
 
   bindArrows() {
