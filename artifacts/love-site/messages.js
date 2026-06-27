@@ -190,9 +190,9 @@ export function init(shared) {
       if (txt.length) {
         spawnBubble(txt);
         heartBurst(_input);
-        sendToWhatsApp(txt);
         _input.value = '';
         if (counter) { counter.textContent = '200'; counter.classList.remove('near-limit'); }
+        setTimeout(() => sendToWhatsApp(txt), 300);
       }
     }
   });
